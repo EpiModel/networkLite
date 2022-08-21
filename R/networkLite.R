@@ -366,11 +366,11 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
 mixingmatrix.networkLite <- function(object, attr, ...) {
   nw <- object
 
-  all_attr <- get.vertex.attribute(object, attr)
+  all_attr <- get.vertex.attribute(nw, attr)
 
   if (is.bipartite(nw)) {
-    row_levels <- sort(unique(all_attr[seq_len(object %n% "bipartite")]))
-    col_levels <- sort(unique(all_attr[-seq_len(object %n% "bipartite")]))
+    row_levels <- sort(unique(all_attr[seq_len(nw %n% "bipartite")]))
+    col_levels <- sort(unique(all_attr[-seq_len(nw %n% "bipartite")]))
   } else {
     row_levels <- sort(unique(all_attr))
     col_levels <- row_levels
