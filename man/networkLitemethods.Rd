@@ -20,6 +20,7 @@
 \alias{print.networkLite}
 \alias{network.naedgecount.networkLite}
 \alias{add.edges.networkLite}
+\alias{as.network.networkLite}
 \alias{as.networkLite}
 \alias{as.networkLite.network}
 \alias{as.networkLite.networkLite}
@@ -89,6 +90,8 @@
 
 \method{add.edges}{networkLite}(x, tail, head, names.eval = NULL, vals.eval = NULL, ...)
 
+\method{as.network}{networkLite}(x, ...)
+
 as.networkLite(x, ...)
 
 \method{as.networkLite}{network}(x, ...)
@@ -143,8 +146,7 @@ for the \code{networkLite} replacement method.}
 
 \item{object}{A \code{networkLite} object.}
 
-\item{attr}{Specification of a vertex attribute in \code{object} as
-described in \code{\link[ergm]{nodal_attributes}}.}
+\item{attr}{The name of a vertex attribute in \code{object}.}
 
 \item{i, j}{Nodal indices (must be missing for networkLite method).}
 

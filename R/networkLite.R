@@ -548,6 +548,12 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
 
 #' @rdname networkLitemethods
 #' @export
+as.network.networkLite <- function(x, ...) {
+  x
+}
+
+#' @rdname networkLitemethods
+#' @export
 as.networkLite <- function(x, ...) {
   UseMethod("as.networkLite")
 }
@@ -587,7 +593,12 @@ as.networkLite.networkLite <- function(x, ...) {
   x
 }
 
-# internal convenience function for converting from networkLite to network
+#' @rdname to_network_networkLite
+#' @title Convert networkLite to network
+#' @param x a \code{networkLite} object
+#' @param ... additional arguments
+#' @return a corresponding \code{network} object
+#' @export
 to_network_networkLite <- function(x, ...) {
   nw <- network.initialize(network.size(x),
                            directed = x %n% "directed",
