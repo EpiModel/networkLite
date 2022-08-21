@@ -2,7 +2,6 @@
 #' @import network 
 #' @importFrom statnet.common NVL NVL2
 #' @importFrom networkDynamic as.networkDynamic
-#' @importFrom ergm ergm_get_vattr
 #' @importFrom tibble tibble as_tibble is_tibble
 #' @importFrom dplyr bind_rows bind_cols
 #' @importFrom stats na.omit
@@ -362,19 +361,16 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
 
 #' @rdname networkLitemethods
 #' @param object A \code{networkLite} object.
-#' @param attr Specification of a vertex attribute in \code{object} as
-#'             described in \code{\link[ergm]{nodal_attributes}}.
+#' @param attr The name of a vertex attribute in \code{object}.
 #' @export
 mixingmatrix.networkLite <- function(object, attr, ...) {
   nw <- object
 
-  all_attr <- ergm_get_vattr(attr, nw, multiple = "paste")
+  all_attr <- get.vertex.attribute(object, attr)
 
   if (is.bipartite(nw)) {
-    row_levels <- sort(unique(ergm_get_vattr(attr, nw, bip = "b1",
-                                             multiple = "paste")))
-    col_levels <- sort(unique(ergm_get_vattr(attr, nw, bip = "b2",
-                                             multiple = "paste")))
+    row_levels <- sort(unique(all_attr[seq_len(object %n% "bipartite")]))
+    col_levels <- sort(unique(all_attr[-seq_len(object %n% "bipartite")]))
   } else {
     row_levels <- sort(unique(all_attr))
     col_levels <- row_levels

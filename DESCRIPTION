@@ -25,10 +25,10 @@ Imports:
     statnet.common,
     network,
     networkDynamic,
-    ergm,
     tibble,
     dplyr
 Enhances:
+    ergm,
     tergm,
     EpiModel,
     testthat
