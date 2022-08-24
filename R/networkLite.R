@@ -1,5 +1,5 @@
 
-#' @import network 
+#' @import network
 #' @importFrom statnet.common NVL NVL2
 #' @importFrom networkDynamic as.networkDynamic
 #' @importFrom tibble tibble as_tibble is_tibble
