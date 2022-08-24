@@ -34,3 +34,12 @@ Enhances:
     testthat
 RoxygenNote: 7.2.1
 Encoding: UTF-8
+Remotes:
+    github::statnet/rle@master,
+    github::statnet/statnet.common@master,
+    github::statnet/network@master,
+    github::statnet/networkDynamic@master,
+    github::EpiModel/networkLite@main,    
+    github::statnet/ergm@master,
+    github::statnet/tergm@master,
+    github::EpiModel/EpiModel@main
