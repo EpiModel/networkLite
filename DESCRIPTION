@@ -28,8 +28,7 @@ Imports:
     tibble,
     dplyr
 Suggests:
-    testthat
-Enhances:
+    testthat,
     ergm,
     tergm,
     EpiModel
