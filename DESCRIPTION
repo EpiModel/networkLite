@@ -27,11 +27,12 @@ Imports:
     networkDynamic,
     tibble,
     dplyr
+Suggests:
+    testthat
 Enhances:
     ergm,
     tergm,
-    EpiModel,
-    testthat
+    EpiModel
 RoxygenNote: 7.2.1
 Encoding: UTF-8
 Remotes:
