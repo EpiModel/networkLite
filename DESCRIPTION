@@ -8,6 +8,7 @@ Description: An implementation of *some* of the `network` package functionality
     Primarily intended for back-end use in `statnet` and `EpiModel` packages.
     Supports binary and weighted, directed and undirected, bipartite and
     unipartite networks; does not support multigraphs, hypergraphs, or loops.
+    Vertex and edge attributes should be atomic.
 Maintainer: Samuel Jenness <samuel.m.jenness@emory.edu>
 Authors@R: c(person("Samuel", "Jenness",
     role=c("cre","aut"), email="samuel.m.jenness@emory.edu"),
