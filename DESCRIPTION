@@ -5,7 +5,7 @@ Title: An Alternative Implementation of some of the `network` Package
     Functionality
 Description: An implementation of *some* of the `network` package functionality
     based on a simplified data structure that is faster in some applications.
-    Primarily intended for back-end use in statnet and EpiModel packages.
+    Primarily intended for back-end use in `statnet` and `EpiModel` packages.
     Supports binary and weighted, directed and undirected, bipartite and
     unipartite networks; does not support multigraphs, hypergraphs, or loops.
 Maintainer: Samuel Jenness <samuel.m.jenness@emory.edu>
