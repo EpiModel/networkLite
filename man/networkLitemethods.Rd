@@ -89,7 +89,7 @@
 
 \method{add.edges}{networkLite}(x, tail, head, names.eval = NULL, vals.eval = NULL, ...)
 
-\method{as.network}{networkLite}(x, ..., allow.networkLite = FALSE)
+\method{as.network}{networkLite}(x, ...)
 
 as.networkLite(x, ...)
 
@@ -157,10 +157,6 @@ present?}
 \item{head}{Vector of heads of edges to add to the networkLite.}
 
 \item{vals.eval}{value(s) of edge attributes}
-
-\item{allow.networkLite}{logical; if \code{TRUE}, return the
-\code{networkLite} unmodified; if \code{FALSE}, convert to a
-\code{network} class object}
 
 \item{attrnames}{vector specifying edge attributes to include in the tibble;
 may be logical, integer, or character vector, the former two being

@@ -550,16 +550,9 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
 }
 
 #' @rdname networkLitemethods
-#' @param allow.networkLite logical; if \code{TRUE}, return the
-#'        \code{networkLite} unmodified; if \code{FALSE}, convert to a
-#'        \code{network} class object
 #' @export
-as.network.networkLite <- function(x, ..., allow.networkLite = FALSE) {
-  if (allow.networkLite == TRUE) {
-    return(x)
-  } else {
-    return(to_network_networkLite(x))
-  }
+as.network.networkLite <- function(x, ...) {
+  return(x)
 }
 
 #' @rdname networkLitemethods
