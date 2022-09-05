@@ -1,7 +1,6 @@
 
 #' @import network
 #' @importFrom statnet.common NVL NVL2
-#' @importFrom networkDynamic as.networkDynamic
 #' @importFrom tibble tibble as_tibble is_tibble
 #' @importFrom dplyr bind_rows bind_cols
 #' @importFrom stats na.omit
@@ -551,9 +550,16 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
 }
 
 #' @rdname networkLitemethods
+#' @param allow.networkLite logical; if \code{TRUE}, return the
+#'        \code{networkLite} unmodified; if \code{FALSE}, convert to a
+#'        \code{network} class object
 #' @export
-as.network.networkLite <- function(x, ...) {
-  x
+as.network.networkLite <- function(x, ..., allow.networkLite = FALSE) {
+  if (allow.networkLite == TRUE) {
+    return(x)
+  } else {
+    return(to_network_networkLite(x))
+  }
 }
 
 #' @rdname networkLitemethods
@@ -630,12 +636,6 @@ to_network_networkLite <- function(x, ...) {
   }
 
   nw
-}
-
-#' @rdname networkLitemethods
-#' @export
-as.networkDynamic.networkLite <- function(object, ...) {
-  as.networkDynamic(to_network_networkLite(object))
 }
 
 #' @rdname networkLitemethods

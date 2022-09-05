@@ -24,7 +24,6 @@
 \alias{as.networkLite}
 \alias{as.networkLite.network}
 \alias{as.networkLite.networkLite}
-\alias{as.networkDynamic.networkLite}
 \alias{as_tibble.networkLite}
 \alias{as.matrix.networkLite}
 \alias{is.na.networkLite}
@@ -90,15 +89,13 @@
 
 \method{add.edges}{networkLite}(x, tail, head, names.eval = NULL, vals.eval = NULL, ...)
 
-\method{as.network}{networkLite}(x, ...)
+\method{as.network}{networkLite}(x, ..., allow.networkLite = FALSE)
 
 as.networkLite(x, ...)
 
 \method{as.networkLite}{network}(x, ...)
 
 \method{as.networkLite}{networkLite}(x, ...)
-
-\method{as.networkDynamic}{networkLite}(object, ...)
 
 \method{as_tibble}{networkLite}(x, attrnames = NULL, na.rm = TRUE, ...)
 
@@ -160,6 +157,10 @@ present?}
 \item{head}{Vector of heads of edges to add to the networkLite.}
 
 \item{vals.eval}{value(s) of edge attributes}
+
+\item{allow.networkLite}{logical; if \code{TRUE}, return the
+\code{networkLite} unmodified; if \code{FALSE}, convert to a
+\code{network} class object}
 
 \item{attrnames}{vector specifying edge attributes to include in the tibble;
 may be logical, integer, or character vector, the former two being
