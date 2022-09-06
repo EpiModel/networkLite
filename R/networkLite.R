@@ -569,7 +569,7 @@ as.networkLite.network <- function(x, ...) {
     stop("cannot coerce `network` to `networkLite` unless `hyper`,",
          " `multiple`, and `loops` are all `FALSE`")
   }
-  
+
   el <- as.edgelist(x, na.rm = FALSE)
 
   rv <- networkLite(el)
