@@ -547,3 +547,32 @@ test_that("attribute setting and deleting behave equivalently for network and ne
     }
   }
 })
+
+test_that("as.networkLite conversions work as expected with respect to network attributes", {
+  net_size <- 10L
+  bip_size <- 4L
+
+  nw <- network.initialize(net_size)
+  nwL <- as.networkLite(nw)
+  expect_is(nwL, "networkLite")
+  expect_is(nwL, "network")
+
+  nw <- network.initialize(net_size, directed = FALSE)
+  nwL <- as.networkLite(nw)
+  expect_is(nwL, "networkLite")
+  expect_is(nwL, "network")
+
+  nw <- network.initialize(net_size, directed = FALSE, bipartite = bip_size)
+  nwL <- as.networkLite(nw)
+  expect_is(nwL, "networkLite")
+  expect_is(nwL, "network")
+
+  nw <- network.initialize(net_size, directed = FALSE, bipartite = FALSE, hyper = TRUE)
+  expect_error(nwL <- as.networkLite(nw), "cannot coerce `network` to `networkLite`")
+
+  nw <- network.initialize(net_size, directed = FALSE, bipartite = FALSE, multiple = TRUE)
+  expect_error(nwL <- as.networkLite(nw), "cannot coerce `network` to `networkLite`")
+
+  nw <- network.initialize(net_size, directed = FALSE, bipartite = FALSE, loops = TRUE)
+  expect_error(nwL <- as.networkLite(nw), "cannot coerce `network` to `networkLite`")
+})
