@@ -548,7 +548,7 @@ test_that("attribute setting and deleting behave equivalently for network and ne
   }
 })
 
-test_that("as.networkLite conversions work as expected with respect to network attributes", {
+test_that("as.networkLite conversion errors work as expected with respect to network attributes", {
   net_size <- 10L
   bip_size <- 4L
 
