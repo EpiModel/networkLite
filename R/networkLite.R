@@ -128,8 +128,8 @@ networkLite.edgelist <- function(
 
   if (!isFALSE(nw$gal[["loops"]]) || !isFALSE(nw$gal[["hyper"]]) ||
       !isFALSE(nw$gal[["multiple"]])) {
-    stop("networkLite requires network attributes `loops`,
-         `hyper`, and `multiple` be `FALSE`.")
+    stop("networkLite requires network attributes `loops`, `hyper`, and",
+         " `multiple` be `FALSE`.")
   }
 
   ## for consistency with network,
@@ -399,12 +399,13 @@ mixingmatrix.networkLite <- function(object, attr, ...) {
 "[<-.networkLite" <- function(x, i, j, names.eval = NULL,
                               add.edges = FALSE, value) {
   if (!missing(i) || !missing(j)) {
-    stop("`[<-.networkLite` does not support `i` and `j`
-         arguments at this time")
+    stop("`[<-.networkLite` does not support `i` and `j` arguments at this",
+         " time")
   }
 
   if (any(is.na(value))) {
-    stop("`[<-.networkLite` does not support NA `value` arguments at this time")
+    stop("`[<-.networkLite` does not support NA `value` arguments at this",
+         " time")
   }
 
   if (is.null(names.eval) && isTRUE(all(value == FALSE))) {
@@ -564,6 +565,11 @@ as.networkLite <- function(x, ...) {
 #' @rdname networkLitemethods
 #' @export
 as.networkLite.network <- function(x, ...) {
+  if (is.hyper(x) || is.multiplex(x) || has.loops(x)) {
+    stop("cannot coerce `network` to `networkLite` unless `hyper`,",
+         " `multiple`, and `loops` are all `FALSE`")
+  }
+  
   el <- as.edgelist(x, na.rm = FALSE)
 
   rv <- networkLite(el)
@@ -827,8 +833,8 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
   if (!identical(e1 %n% "n", e2 %n% "n") ||
       !identical(e1 %n% "directed", e2 %n% "directed") ||
       !identical(e1 %n% "bipartite", e2 %n% "bipartite")) {
-    stop("cannot add networkLites of differing network size, directedness, or
-         bipartiteness")
+    stop("cannot add networkLites of differing network size, directedness, or",
+         " bipartiteness")
   }
 
   if (any(NVL(e1 %e% "na", FALSE)) || any(NVL(e2 %e% "na", FALSE))) {
@@ -850,13 +856,13 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
   if (!identical(e1 %n% "n", e2 %n% "n") ||
       !identical(e1 %n% "directed", e2 %n% "directed") ||
       !identical(e1 %n% "bipartite", e2 %n% "bipartite")) {
-    stop("cannot subtract networkLites of differing network size, directedness,
-         or bipartiteness")
+    stop("cannot subtract networkLites of differing network size,",
+         " directedness, or bipartiteness")
   }
 
   if (any(NVL(e1 %e% "na", FALSE)) || any(NVL(e2 %e% "na", FALSE))) {
-    stop("subtracting networkLites with missing edges is
-         not currently supported")
+    stop("subtracting networkLites with missing edges is not currently",
+         " supported")
   }
 
   out <- e1
