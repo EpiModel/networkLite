@@ -186,8 +186,8 @@ networkLite_initialize <- networkLite.numeric
 #'
 #' @details Allows use of networkLite objects in \code{ergm_model}.
 #'
-#' @return Behavior and return values are analogous to those of the 
-#'         corresponding \code{network} methods, with network data structured 
+#' @return Behavior and return values are analogous to those of the
+#'         corresponding \code{network} methods, with network data structured
 #'         in the \code{networkLite} format.
 #'
 #' @rdname networkLitemethods

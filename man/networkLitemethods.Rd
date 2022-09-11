@@ -173,8 +173,8 @@ be added to the second mode?}
 \item{e1, e2}{networkLite objects}
 }
 \value{
-Behavior and return values are analogous to those of the 
-        corresponding \code{network} methods, with network data structured 
+Behavior and return values are analogous to those of the
+        corresponding \code{network} methods, with network data structured
         in the \code{networkLite} format.
 }
 \description{
