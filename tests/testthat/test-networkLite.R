@@ -605,3 +605,21 @@ test_that("more network conversions", {
   expect_identical(unlist(get.edge.attribute(nw, "eattr", null.na = TRUE, unlist = FALSE)[eids]),
                    unlist(get.edge.attribute(nwL, "eattr", unlist = FALSE)))
 })
+
+test_that("as.edgelist with attrname", {
+  nw <- network.initialize(10, directed = FALSE)
+  nw[1,2] <- 1
+  nw[1,5] <- 1
+  nw[2,7] <- 1
+  nw[3,8] <- 1
+  nw[5,10] <- 1
+
+  nwL <- networkLite(as.edgelist(nw))
+
+  set.edge.attribute(nwL, "eattr", list(1, 2, NULL, NA, 3))
+
+  el <- as.edgelist(nwL, attrname = "eattr")
+
+  expect_equal(nwL$el[["eattr"]], list(1, 2, NULL, NA, 3))
+  expect_equal(el[,3], c(1, 2, NA, NA, 3))
+})

@@ -357,7 +357,10 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
   if (output == "matrix") {
     m <- matrix(c(x$el$.tail, x$el$.head), ncol = 2)
     if (!is.null(attrname)) {
-      m <- cbind(m, get.edge.attribute(x, attrname))
+      attrval <- get.edge.attribute(x, attrname, unlist = FALSE)
+      ## analogous to null.na = TRUE in network
+      attrval <- lapply(attrval, function(val) NVL(val, NA))
+      m <- cbind(m, unlist(attrval))
     }
   } else {
     m <- x$el[c(".tail", ".head", attrname)]
