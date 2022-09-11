@@ -21,9 +21,6 @@
 \alias{network.naedgecount.networkLite}
 \alias{add.edges.networkLite}
 \alias{as.network.networkLite}
-\alias{as.networkLite}
-\alias{as.networkLite.network}
-\alias{as.networkLite.networkLite}
 \alias{as_tibble.networkLite}
 \alias{as.matrix.networkLite}
 \alias{is.na.networkLite}
@@ -35,7 +32,7 @@
 \alias{-.networkLite}
 \title{networkLite Methods}
 \usage{
-\method{get.vertex.attribute}{networkLite}(x, attrname, ...)
+\method{get.vertex.attribute}{networkLite}(x, attrname, ..., unlist = TRUE)
 
 \method{set.vertex.attribute}{networkLite}(x, attrname, value, v = seq_len(network.size(x)), ...)
 
@@ -47,9 +44,9 @@
 
 \method{list.network.attributes}{networkLite}(x, ...)
 
-\method{get.edge.attribute}{networkLite}(x, attrname, ...)
+\method{get.edge.attribute}{networkLite}(x, attrname, ..., unlist = TRUE)
 
-\method{get.edge.value}{networkLite}(x, attrname, ...)
+\method{get.edge.value}{networkLite}(x, attrname, ..., unlist = TRUE)
 
 \method{set.edge.attribute}{networkLite}(
   x,
@@ -91,12 +88,6 @@
 
 \method{as.network}{networkLite}(x, ...)
 
-as.networkLite(x, ...)
-
-\method{as.networkLite}{network}(x, ...)
-
-\method{as.networkLite}{networkLite}(x, ...)
-
 \method{as_tibble}{networkLite}(x, attrnames = NULL, na.rm = TRUE, ...)
 
 \method{as.matrix}{networkLite}(
@@ -126,6 +117,10 @@ as.networkLite(x, ...)
 \item{attrname}{The name of an attribute in \code{x}.}
 
 \item{...}{Any additional arguments.}
+
+\item{unlist}{logical; if \code{TRUE}, call \code{unlist} on the attribute
+value before returning it; if \code{FALSE}, call \code{as.list} on
+the attribute value before returning it}
 
 \item{value}{The attribute value to set in vertex, edge, and network
 attribute setters; the value to set edges to (must be FALSE)
@@ -178,9 +173,9 @@ be added to the second mode?}
 \item{e1, e2}{networkLite objects}
 }
 \value{
-An edgelist for \code{as.edgelist.networkLite}; an updated
-        \code{networkLite} object for the replacement method. The other
-        methods return no objects.
+Behavior and return values are analogous to those of the 
+        corresponding \code{network} methods, with network data structured 
+        in the \code{networkLite} format.
 }
 \description{
 S3 methods for networkLite class, for generics defined in

@@ -179,23 +179,34 @@ networkLite_initialize <- networkLite.numeric
 #' @param value The attribute value to set in vertex, edge, and network
 #'              attribute setters; the value to set edges to (must be FALSE)
 #'              for the \code{networkLite} replacement method.
+#' @param unlist logical; if \code{TRUE}, call \code{unlist} on the attribute
+#'        value before returning it; if \code{FALSE}, call \code{as.list} on
+#'        the attribute value before returning it
 #' @param ... Any additional arguments.
 #'
 #' @details Allows use of networkLite objects in \code{ergm_model}.
 #'
-#' @return An edgelist for \code{as.edgelist.networkLite}; an updated
-#'         \code{networkLite} object for the replacement method. The other
-#'         methods return no objects.
+#' @return Behavior and return values are analogous to those of the 
+#'         corresponding \code{network} methods, with network data structured 
+#'         in the \code{networkLite} format.
 #'
 #' @rdname networkLitemethods
 #' @export
 #'
-get.vertex.attribute.networkLite <- function(x, attrname, ...) {
+get.vertex.attribute.networkLite <- function(x, attrname, ..., unlist = TRUE) {
   if (attrname %in% list.vertex.attributes(x)) {
-    x$attr[[attrname]]
+    out <- x$attr[[attrname]]
   } else {
-    rep(NA, length.out = network.size(x))
+    out <- rep(NA, length.out = network.size(x))
   }
+
+  if (unlist == TRUE) {
+    out <- unlist(out)
+  } else {
+    out <- as.list(out)
+  }
+
+  return(out)
 }
 
 #' @rdname networkLitemethods
@@ -255,8 +266,16 @@ list.network.attributes.networkLite <- function(x, ...) {
 #' @rdname networkLitemethods
 #' @export
 #'
-get.edge.attribute.networkLite <- function(x, attrname, ...) {
-  x$el[[attrname]]
+get.edge.attribute.networkLite <- function(x, attrname, ..., unlist = TRUE) {
+  out <- x$el[[attrname]]
+
+  if (unlist == TRUE) {
+    out <- unlist(out)
+  } else {
+    out <- as.list(out)
+  }
+
+  return(out)
 }
 
 #' @rdname networkLitemethods
@@ -338,7 +357,7 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
   if (output == "matrix") {
     m <- matrix(c(x$el$.tail, x$el$.head), ncol = 2)
     if (!is.null(attrname)) {
-      m <- cbind(m, x$el[[attrname]])
+      m <- cbind(m, get.edge.attribute(x, attrname))
     }
   } else {
     m <- x$el[c(".tail", ".head", attrname)]
@@ -503,7 +522,7 @@ print.networkLite <- function(x, ...) {
 #' @rdname networkLitemethods
 #' @export
 network.naedgecount.networkLite <- function(x, ...) {
-  sum(x$el[["na"]])
+  sum(x %e% "na")
 }
 
 #' @rdname networkLitemethods
@@ -556,13 +575,23 @@ as.network.networkLite <- function(x, ...) {
   return(x)
 }
 
-#' @rdname networkLitemethods
+#' @rdname as.networkLite
+#' @title as.networkLite
+#' @description Convert to \code{networkLite} representation.
+#' @details Currently the network attributes \code{hyper}, \code{multiple}, and
+#'          \code{loops} must be \code{FALSE} for \code{networkLite}s;
+#'          attempting to convert to \code{networkLite} when this is not the
+#'          case will result in an error.
+#' @param x a \code{network} or \code{networkLite} object
+#' @param ... additional arguments
+#' @return a corresponding \code{networkLite} object
+#' @seealso \code{\link{to_network_networkLite}}
 #' @export
 as.networkLite <- function(x, ...) {
   UseMethod("as.networkLite")
 }
 
-#' @rdname networkLitemethods
+#' @rdname as.networkLite
 #' @export
 as.networkLite.network <- function(x, ...) {
   if (is.hyper(x) || is.multiplex(x) || has.loops(x)) {
@@ -575,38 +604,68 @@ as.networkLite.network <- function(x, ...) {
   rv <- networkLite(el)
 
   for (name in list.vertex.attributes(x)) {
-    rv %v% name <- x %v% name
+    set.vertex.attribute(rv, name, get.vertex.attribute(x,
+                                                        name,
+                                                        null.na = TRUE,
+                                                        unlist = FALSE))
   }
 
   for (name in setdiff(list.network.attributes(x), c("mnext"))) {
-    rv %n% name <- x %n% name
+    set.network.attribute(rv, name, get.network.attribute(x, name))
   }
 
   eids <- unlist(get.dyads.eids(x, el[, 1], el[, 2]))
   for (name in list.edge.attributes(x)) {
-    set.edge.attribute(rv, name, unlist(get.edge.attribute(x, name, null.na = TRUE,
-                                                           deleted.edges.omit = FALSE,
-                                                           unlist = FALSE)[eids]))
+    set.edge.attribute(rv, name, get.edge.attribute(x, name, null.na = TRUE,
+                                                    deleted.edges.omit = FALSE,
+                                                    unlist = FALSE)[eids])
   }
 
   for (name in setdiff(names(attributes(x)), c("class", "names"))) {
     attr(rv, name) <- attr(x, name)
   }
 
+  rv <- atomize(rv)
+
   rv
 }
 
-#' @rdname networkLitemethods
+## convert vertex and edge attributes to atomic vectors where possible;
+## note that this may upcast atomic types, e.g. logical -> numeric -> character
+atomize <- function(nwL) {
+  for (name in list.vertex.attributes(nwL)) {
+    value <- get.vertex.attribute(nwL, name, unlist = FALSE)
+    if (length(value) > 0 &&
+        all(unlist(lapply(value, is.atomic))) &&
+        all(unlist(lapply(value, length)) == 1)) {
+      nwL$attr[[name]] <- unlist(value)
+    }
+  }
+
+  for (name in list.edge.attributes(nwL)) {
+    value <- get.edge.attribute(nwL, name, unlist = FALSE)
+    if (length(value) > 0 &&
+        all(unlist(lapply(value, is.atomic))) &&
+        all(unlist(lapply(value, length)) == 1)) {
+      nwL$el[[name]] <- unlist(value)
+    }
+  }
+
+  nwL
+}
+
+#' @rdname as.networkLite
 #' @export
 as.networkLite.networkLite <- function(x, ...) {
   x
 }
 
 #' @rdname to_network_networkLite
-#' @title Convert networkLite to network
+#' @title Convert a \code{networkLite} object to a \code{network} object
 #' @param x a \code{networkLite} object
 #' @param ... additional arguments
 #' @return a corresponding \code{network} object
+#' @seealso \code{\link{as.networkLite}}
 #' @export
 to_network_networkLite <- function(x, ...) {
   nw <- network.initialize(network.size(x),
@@ -618,16 +677,16 @@ to_network_networkLite <- function(x, ...) {
   nw <- add.edges(nw, el[, 1], el[, 2])
 
   for (name in list.vertex.attributes(x)) {
-    nw %v% name <- x %v% name
+    set.vertex.attribute(nw, name, get.vertex.attribute(x, name, unlist = FALSE))
   }
 
   for (name in list.network.attributes(x)) {
-    nw %n% name <- x %n% name
+    set.network.attribute(nw, name, get.network.attribute(x, name))
   }
 
   eids <- unlist(get.dyads.eids(nw, el[, 1], el[, 2]))
   for (name in list.edge.attributes(x)) {
-    set.edge.attribute(nw, name, x %e% name, eids)
+    set.edge.attribute(nw, name, get.edge.attribute(x, name, unlist = FALSE), eids)
   }
 
   for (name in setdiff(names(attributes(x)), c("class", "names"))) {
@@ -720,7 +779,7 @@ as.matrix.networkLite.edgelist <- function(x, attrname = NULL,
 
   m <- matrix(c(x$el$.tail, x$el$.head), ncol = 2)
   if (!is.null(attrname)) {
-    m <- cbind(m, x$el[[attrname]])
+    m <- cbind(m, get.edge.attribute(x, attrname))
   }
   if (na.rm == TRUE) {
     m <- m[!NVL(x %e% "na", FALSE), , drop = FALSE]

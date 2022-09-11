@@ -2,7 +2,7 @@
 % Please edit documentation in R/networkLite.R
 \name{to_network_networkLite}
 \alias{to_network_networkLite}
-\title{Convert networkLite to network}
+\title{Convert a \code{networkLite} object to a \code{network} object}
 \usage{
 to_network_networkLite(x, ...)
 }
@@ -15,5 +15,8 @@ to_network_networkLite(x, ...)
 a corresponding \code{network} object
 }
 \description{
-Convert networkLite to network
+Convert a \code{networkLite} object to a \code{network} object
+}
+\seealso{
+\code{\link{as.networkLite}}
 }

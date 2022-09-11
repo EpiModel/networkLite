@@ -576,3 +576,32 @@ test_that("as.networkLite conversion errors work as expected with respect to net
   nw <- network.initialize(net_size, directed = FALSE, bipartite = FALSE, loops = TRUE)
   expect_error(nwL <- as.networkLite(nw), "cannot coerce `network` to `networkLite`")
 })
+
+test_that("more network conversions", {
+  nw <- network.initialize(5, directed = FALSE)
+  nwL <- networkLite(5)
+
+  set.vertex.attribute(nw, "newattr", list(1,list(3),5), c(3,4,1))
+  set.vertex.attribute(nwL, "newattr", list(1,list(3),5), c(3,4,1))
+
+  expect_identical(get.vertex.attribute(nw, "newattr", null.na = TRUE, unlist = FALSE),
+                   get.vertex.attribute(nwL, "newattr", unlist = FALSE))
+
+  expect_identical(get.vertex.attribute(nw, "newattr", null.na = TRUE, unlist = TRUE),
+                   get.vertex.attribute(nwL, "newattr", unlist = TRUE))
+
+  nw[1,2] <- 1
+  nw[3,4] <- 1
+  nw[2,5] <- 1
+
+  set.edge.attribute(nw, "eattr", list(list(NULL), NA, list(3)))
+
+  nwL <- as.networkLite(nw)
+  el <- as.edgelist(nwL)
+
+  eids <- unlist(get.dyads.eids(nw, el[,1], el[,2]))
+  expect_identical(get.edge.attribute(nw, "eattr", null.na = TRUE, unlist = FALSE)[eids],
+                   get.edge.attribute(nwL, "eattr", unlist = FALSE))
+  expect_identical(unlist(get.edge.attribute(nw, "eattr", null.na = TRUE, unlist = FALSE)[eids]),
+                   unlist(get.edge.attribute(nwL, "eattr", unlist = FALSE)))
+})
