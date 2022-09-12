@@ -81,26 +81,10 @@ Within \code{tergmLite}, the \code{networkLite} data structure is used in the
 calls to \code{ergm} and \code{tergm} \code{simulate} functions.
 }
 \examples{
-\dontrun{
-library("EpiModel")
-nw <- network_initialize(100)
-formation <- ~edges
-target.stats <- 50
-coef.diss <- dissolution_coefs(dissolution = ~offset(edges), duration = 20)
-x <- netest(nw, formation, target.stats, coef.diss, verbose = FALSE)
-
-param <- param.net(inf.prob = 0.3)
-init <- init.net(i.num = 10)
-control <- control.net(type = "SI", nsteps = 100, nsims = 5,
-                       tergmLite = TRUE)
-
-# networkLite representation after initialization
-dat <- crosscheck.net(x, param, init, control)
-dat <- initialize.net(x, param, init, control)
-
-# Conversion to networkLite class format
-nwl <- networkLite(dat$el[[1]], dat$attr)
-nwl
-}
+edgelist <- cbind(c(1,2,3), c(2,4,7))
+attr(edgelist, "n") <- 10 # network size
+vertex_attributes <- list(a = 1:10, b = runif(10))
+nwL <- networkLite(edgelist, vertex_attributes)
+nwL
 
 }

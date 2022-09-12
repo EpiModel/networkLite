@@ -38,7 +38,7 @@
 
 \method{list.vertex.attributes}{networkLite}(x, ...)
 
-\method{get.network.attribute}{networkLite}(x, attrname, ...)
+\method{get.network.attribute}{networkLite}(x, attrname, ..., unlist = FALSE)
 
 \method{set.network.attribute}{networkLite}(x, attrname, value, ...)
 
@@ -118,9 +118,14 @@
 
 \item{...}{Any additional arguments.}
 
-\item{unlist}{logical; if \code{TRUE}, call \code{unlist} on the attribute
-value before returning it; if \code{FALSE}, call \code{as.list} on
-the attribute value before returning it}
+\item{unlist}{logical; in \code{get.vertex.attribute} and
+\code{get.edge.attribute}, if \code{unlist} is \code{TRUE}, call
+\code{unlist} on the attribute value before returning it, and if
+\code{unlist} is \code{FALSE}, call \code{as.list} on the attribute
+value before returning it; in \code{get.network.attribute}, if
+\code{unlist} is \code{TRUE}, call \code{unlist} on the attribute
+value before returning it, and if \code{unlist} is \code{FALSE},
+return the attribute value without any modification}
 
 \item{value}{The attribute value to set in vertex, edge, and network
 attribute setters; the value to set edges to (must be FALSE)

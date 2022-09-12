@@ -57,27 +57,11 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' library("EpiModel")
-#' nw <- network_initialize(100)
-#' formation <- ~edges
-#' target.stats <- 50
-#' coef.diss <- dissolution_coefs(dissolution = ~offset(edges), duration = 20)
-#' x <- netest(nw, formation, target.stats, coef.diss, verbose = FALSE)
-#'
-#' param <- param.net(inf.prob = 0.3)
-#' init <- init.net(i.num = 10)
-#' control <- control.net(type = "SI", nsteps = 100, nsims = 5,
-#'                        tergmLite = TRUE)
-#'
-#' # networkLite representation after initialization
-#' dat <- crosscheck.net(x, param, init, control)
-#' dat <- initialize.net(x, param, init, control)
-#'
-#' # Conversion to networkLite class format
-#' nwl <- networkLite(dat$el[[1]], dat$attr)
-#' nwl
-#' }
+#' edgelist <- cbind(c(1,2,3), c(2,4,7))
+#' attr(edgelist, "n") <- 10 # network size
+#' vertex_attributes <- list(a = 1:10, b = runif(10))
+#' nwL <- networkLite(edgelist, vertex_attributes)
+#' nwL
 #'
 networkLite <- function(x, ...) {
   UseMethod("networkLite")
@@ -179,9 +163,14 @@ networkLite_initialize <- networkLite.numeric
 #' @param value The attribute value to set in vertex, edge, and network
 #'              attribute setters; the value to set edges to (must be FALSE)
 #'              for the \code{networkLite} replacement method.
-#' @param unlist logical; if \code{TRUE}, call \code{unlist} on the attribute
-#'        value before returning it; if \code{FALSE}, call \code{as.list} on
-#'        the attribute value before returning it
+#' @param unlist logical; in \code{get.vertex.attribute} and
+#'        \code{get.edge.attribute}, if \code{unlist} is \code{TRUE}, call
+#'        \code{unlist} on the attribute value before returning it, and if
+#'        \code{unlist} is \code{FALSE}, call \code{as.list} on the attribute
+#'        value before returning it; in \code{get.network.attribute}, if
+#'        \code{unlist} is \code{TRUE}, call \code{unlist} on the attribute
+#'        value before returning it, and if \code{unlist} is \code{FALSE},
+#'        return the attribute value without any modification
 #' @param ... Any additional arguments.
 #'
 #' @details Allows use of networkLite objects in \code{ergm_model}.
@@ -240,8 +229,14 @@ list.vertex.attributes.networkLite <- function(x, ...) {
 #' @rdname networkLitemethods
 #' @export
 #'
-get.network.attribute.networkLite <- function(x, attrname, ...) {
-  x$gal[[attrname]]
+get.network.attribute.networkLite <- function(x, attrname, ..., unlist = FALSE) {
+  out <- x$gal[[attrname]]
+
+  if (unlist == TRUE) {
+    out <- unlist(out)
+  }
+
+  return(out)
 }
 
 #' @rdname networkLitemethods
