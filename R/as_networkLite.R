@@ -1,4 +1,4 @@
-#' @rdname as.networkLite
+#' @rdname as_networkLite
 #' @title Convert to \code{networkLite} Representation
 #' @details \code{as.networkLite.network} converts a \code{network} object
 #'          to a \code{networkLite} object.  \code{as.networkLite.networkLite}
@@ -17,7 +17,7 @@ as.networkLite <- function(x, ...) {
   UseMethod("as.networkLite")
 }
 
-#' @rdname as.networkLite
+#' @rdname as_networkLite
 #' @export
 as.networkLite.network <- function(x, ...) {
   if (is.hyper(x) || is.multiplex(x) || has.loops(x)) {
@@ -80,7 +80,7 @@ atomize <- function(nwL) {
   nwL
 }
 
-#' @rdname as.networkLite
+#' @rdname as_networkLite
 #' @export
 as.networkLite.networkLite <- function(x, ...) {
   x
