@@ -32,7 +32,7 @@ significance. These are
  \item for \code{attr}: \code{"na"}, which is a logical attribute indicating
  if the vertex is missing or not;
  \item for \code{gal}: \code{"n"} (the network size), \code{"directed"} (a
- logical indicating if the network is directed), \code{"bipartite"} (either 
+ logical indicating if the network is directed), \code{"bipartite"} (either
  \code{FALSE} to indicate the network is not bipartite, or the size of the
  first bipartition if the network is bipartite), \code{"hyper"} (a logical
  indicating if the network is a hypergraph), \code{"multiple"} (a logical
