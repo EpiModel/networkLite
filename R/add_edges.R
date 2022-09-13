@@ -60,7 +60,7 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
     }
   }
 
-  old_names <- names(x$el)[-c(1,2)]
+  old_names <- names(x$el)[-c(1, 2)]
   for (name in setdiff(old_names, new_names)) {
     update_tibble[[name]] <- vector(mode = "list", length = NROW(update_tibble))
   }
