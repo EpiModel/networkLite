@@ -56,7 +56,7 @@ is.na.networkLite <- function(x) {
                    directed = x %n% "directed",
                    bipartite = x %n% "bipartite")
   el <- as.edgelist(x, na.rm = FALSE)
-  elna <- el[NVL(x %e% "na", FALSE), , drop = FALSE]
+  elna <- el[NVL(x %e% "na", logical(NROW(el))), , drop = FALSE]
   add.edges(y, elna[, 1], elna[, 2])
   y
 }

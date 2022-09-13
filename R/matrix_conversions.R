@@ -28,7 +28,7 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
   }
 
   if (na.rm && NROW(m) > 0) {
-    na <- NVL(x %e% "na", FALSE)
+    na <- NVL(x %e% "na", logical(NROW(m)))
     m <- m[!na, , drop = FALSE]
   }
 
@@ -56,7 +56,7 @@ as_tibble.networkLite <- function(x, attrnames = NULL, na.rm = TRUE, ...) {
     attrnames <- na.omit(list.edge.attributes(x)[attrnames])
   out <- x$el[, c(".tail", ".head", attrnames)]
   if (na.rm && NROW(out) > 0) {
-    na <- NVL(x %e% "na", FALSE)
+    na <- NVL(x %e% "na", logical(NROW(out)))
     out <- out[!na, ]
   }
   out <- atomize_tibble(out)
@@ -87,7 +87,7 @@ as.matrix.networkLite.adjacency <- function(x, attrname = NULL, ...) {
   } else {
     vals <- rep(1, network.edgecount(x, na.omit = FALSE))
   }
-  vals[NVL(x %e% "na", FALSE)] <- NA
+  vals[NVL(x %e% "na", logical(length(vals)))] <- NA
 
   n <- network.size(x)
 
@@ -111,7 +111,7 @@ as.matrix.networkLite.incidence <- function(x, attrname = NULL, ...) {
 
   vals <- NVL2(attrname, x %e% attrname,
                rep(1, network.edgecount(x, na.omit = FALSE)))
-  vals[NVL(x %e% "na", FALSE)] <- NA
+  vals[NVL(x %e% "na", logical(length(vals)))] <- NA
 
   m <- matrix(0, nrow = network.size(x),
               ncol = network.edgecount(x, na.omit = FALSE))
@@ -130,7 +130,7 @@ as.matrix.networkLite.edgelist <- function(x, attrname = NULL,
     m <- cbind(m, get.edge.attribute(x, attrname))
   }
   if (na.rm == TRUE) {
-    m <- m[!NVL(x %e% "na", FALSE), , drop = FALSE]
+    m <- m[!NVL(x %e% "na", logical(NROW(m))), , drop = FALSE]
   }
   attr(m, "n") <- network.size(x)
   attr(m, "vnames") <- network.vertex.names(x)

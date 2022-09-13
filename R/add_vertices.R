@@ -57,7 +57,7 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
       update_tibble <- as_tibble(list(na = logical(nv)))
     }
 
-    old_names <- list.vertex.attributes(x)
+    old_names <- names(x$attr)
     for (name in setdiff(old_names, new_names)) {
       update_tibble[[name]] <- vector(mode = "list", length = NROW(update_tibble))
     }
