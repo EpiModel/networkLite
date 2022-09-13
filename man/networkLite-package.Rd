@@ -2,7 +2,6 @@
 % Please edit documentation in R/networkLite-package.R
 \name{networkLite-package}
 \alias{networkLite-package}
-\alias{networkLite}
 \title{networkLite Package}
 \description{
 The \code{networkLite} package provides an alternative implementation of
@@ -20,7 +19,7 @@ The \code{networkLite} data structure is a named list with three components:
 }
 These components should not be referred to directly by the user in their own
 code. Instead, the various access, coercion, etc. methods provided by this
-package should be used. See \code{\link{constructors}} for information on
+package should be used. See \code{\link{networkLite}} for information on
 how to construct a \code{networkLite}.
 
 Certain names in \code{el}, \code{attr}, and \code{gal} have special

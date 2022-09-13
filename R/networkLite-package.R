@@ -16,7 +16,7 @@
 #' }
 #' These components should not be referred to directly by the user in their own
 #' code. Instead, the various access, coercion, etc. methods provided by this
-#' package should be used. See \code{\link{constructors}} for information on
+#' package should be used. See \code{\link{networkLite}} for information on
 #' how to construct a \code{networkLite}.
 #'
 #' Certain names in \code{el}, \code{attr}, and \code{gal} have special
@@ -42,7 +42,6 @@
 #' use in \code{ergm}, \code{tergm}, and \code{EpiModel}.
 #'
 #' @name networkLite-package
-#' @aliases networkLite
 #'
 #' @import network
 #' @importFrom statnet.common NVL NVL2
