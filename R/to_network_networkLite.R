@@ -29,7 +29,7 @@ to_network_networkLite <- function(x, ...) {
     set.network.attribute(nw, name, value)
   }
 
-  eids <- unlist(get.dyads.eids(nw, el[, 1], el[, 2], na.omit = FALSE))
+  eids <- unlist(lapply(seq_len(NROW(el)), function(index) get.edgeIDs(nw, el[index, 1], el[index, 2], na.omit = FALSE)))
   for (name in list.edge.attributes(x)) {
     value <- get.edge.attribute(x, name, null.na = FALSE, unlist = FALSE)
     set.edge.attribute(nw, name, value, eids)
