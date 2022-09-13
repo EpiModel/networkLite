@@ -114,20 +114,3 @@ is.na.networkLite <- function(x) {
   }
   out
 }
-
-# x = a list of tibbles
-ensure_list <- function(x) {
-  names <- sort(unique(unlist(lapply(x, names))))
-  for (name in names) {
-    any_list <- any(unlist(lapply(lapply(x, `[[`, name), is.list)))
-    if (any_list == TRUE) {
-      x <- lapply(x, function(y) {
-                       if (name %in% names(y)) {
-                         y[[name]] <- as.list(y[[name]])
-                       }
-                       y
-                     })
-    }
-  }
-  return(x)
-}

@@ -2,14 +2,24 @@
 #' @rdname add_edges
 #' @title Methods to Add or Modify Edges in a \code{networkLite}
 #' @param x A \code{networkLite}.
-#' @param tail Vector of tails of edges to add to the networkLite.
-#' @param head Vector of heads of edges to add to the networkLite.
-#' @param names.eval name(s) of edge attributes
-#' @param vals.eval value(s) of edge attributes
-#' @param i,j Nodal indices (must be missing for networkLite method).
-#' @param add.edges should edges being assigned to be added if not already
-#'        present?
-#' @param value edge values to assign
+#' @param tail Vector of tails of edges to add to the \code{networkLite}.
+#' @param head Vector of heads of edges to add to the \code{networkLite}.
+#' @param names.eval Names of edge attributes, or \code{NULL} to indicate that
+#'        attributes are not being specified. For \code{add.edges}, this
+#'        argument should be structured as a list of length equal to
+#'        \code{length(tail)}, each element of which is a character vector
+#'        of attribute names for the corresponding edge. For the replacement
+#'        method \code{[<-.networkLite}, this should argument should be a
+#'        single attribute name, which is applied to all edges.
+#' @param vals.eval Value(s) of edge attributes, or \code{NULL} to indicate
+#'        that attributes are not being specified. This argument should be
+#'        structured as a list of length equal to \code{length(tail)}, each
+#'        element of which is a list of attribute values, in the same order
+#'        as the corresponding attribute names in \code{names.eval}.
+#' @param i,j Nodal indices (must be missing for \code{networkLite} method).
+#' @param add.edges logical; should edges being assigned to be added if they
+#'        are not already present?
+#' @param value Edge values to assign (coerced to a matrix).
 #' @param ... additional arguments
 #' @export
 add.edges.networkLite <- function(x, tail, head, names.eval = NULL,

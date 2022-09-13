@@ -12,22 +12,32 @@
 \arguments{
 \item{x}{A \code{networkLite}.}
 
-\item{tail}{Vector of tails of edges to add to the networkLite.}
+\item{tail}{Vector of tails of edges to add to the \code{networkLite}.}
 
-\item{head}{Vector of heads of edges to add to the networkLite.}
+\item{head}{Vector of heads of edges to add to the \code{networkLite}.}
 
-\item{names.eval}{name(s) of edge attributes}
+\item{names.eval}{Names of edge attributes, or \code{NULL} to indicate that
+attributes are not being specified. For \code{add.edges}, this
+argument should be structured as a list of length equal to
+\code{length(tail)}, each element of which is a character vector
+of attribute names for the corresponding edge. For the replacement
+method \code{[<-.networkLite}, this should argument should be a
+single attribute name, which is applied to all edges.}
 
-\item{vals.eval}{value(s) of edge attributes}
+\item{vals.eval}{Value(s) of edge attributes, or \code{NULL} to indicate
+that attributes are not being specified. This argument should be
+structured as a list of length equal to \code{length(tail)}, each
+element of which is a list of attribute values, in the same order
+as the corresponding attribute names in \code{names.eval}.}
 
 \item{...}{additional arguments}
 
-\item{i, j}{Nodal indices (must be missing for networkLite method).}
+\item{i, j}{Nodal indices (must be missing for \code{networkLite} method).}
 
-\item{add.edges}{should edges being assigned to be added if not already
-present?}
+\item{add.edges}{logical; should edges being assigned to be added if they
+are not already present?}
 
-\item{value}{edge values to assign}
+\item{value}{Edge values to assign (coerced to a matrix).}
 }
 \description{
 Methods to Add or Modify Edges in a \code{networkLite}
