@@ -1,3 +1,52 @@
+expect_equiv_nets <- function(nw1, nw2) {
+  expect_identical(list.network.attributes(nw1),
+                   list.network.attributes(nw2))
+
+  expect_identical(list.vertex.attributes(nw1),
+                   list.vertex.attributes(nw2))
+
+  expect_identical(list.edge.attributes(nw1),
+                   list.edge.attributes(nw2))
+
+  for (attrname in list.network.attributes(nw1)) {
+    if (attrname == "n") {
+      # can have integer vs. double issues...
+      expect_equal(get.network.attribute(nw1, attrname),
+                   get.network.attribute(nw2, attrname))    
+    } else {
+      expect_identical(get.network.attribute(nw1, attrname),
+                       get.network.attribute(nw2, attrname))
+    }
+  }
+
+  for (attrname in list.vertex.attributes(nw1)) {
+    expect_identical(get.vertex.attribute(nw1, attrname, null.na = FALSE, unlist = FALSE),
+                     get.vertex.attribute(nw2, attrname, null.na = FALSE, unlist = FALSE))
+  }
+
+  expect_identical(as.edgelist(nw1, na.rm = FALSE), as.edgelist(nw2, na.rm = FALSE))
+  el <- as.edgelist(nw1, na.rm = FALSE)
+  if (!is(nw1, "networkLite")) {
+    eids1 <- unlist(get.dyads.eids(nw1, el[,1], el[,2], na.omit = FALSE))
+  } else {
+    eids1 <- seq_len(network.edgecount(nw1, na.omit = FALSE))
+  }
+  if (!is(nw2, "networkLite")) {
+    eids2 <- unlist(get.dyads.eids(nw2, el[,1], el[,2], na.omit = FALSE))
+  } else {
+    eids2 <- seq_len(network.edgecount(nw2, na.omit = FALSE))  
+  }
+  for (attrname in list.edge.attributes(nw1)) {
+    expect_identical(get.edge.attribute(nw1, attrname, null.na = FALSE, unlist = FALSE, na.omit = FALSE, deleted.edges.omit = FALSE)[eids1],
+                     get.edge.attribute(nw2, attrname, null.na = FALSE, unlist = FALSE, na.omit = FALSE, deleted.edges.omit = FALSE)[eids2])
+  }
+
+  sn1 <- sort(names(attributes(nw1)))
+  sn2 <- sort(names(attributes(nw2)))
+  expect_identical(sn1, sn2)
+  expect_identical(length(sn1), length(attributes(nw1)))
+  expect_identical(attributes(nw1)[sn1], attributes(nw2)[sn2])
+}
 
 create_random_edgelist <- function(n_nodes, directed, bipartite, target_n_edges) {
   if (directed == TRUE) {
@@ -32,56 +81,26 @@ test_that("direct conversion between network and networkLite functions as expect
       }
 
       for(last.mode in list(FALSE, TRUE)) {
-        for(delete in list(FALSE)) {
-          set.seed(0)
-          nw <- network(create_random_edgelist(net_size, directed, bipartite, edges_target), directed = directed, bipartite = bipartite, matrix.type = "edgelist")
-          nw %v% "b" <- runif(net_size)
-          nw %e% "eattr" <- runif(network.edgecount(nw))
-          nw %n% "nattr" <- "attr"
-#          nainds <- sample(valid.eids(nw), as.integer(network.size(nw)/2), FALSE)
-#          set.edge.attribute(nw, "na", TRUE, nainds)
-          add.vertices(nw, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
-          if(delete) {
-            el <- as.edgelist(nw, attrname = "na", na.rm = FALSE)
-            w1 <- sample(which(as.logical(el[,3])))[1:5]
-            w2 <- sample(which(!as.logical(el[,3])))[1:7]
-            delete.edges(nw, unlist(get.dyads.eids(nw, el[w1,1], el[w1,2], na.omit = FALSE)))
-            delete.edges(nw, unlist(get.dyads.eids(nw, el[w2,1], el[w2,2], na.omit = FALSE)))
-            vd <- sample(seq_len(net_size), 10, FALSE)
-            delete.vertices(nw, vd)
-          }
-          # add.vertices and delete.vertices convert network size to integer....
-          nw %n% "n" <- as.numeric(nw %n% "n")
+        set.seed(0)
+        nw <- network(create_random_edgelist(net_size, directed, bipartite, edges_target), directed = directed, bipartite = bipartite, matrix.type = "edgelist")
+        nw %v% "b" <- runif(net_size)
+        nw %e% "eattr" <- runif(network.edgecount(nw))
+        nw %n% "nattr" <- "attr"
+        add.vertices(nw, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
 
-          set.seed(0)
-          nwL <- networkLite(create_random_edgelist(net_size, directed, bipartite, edges_target))
-          nwL %v% "b" <- runif(net_size)
-          set.edge.attribute(nwL, "eattr", runif(network.edgecount(nwL)))
-          nwL %n% "nattr" <- "attr"
-#          nainds <- sample(seq_len(network.edgecount(nwL)), as.integer(network.size(nwL)/2), FALSE)
-#          set.edge.attribute(nwL, "na", TRUE, nainds)
-          add.vertices(nwL, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
-          if(delete) {
-            el <- as.edgelist(nwL, attrname = "na", na.rm = FALSE)
-            w1 <- sample(which(as.logical(el[,3])))[1:5]
-            w2 <- sample(which(!as.logical(el[,3])))[1:7]
-            delete.edges(nwL, c(w1,w2))
-            vd <- sample(seq_len(net_size), 10, FALSE)
-            delete.vertices(nwL, vd)
-          }
+        set.seed(0)
+        nwL <- networkLite(create_random_edgelist(net_size, directed, bipartite, edges_target))
+        nwL %v% "b" <- runif(net_size)
+        set.edge.attribute(nwL, "eattr", runif(network.edgecount(nwL)))
+        nwL %n% "nattr" <- "attr"
+        add.vertices(nwL, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
 
-          expect_identical(as.networkLite(nw), nwL)
-          expect_identical(as.networkLite(is.na(nw)), is.na(nwL))
-          expect_identical(as.networkLite(is.na(is.na(nw))), is.na(is.na(nwL)))
+        expect_equiv_nets(as.networkLite(nw), nwL)
+        expect_equiv_nets(as.networkLite(is.na(nw)), is.na(nwL))
+        expect_equiv_nets(as.networkLite(is.na(is.na(nw))), is.na(is.na(nwL)))
 
-          if(delete) {
-            expect_identical(as.networkLite(nw), as.networkLite(to_network_networkLite(nwL)))
-            expect_identical(as.networkLite(is.na(nw)), as.networkLite(to_network_networkLite(is.na(nwL))))
-          } else {
-            expect_identical(nw, to_network_networkLite(nwL))
-            expect_identical(is.na(nw), to_network_networkLite(is.na(nwL)))
-          }
-        }
+        expect_equiv_nets(nw, to_network_networkLite(nwL))
+        expect_equiv_nets(is.na(nw), to_network_networkLite(is.na(nwL)))
       }
     }
   }
@@ -101,14 +120,10 @@ test_that("network and networkLite produce identical matrices, edgelists, and ti
       set.seed(0)
       nw <- network(create_random_edgelist(net_size, directed, bipartite, edges_target), directed = directed, bipartite = bipartite, matrix.type = "edgelist")
       nw %e% "eattr" <- runif(network.edgecount(nw))
-#      nainds <- sample(valid.eids(nw), as.integer(length(valid.eids(nw))/2), FALSE)
-#      set.edge.attribute(nw, "na", TRUE, nainds)
 
       set.seed(0)
       nwL <- networkLite(create_random_edgelist(net_size, directed, bipartite, edges_target))
       set.edge.attribute(nwL, "eattr", runif(network.edgecount(nwL)))
-#      nainds <- sample(valid.eids(nwL), as.integer(length(valid.eids(nwL))/2), FALSE)
-#      set.edge.attribute(nwL, "na", TRUE, nainds)
 
       for(attrname in list(NULL, "eattr", "na")) {
         for(na.rm in list(FALSE, TRUE)) {
@@ -321,7 +336,7 @@ test_that("network and networkLite behave equivalently for basic access and muta
       nwL %v% "vattr3" <- vattr3
 
       expect_identical(as.edgelist(nw, attrname = "eattr1"), as.edgelist(nwL, attrname = "eattr1"))
-#      expect_identical(as.edgelist(nw, attrname = "eattr2"), as.edgelist(nwL, attrname = "eattr2"))
+      expect_identical(as.edgelist(nw, attrname = "eattr2"), as.edgelist(nwL, attrname = "eattr2"))
       expect_identical(as.edgelist(nw, attrname = "eattr3"), as.edgelist(nwL, attrname = "eattr3"))
 
       expect_identical(nw %v% "vattr1", nwL %v% "vattr1")
@@ -422,20 +437,8 @@ test_that("add.vertices and add.edges with irregular attribute arguments behave 
         }
         add.vertices(nwL, vta, vattr = vattr, last.mode = last.mode)
 
-        for(en in setdiff(list.edge.attributes(nw), "na")) {
-          ev <- get.edge.attribute(nwL, en)
-          delete.edge.attribute(nwL, en)
-          set.edge.attribute(nwL, en, ev)
-        }
-
-        for(vn in setdiff(list.vertex.attributes(nw), c("na", "vertex.names"))) {
-          vv <- get.vertex.attribute(nwL, vn)
-          delete.vertex.attribute(nwL, vn)
-          set.vertex.attribute(nwL, vn, vv)
-        }
-
-        expect_equal(as.networkLite(nw), nwL)
-        expect_equal(as.networkLite(nw), as.networkLite(to_network_networkLite(nwL)))
+        expect_equiv_nets(as.networkLite(nw), nwL)
+        expect_equiv_nets(as.networkLite(nw), as.networkLite(to_network_networkLite(nwL)))
       }
     }
   }
@@ -505,45 +508,8 @@ test_that("attribute setting and deleting behave equivalently for network and ne
         }
       }
 
-      ## re-order everything for these comparisons...
-      for(en in setdiff(list.edge.attributes(nw), "na")) {
-        ev <- get.edge.attribute(nwL, en)
-        delete.edge.attribute(nwL, en)
-        set.edge.attribute(nwL, en, ev)
-      }
-
-      for(vn in setdiff(list.vertex.attributes(nw), c("na", "vertex.names"))) {
-        vv <- get.vertex.attribute(nwL, vn)
-        delete.vertex.attribute(nwL, vn)
-        set.vertex.attribute(nwL, vn, vv)
-      }
-
-      for(nn in setdiff(list.network.attributes(nw), c("n", "directed", "bipartite", "loops", "hyper", "multiple", "mnext"))) {
-        nv <- get.network.attribute(nwL, nn)
-        delete.network.attribute(nwL, nn)
-        set.network.attribute(nwL, nn, nv)
-      }
-
-      for(en in setdiff(list.edge.attributes(nwL), "na")) {
-        ev <- get.edge.attribute(nw, en)
-        delete.edge.attribute(nw, en)
-        set.edge.attribute(nw, en, ev)
-      }
-
-      for(vn in setdiff(list.vertex.attributes(nwL), c("na", "vertex.names"))) {
-        vv <- get.vertex.attribute(nw, vn)
-        delete.vertex.attribute(nw, vn)
-        set.vertex.attribute(nw, vn, vv)
-      }
-
-      for(nn in setdiff(list.network.attributes(nwL), c("n", "directed", "bipartite", "loops", "hyper", "multiple", "mnext"))) {
-        nv <- get.network.attribute(nw, nn)
-        delete.network.attribute(nw, nn)
-        set.network.attribute(nw, nn, nv)
-      }
-
-      expect_identical(nw, to_network_networkLite(nwL))
-      expect_identical(as.networkLite(nw), nwL)
+      expect_equiv_nets(nw, to_network_networkLite(nwL))
+      expect_equiv_nets(as.networkLite(nw), nwL)
     }
   }
 })
@@ -585,10 +551,10 @@ test_that("more network conversions", {
   set.vertex.attribute(nwL, "newattr", list(1,list(3),5), c(3,4,1))
 
   expect_identical(get.vertex.attribute(nw, "newattr", null.na = TRUE, unlist = FALSE),
-                   get.vertex.attribute(nwL, "newattr", unlist = FALSE))
+                   get.vertex.attribute(nwL, "newattr", null.na = TRUE, unlist = FALSE))
 
   expect_identical(get.vertex.attribute(nw, "newattr", null.na = TRUE, unlist = TRUE),
-                   get.vertex.attribute(nwL, "newattr", unlist = TRUE))
+                   get.vertex.attribute(nwL, "newattr", null.na = TRUE, unlist = TRUE))
 
   nw[1,2] <- 1
   nw[3,4] <- 1
@@ -601,9 +567,9 @@ test_that("more network conversions", {
 
   eids <- unlist(get.dyads.eids(nw, el[,1], el[,2]))
   expect_identical(get.edge.attribute(nw, "eattr", null.na = TRUE, unlist = FALSE)[eids],
-                   get.edge.attribute(nwL, "eattr", unlist = FALSE))
+                   get.edge.attribute(nwL, "eattr", null.na = TRUE, unlist = FALSE))
   expect_identical(unlist(get.edge.attribute(nw, "eattr", null.na = TRUE, unlist = FALSE)[eids]),
-                   unlist(get.edge.attribute(nwL, "eattr", unlist = FALSE)))
+                   unlist(get.edge.attribute(nwL, "eattr", null.na = TRUE, unlist = FALSE)))
 })
 
 test_that("as.edgelist with attrname", {

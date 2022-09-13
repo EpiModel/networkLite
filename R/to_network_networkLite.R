@@ -20,16 +20,19 @@ to_network_networkLite <- function(x, ...) {
   nw <- add.edges(nw, el[, 1], el[, 2])
 
   for (name in list.vertex.attributes(x)) {
-    set.vertex.attribute(nw, name, get.vertex.attribute(x, name, unlist = FALSE))
+    value <- get.vertex.attribute(x, name, null.na = FALSE, unlist = FALSE)
+    set.vertex.attribute(nw, name, value)
   }
 
   for (name in list.network.attributes(x)) {
-    set.network.attribute(nw, name, get.network.attribute(x, name))
+    value <- get.network.attribute(x, name)
+    set.network.attribute(nw, name, value)
   }
 
-  eids <- unlist(get.dyads.eids(nw, el[, 1], el[, 2]))
+  eids <- unlist(get.dyads.eids(nw, el[, 1], el[, 2], na.omit = FALSE))
   for (name in list.edge.attributes(x)) {
-    set.edge.attribute(nw, name, get.edge.attribute(x, name, unlist = FALSE), eids)
+    value <- get.edge.attribute(x, name, null.na = FALSE, unlist = FALSE)
+    set.edge.attribute(nw, name, value, eids)
   }
 
   for (name in setdiff(names(attributes(x)), c("class", "names"))) {

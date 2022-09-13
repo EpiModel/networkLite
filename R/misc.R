@@ -83,7 +83,7 @@ is.na.networkLite <- function(x) {
 
   out <- e1
   if (network.edgecount(e2, na.omit = FALSE) > 0) {
-    edgelist <- dplyr::bind_rows(e1$el, e2$el)
+    edgelist <- dplyr::bind_rows(ensure_list(list(e1$el, e2$el)))
     edgelist <- edgelist[!duplicated(edgelist[, c(".tail", ".head")]), ]
     out$el <- edgelist[order(edgelist$.tail, edgelist$.head), ]
   }
@@ -107,10 +107,22 @@ is.na.networkLite <- function(x) {
 
   out <- e1
   if (network.edgecount(e2, na.omit = FALSE) > 0) {
-    edgelist <- dplyr::bind_rows(e2$el, e1$el)
+    edgelist <- dplyr::bind_rows(ensure_list(list(e2$el, e1$el)))
     nd <- !duplicated(edgelist[, c(".tail", ".head")])
     out$el <- out$el[nd[-seq_len(network.edgecount(e2, na.omit = FALSE))], ]
     out$el <- out$el[order(out$el$.tail, out$el$.head), ]
   }
   out
+}
+
+# x = a list of tibbles
+ensure_list <- function(x) {
+  names <- sort(unique(unlist(lapply(x, names))))
+  for(name in names) {
+    any_list <- any(unlist(lapply(lapply(x, `[[`, name), is.list)))
+    if (any_list == TRUE) {
+      x <- lapply(x, function(y) { if (name %in% names(y)) { y[[name]] <- as.list(y[[name]]) }; y })
+    }
+  }
+  return(x)
 }

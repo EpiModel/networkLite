@@ -21,10 +21,7 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
   if (output == "matrix") {
     m <- matrix(c(x$el$.tail, x$el$.head), ncol = 2)
     if (!is.null(attrname)) {
-      attrval <- get.edge.attribute(x, attrname, unlist = FALSE)
-      ## analogous to null.na = TRUE in network
-      attrval <- lapply(attrval, function(val) NVL(val, NA))
-      m <- cbind(m, unlist(attrval))
+      m <- cbind(m, get.edge.attribute(x, attrname, null.na = TRUE, unlist = TRUE))
     }
   } else {
     m <- x$el[c(".tail", ".head", attrname)]
@@ -35,6 +32,9 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
     m <- m[!na, , drop = FALSE]
   }
 
+  if (output == "tibble") {
+    m <- atomize_tibble(m)
+  }
   attr(m, "dimnames") <- NULL
 
   attr(m, "n") <- as.integer(network.size(x))
@@ -59,6 +59,7 @@ as_tibble.networkLite <- function(x, attrnames = NULL, na.rm = TRUE, ...) {
     na <- NVL(x %e% "na", FALSE)
     out <- out[!na, ]
   }
+  out <- atomize_tibble(out)
   attr(out, "n") <- network.size(x)
   attr(out, "vnames") <- network.vertex.names(x)
   if (is.bipartite(x)) attr(out, "bipartite") <- x %n% "bipartite"

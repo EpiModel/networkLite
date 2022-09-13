@@ -33,18 +33,41 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
         vattr <- as.list(rep(vattr, length.out = nv))
       }
 
-      f <- function(x) if (length(x) > 0) as_tibble(x) else tibble(NULL, .rows = 1)
-      update_tibble <- dplyr::bind_rows(lapply(vattr, f))
+      new_names <- unique(unlist(lapply(vattr, names)))
+      for (i in seq_along(vattr)) {
+        given_names <- names(vattr[[i]])
+        null_names <- setdiff(new_names, given_names)
+        vattr[[i]] <- c(vattr[[i]], vector(mode = "list", length = length(null_names)))
+        names(vattr[[i]]) <- c(given_names, null_names)
+      }
+      
+      update_list <- lapply(new_names, function(name) lapply(vattr, `[[`, name))
+      names(update_list) <- new_names
+      update_tibble <- as_tibble(update_list)
+
+      if ("na" %in% new_names) {
+        update_tibble[["na"]] <- lapply(update_tibble[["na"]],
+                                        function(val) if (is.null(val) || is.na(val)) FALSE else val)
+      } else {
+        new_names <- c(new_names, "na")
+        update_tibble[["na"]] <- logical(NROW(update_tibble))
+      }
     } else {
+      new_names <- c("na")
       update_tibble <- as_tibble(list(na = logical(nv)))
     }
-    update_tibble[["na"]] <- NVL(update_tibble[["na"]],
-                                 logical(NROW(update_tibble)))
-    update_tibble[["na"]][is.na(update_tibble[["na"]])] <- FALSE
 
-    x$attr <- dplyr::bind_rows(x$attr[seq_len(offset), ],
-                               update_tibble,
-                               x$attr[offset + seq_len(oldsize - offset), ])
+    old_names <- list.vertex.attributes(x)
+    for (name in setdiff(old_names, new_names)) {
+      update_tibble[[name]] <- vector(mode = "list", length = NROW(update_tibble))
+    }
+    for (name in setdiff(new_names, old_names)) {
+      x$attr[[name]] <- vector(mode = "list", length = NROW(x$attr))
+    }
+
+    x$attr <- dplyr::bind_rows(ensure_list(list(x$attr[seq_len(offset), ],
+                                           update_tibble,
+                                           x$attr[offset + seq_len(oldsize - offset), ])))
   }
 
   on.exit(eval.parent(call("<-", xn, x)))

@@ -17,7 +17,7 @@
 \alias{delete.network.attribute.networkLite}
 \title{\code{networkLite} Attribute Methods}
 \usage{
-\method{get.vertex.attribute}{networkLite}(x, attrname, ..., unlist = TRUE)
+\method{get.vertex.attribute}{networkLite}(x, attrname, ..., null.na = TRUE, unlist = TRUE)
 
 \method{set.vertex.attribute}{networkLite}(x, attrname, value, v = seq_len(network.size(x)), ...)
 
@@ -29,9 +29,9 @@
 
 \method{list.network.attributes}{networkLite}(x, ...)
 
-\method{get.edge.attribute}{networkLite}(x, attrname, ..., unlist = TRUE)
+\method{get.edge.attribute}{networkLite}(x, attrname, ..., null.na = TRUE, unlist = TRUE)
 
-\method{get.edge.value}{networkLite}(x, attrname, ..., unlist = TRUE)
+\method{get.edge.value}{networkLite}(x, attrname, ..., null.na = TRUE, unlist = TRUE)
 
 \method{set.edge.attribute}{networkLite}(
   x,
@@ -65,7 +65,11 @@ character vector.}
 
 \item{...}{additional arguments}
 
-\item{unlist}{Logical.  In \code{get.vertex.attribute} and
+\item{null.na}{Logical. If \code{TRUE}, replace \code{NULL} attribute values
+with \code{NA} in \code{get.vertex.attribute} and
+\code{get.edge.attribute}. Applied before the \code{unlist} argument.}
+
+\item{unlist}{Logical. In \code{get.vertex.attribute} and
 \code{get.edge.attribute}, if \code{unlist} is \code{TRUE}, we call
 \code{unlist} on the attribute value before returning it, and if
 \code{unlist} is \code{FALSE}, we call \code{as.list} on the

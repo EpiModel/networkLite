@@ -12,7 +12,10 @@
 #'        attribute setters.
 #' @param v Indices at which to set vertex attribute values.
 #' @param e Indices at which to set edge attribute values.
-#' @param unlist Logical.  In \code{get.vertex.attribute} and
+#' @param null.na Logical. If \code{TRUE}, replace \code{NULL} attribute values
+#'        with \code{NA} in \code{get.vertex.attribute} and
+#'        \code{get.edge.attribute}. Applied before the \code{unlist} argument.
+#' @param unlist Logical. In \code{get.vertex.attribute} and
 #'        \code{get.edge.attribute}, if \code{unlist} is \code{TRUE}, we call
 #'        \code{unlist} on the attribute value before returning it, and if
 #'        \code{unlist} is \code{FALSE}, we call \code{as.list} on the
@@ -30,11 +33,15 @@
 #'
 #' @export
 #'
-get.vertex.attribute.networkLite <- function(x, attrname, ..., unlist = TRUE) {
+get.vertex.attribute.networkLite <- function(x, attrname, ..., null.na = TRUE, unlist = TRUE) {
   if (attrname %in% list.vertex.attributes(x)) {
     out <- x$attr[[attrname]]
   } else {
-    out <- rep(NA, length.out = network.size(x))
+    out <- vector(mode = "list", length = network.size(x))
+  }
+
+  if (null.na == TRUE && is.list(out)) {
+    out <- lapply(out, NVL, NA)
   }
 
   if (unlist == TRUE) {
@@ -57,7 +64,7 @@ set.vertex.attribute.networkLite <- function(x,
   xn <- substitute(x)
 
   if (!(attrname %in% list.vertex.attributes(x))) {
-    x$attr[[attrname]] <- rep(NA, length.out = network.size(x))
+    x$attr[[attrname]] <- vector(mode = "list", length = network.size(x))
   }
 
   x$attr[[attrname]][v] <- value
@@ -108,8 +115,16 @@ list.network.attributes.networkLite <- function(x, ...) {
 #' @rdname attribute_methods
 #' @export
 #'
-get.edge.attribute.networkLite <- function(x, attrname, ..., unlist = TRUE) {
-  out <- x$el[[attrname]]
+get.edge.attribute.networkLite <- function(x, attrname, ..., null.na = TRUE, unlist = TRUE) {
+  if (attrname %in% list.edge.attributes(x)) {
+    out <- x$el[[attrname]]
+  } else {
+    out <- vector(mode = "list", length = network.edgecount(x, na.omit = FALSE))
+  }
+
+  if (null.na == TRUE && is.list(out)) {
+    out <- lapply(out, NVL, NA)
+  }
 
   if (unlist == TRUE) {
     out <- unlist(out)
@@ -135,8 +150,7 @@ set.edge.attribute.networkLite <- function(
   xn <- substitute(x)
 
   if (!(attrname %in% list.edge.attributes(x))) {
-    x$el[[attrname]] <- rep(NA,
-                            length.out = network.edgecount(x, na.omit = FALSE))
+    x$el[[attrname]] <- vector(mode = "list", length = network.edgecount(x, na.omit = FALSE))
   }
 
   x$el[[attrname]][e] <- value
@@ -155,8 +169,7 @@ set.edge.value.networkLite <- function(
   xn <- substitute(x)
 
   if (!(attrname %in% list.edge.attributes(x))) {
-    x$el[[attrname]] <- rep(NA,
-                            length.out = network.edgecount(x, na.omit = FALSE))
+    x$el[[attrname]] <- vector(mode = "list", length = network.edgecount(x, na.omit = FALSE))
   }
 
   x$el[[attrname]][e] <- value[as.matrix(x$el[e, c(".tail", ".head")])]
