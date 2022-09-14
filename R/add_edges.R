@@ -32,7 +32,6 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
                                     na = logical(length(tail))))
     new_names <- c("na")
   } else {
-    new_names <- unique(unlist(names.eval))
 
     if (!is.list(names.eval)) names.eval <-
         as.list(rep(names.eval, length.out = length(tail)))
@@ -40,16 +39,14 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
         as.list(rep(vals.eval, length.out = length(names.eval)))
 
     for (i in seq_along(vals.eval)) {
-      given_names <- unlist(names.eval[[i]])
-      null_names <- setdiff(new_names, given_names)
-      vals.eval[[i]] <- c(as.list(vals.eval[[i]]), vector(mode = "list", length = length(null_names)))
-      names(vals.eval[[i]]) <- c(given_names, null_names)
+      vals.eval[[i]] <- as.list(vals.eval[[i]])
+      names(vals.eval[[i]]) <- names.eval[[i]]
     }
 
+    new_names <- unique(unlist(names.eval))
     update_list <- lapply(new_names, function(name) lapply(vals.eval, `[[`, name))
     names(update_list) <- new_names
-    update_tibble <- dplyr::bind_cols(as_tibble(list(.tail = tail, .head = head)),
-                                      as_tibble(update_list))
+    update_tibble <- as_tibble(c(list(.tail = tail, .head = head), update_list))
 
     if ("na" %in% new_names) {
      update_tibble[["na"]] <- lapply(update_tibble[["na"]],

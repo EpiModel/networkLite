@@ -34,13 +34,6 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
       }
 
       new_names <- unique(unlist(lapply(vattr, names)))
-      for (i in seq_along(vattr)) {
-        given_names <- names(vattr[[i]])
-        null_names <- setdiff(new_names, given_names)
-        vattr[[i]] <- c(vattr[[i]], vector(mode = "list", length = length(null_names)))
-        names(vattr[[i]]) <- c(given_names, null_names)
-      }
-
       update_list <- lapply(new_names, function(name) lapply(vattr, `[[`, name))
       names(update_list) <- new_names
       update_tibble <- as_tibble(update_list)
