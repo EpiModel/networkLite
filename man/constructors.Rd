@@ -29,21 +29,39 @@ networkLite(x, ...)
 networkLite_initialize(x, directed = FALSE, bipartite = FALSE, ...)
 }
 \arguments{
-\item{x}{Either an \code{edgelist} class network representation (including
-network attributes in its \code{attributes} list), or a number
-specifying the network size.}
+\item{x}{Either an \code{edgelist} class network representation, including
+       network attributes as \code{attr}-style attributes on the
+       \code{edgelist}, or a number specifying the network size. The
+       \code{edgelist} may be either a \code{tibble} or a \code{matrix}. If
+       a \code{tibble} is passed, it should have integer columns named
+       \code{".tail"} and \code{".head"} for the tails and heads of edges,
+       and may include edge attributes as additional columns. If a
+       \code{matrix} is passed, it should have two columns, the first being
+       the tails of edges and the second being the heads of edges; edge
+       attributes are not supported for \code{matrix} arguments. Edges
+       should be sorted, first on tails then on heads. See
+       \code{\link[network]{as.edgelist}} for information on producing such
+       \code{edgelist} objects from \code{network} objects.
+
+       The \code{edgelist} \emph{must} have the \code{"n"} attribute
+       indicating the network size, and may include additional named
+       \code{attr}-style attributes that will be interpreted as network
+       attributes and copied to the \code{networkLite}. Exceptions to this
+       are attributes named \code{"class"}, \code{"dim"}, \code{"dimnames"},
+       \code{"vnames"}, \code{"row.names"}, \code{"names"}, and
+       \code{"mnext"}; these are not copied from the \code{edgelist} to the
+       \code{networkLite}.}
 
 \item{...}{additional arguments}
 
-\item{attr}{A named list of vertex attributes for the network represented by
-\code{x}.}
+\item{attr}{A named list of vertex attributes, coerced to \code{tibble}.}
 
 \item{directed, bipartite}{Common network attributes that may be set via
 arguments to the \code{networkLite.numeric} method.}
 }
 \value{
-A networkLite object with edge list \code{el}, vertex attributes \code{attr},
-and network attributes \code{gal}.
+A \code{networkLite} object with edgelist \code{el}, vertex attributes
+\code{attr}, and network attributes \code{gal}.
 }
 \description{
 Constructor methods for \code{networkLite} objects.
@@ -56,17 +74,12 @@ The \code{edgelist} method takes an \code{edgelist} class object \code{x}
 with network attributes attached in its \code{attributes} list, and a named
 list of vertex attributes \code{attr}, and returns a \code{networkLite}
 object, which is a named list with fields \code{el}, \code{attr}, and
-\code{gal}; the fields \code{el} and \code{attr} match the arguments \code{x}
-and \code{attr} (the latter coerced to \code{tibble}) respectively, and the
-field \code{gal} is the list of network attributes (copied from
-\code{attributes(x)}). Missing network attributes \code{directed} and
-\code{bipartite} are defaulted to \code{FALSE}; the network size attribute
-\code{n} must not be missing. Attributes \code{class}, \code{dim},
-\code{dimnames}, \code{vnames}, and \code{mnext} (if present) are not copied
-from \code{x} to the \code{networkLite}.  (For convenience, a \code{matrix}
-method, identical to the \code{edgelist} method, is also defined, to handle
-cases where the edgelist is, for whatever reason, not classed as an
-\code{edgelist}.)
+\code{gal}. The fields \code{el} and \code{attr} are \code{tibble}s
+corresponding to the \code{x} and \code{attr} arguments, respectively, and
+the field \code{gal} is the list of network attributes (copied from
+\code{attributes(x)}, with the exceptions noted above). Missing network
+attributes \code{directed} and \code{bipartite} are defaulted to
+\code{FALSE}; the network size attribute \code{n} must not be missing.
 
 The \code{numeric} method takes a number \code{x} as well as the network
 attributes \code{directed} and \code{bipartite} (defaulting to \code{FALSE}),
