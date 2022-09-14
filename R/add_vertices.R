@@ -26,7 +26,8 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
       offset <- oldsize
     }
 
-    if (!is.null(vattr)) {
+    ## if we were passed any attribute information...
+    if (length(unlist(vattr)) > 0) {
       if (is.list(vattr)) {
         vattr <- rep(vattr, length.out = nv)
       } else {
@@ -36,19 +37,17 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
       new_names <- unique(unlist(lapply(vattr, names)))
       update_list <- lapply(new_names, function(name) lapply(vattr, `[[`, name))
       names(update_list) <- new_names
-      update_tibble <- as_tibble(update_list)
-
-      if ("na" %in% new_names) {
-        update_tibble[["na"]] <- lapply(update_tibble[["na"]],
-                                        function(val) if (is.null(val) || is.na(val)) FALSE else val)
-      } else {
-        new_names <- c(new_names, "na")
-        update_tibble[["na"]] <- logical(NROW(update_tibble))
-      }
     } else {
-      new_names <- c("na")
-      update_tibble <- as_tibble(list(na = logical(nv)))
+      update_list <- list()
     }
+
+    if ("na" %in% names(update_list)) {
+      update_list[["na"]] <- lapply(update_list[["na"]], function(val) if (is.null(val) || is.na(val)) FALSE else val)
+    } else {
+      update_list <- c(update_list, list(na = logical(nv)))
+    }
+    new_names <- names(update_list) # including "na"
+    update_tibble <- as_tibble(update_list)
 
     old_names <- names(x$attr)
     for (name in setdiff(old_names, new_names)) {

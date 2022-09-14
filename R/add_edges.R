@@ -24,15 +24,12 @@
 #' @export
 add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
                                   vals.eval = NULL, ...) {
+  ## convert to atomic...
   tail <- NVL(unlist(tail), integer(0))
   head <- NVL(unlist(head), integer(0))
-  if (length(names.eval) == 0 || length(vals.eval) == 0 ||
-      length(unlist(names.eval)) == 0 || length(unlist(vals.eval)) == 0) {
-    update_tibble <- as_tibble(list(.tail = tail, .head = head,
-                                    na = logical(length(tail))))
-    new_names <- c("na")
-  } else {
 
+  ## if we were passed any attribute information...
+  if (length(unlist(names.eval))  > 0) {
     if (!is.list(names.eval)) names.eval <-
         as.list(rep(names.eval, length.out = length(tail)))
     if (!is.list(vals.eval)) vals.eval <-
@@ -45,19 +42,20 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
 
     new_names <- unique(unlist(names.eval))
     update_list <- lapply(new_names, function(name) lapply(vals.eval, `[[`, name))
-    names(update_list) <- new_names
-    update_tibble <- as_tibble(c(list(.tail = tail, .head = head), update_list))
-
-    if ("na" %in% new_names) {
-     update_tibble[["na"]] <- lapply(update_tibble[["na"]],
-                                     function(val) if (is.null(val) || is.na(val)) FALSE else val)
-    } else {
-      new_names <- c(new_names, "na")
-      update_tibble[["na"]] <- logical(NROW(update_tibble))
-    }
+    names(update_list) <- new_names  
+  } else {
+    update_list <- list() 
   }
 
-  old_names <- names(x$el)[-c(1, 2)]
+  if ("na" %in% names(update_list)) {
+    update_list[["na"]] <- lapply(update_list[["na"]], function(val) if (is.null(val) || is.na(val)) FALSE else val)
+  } else {
+    update_list <- c(update_list, list(na = logical(length(tail))))
+  }
+  new_names <- names(update_list) # including "na"
+  update_tibble <- as_tibble(c(list(.tail = tail, .head = head), update_list))
+
+  old_names <- setdiff(names(x$el), c(".tail", ".head"))
   for (name in setdiff(old_names, new_names)) {
     update_tibble[[name]] <- vector(mode = "list", length = NROW(update_tibble))
   }
