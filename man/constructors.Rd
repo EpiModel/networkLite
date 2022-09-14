@@ -90,8 +90,9 @@ The constructor \code{networkLite_initialize} is also available for creating
 an empty \code{networkLite}, and its \code{x} argument should be a number
 indicating the size of the \code{networkLite} to create.
 
-Within \code{tergmLite}, the \code{networkLite} data structure is used in the
-calls to \code{ergm} and \code{tergm} \code{simulate} functions.
+Within \code{EpiModel}, the \code{networkLite} data structure is used in the
+calls to \code{ergm} and \code{tergm} \code{simulate} and \code{summary}
+functions.
 }
 \examples{
 edgelist <- cbind(c(1,2,3), c(2,4,7))
