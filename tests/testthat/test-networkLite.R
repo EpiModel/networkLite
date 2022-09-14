@@ -159,6 +159,93 @@ test_that("various attribute operations function equivalently for network and ne
   expect_equiv_nets(nw, nwL)
 })
 
+test_that("initially atomic attribute assigns non-atomic values consistently", {
+  nw <- network.initialize(5, directed = FALSE)
+  nw %v% "verts" <- 1:5
+  nwL <- as.networkLite(nw)
+  expect_equiv_nets(nw, nwL)
+  expect_true(is.atomic(nwL$attr$verts))
+  set.vertex.attribute(nw, "verts", list(list(1),list(2:3),list(c("a","b"))), c(1,4,5))
+  set.vertex.attribute(nwL, "verts", list(list(1),list(2:3),list(c("a","b"))), c(1,4,5))
+  expect_equiv_nets(nw, nwL)
+  expect_false(is.atomic(nwL$attr$verts))
+  expect_identical(nwL$attr$verts, list(list(1), 2L, 3L, list(2:3), list(c("a","b"))))
+  expect_identical(get.vertex.attribute(nwL, "verts", unlist = FALSE, null.na = FALSE),
+                   list(list(1), 2L, 3L, list(2:3), list(c("a","b"))))
+  expect_identical(get.vertex.attribute(nw, "verts", unlist = FALSE, null.na = FALSE),
+                   list(list(1), 2L, 3L, list(2:3), list(c("a","b"))))
+})
+
+test_that("initialization errors or lack thereof", {
+  el <- cbind(c(1,1,3,3,4), c(2,3,4,5,5))
+  attr(el, "n") <- 5
+  nw <- network(el, directed = FALSE)
+  el <- as.edgelist(nw, output = "tibble")
+  nwL <- networkLite(el)
+  expect_equiv_nets(nw, nwL)
+  names(el) <- c("tail", ".head")
+  expect_error(networkLite(el), "'.tail' and '.head'")
+  nw %e% "eattr" <- runif(5)
+  el <- as.edgelist(nw, output = "tibble")
+  nwL <- networkLite(el)
+  expect_error(expect_equiv_nets(nw, nwL))
+  el_attr <- as.edgelist(nw, attrname = "eattr", output = "tibble")
+  nwL <- networkLite(el_attr)
+  expect_equiv_nets(nw, nwL)
+  delete.edge.attribute(nw, "eattr")
+  set.edge.attribute(nw, "na", sample(c(FALSE,TRUE), 5, TRUE))
+  el_attr <- as.edgelist(nw, attrname = "na", output = "tibble", na.rm = FALSE)
+  nwL <- networkLite(el_attr)
+  expect_equiv_nets(nw, nwL)  
+  set.edge.attribute(nw, "na", FALSE)
+  el <- as.edgelist(nw)
+  el <- el[,1,drop=FALSE]
+  attr(el, "n") <- 5
+  expect_error(networkLite(el), "two columns")
+})
+
+test_that("more tibble tests", {
+  nw <- network(create_random_edgelist(100L, FALSE, FALSE, 100L), directed = FALSE, bipartite = FALSE, matrix.type = "edgelist")
+  nw %e% "e1" <- runif(network.edgecount(nw))
+  nw %e% "e2" <- runif(network.edgecount(nw))
+  nw %e% "na" <- sample(c(FALSE, TRUE), network.edgecount(nw), TRUE)
+  
+  tbl <- as_tibble(nw, na.rm = FALSE)
+  tbl <- tbl[order(tbl$.tail, tbl$.head),]
+  class(tbl) <- c("edgelist", class(tbl))
+  nwL <- networkLite(tbl)
+  expect_error(expect_equiv_nets(nw, nwL))
+  expect_equal(list.edge.attributes(nwL), c("na"))
+
+  tbl <- as_tibble(nw, attrnames = "e1", na.rm = FALSE)
+  tbl <- tbl[order(tbl$.tail, tbl$.head),]
+  class(tbl) <- c("edgelist", class(tbl))
+  nwL <- networkLite(tbl)
+  expect_error(expect_equiv_nets(nw, nwL))
+  expect_equal(list.edge.attributes(nwL), c("e1", "na"))
+
+  tbl <- as_tibble(nw, attrnames = c("e1", "e2"), na.rm = FALSE)
+  tbl <- tbl[order(tbl$.tail, tbl$.head),]
+  class(tbl) <- c("edgelist", class(tbl))
+  nwL <- networkLite(tbl)
+  expect_error(expect_equiv_nets(nw, nwL))
+  expect_equal(list.edge.attributes(nwL), c("e1", "e2", "na"))
+
+  tbl <- as_tibble(nw, attrnames = c("e1", "e2", "na"), na.rm = FALSE)
+  tbl <- tbl[order(tbl$.tail, tbl$.head),]
+  class(tbl) <- c("edgelist", class(tbl))
+  nwL <- networkLite(tbl)
+  expect_equiv_nets(nw, nwL)
+  expect_equal(list.edge.attributes(nwL), c("e1", "e2", "na"))
+
+  tbl <- as_tibble(nw, attrnames = c("e1", "e2", "na"), na.rm = TRUE)
+  tbl <- tbl[order(tbl$.tail, tbl$.head),]
+  class(tbl) <- c("edgelist", class(tbl))
+  nwL <- networkLite(tbl)
+  expect_error(expect_equiv_nets(nw, nwL))
+  expect_equal(list.edge.attributes(nwL), c("e1", "e2", "na"))
+})
+
 test_that("direct conversion between network and networkLite functions as expected", {
   net_size <- 100
   bip_size <- 40
@@ -213,10 +300,12 @@ test_that("network and networkLite produce identical matrices, edgelists, and ti
       set.seed(0)
       nw <- network(create_random_edgelist(net_size, directed, bipartite, edges_target), directed = directed, bipartite = bipartite, matrix.type = "edgelist")
       nw %e% "eattr" <- runif(network.edgecount(nw))
+      nw %e% "na" <- sample(c(FALSE, TRUE), network.edgecount(nw), TRUE)
 
       set.seed(0)
       nwL <- networkLite(create_random_edgelist(net_size, directed, bipartite, edges_target))
       set.edge.attribute(nwL, "eattr", runif(network.edgecount(nwL)))
+      set.edge.attribute(nwL, "na", sample(c(FALSE, TRUE), network.edgecount(nwL), TRUE))
 
       for(attrname in list(NULL, "eattr", "na")) {
         for(na.rm in list(FALSE, TRUE)) {

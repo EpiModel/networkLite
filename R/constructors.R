@@ -84,8 +84,14 @@ networkLite.edgelist <- function(
     ...) {
 
   if (is_tibble(x)) {
+    if (!(".tail" %in% names(x)) || !(".head" %in% names(x))) {
+      stop("tibble edgelist must include column names '.tail' and '.head'")
+    }
     el <- x
   } else {
+    if (NCOL(x) != 2) {
+      stop("matrix edgelist must have two columns")
+    }
     el <- as_tibble(list(.tail = as.integer(x[, 1]),
                          .head = as.integer(x[, 2])))
   }
