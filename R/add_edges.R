@@ -42,9 +42,9 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
 
     new_names <- unique(unlist(names.eval))
     update_list <- lapply(new_names, function(name) lapply(vals.eval, `[[`, name))
-    names(update_list) <- new_names  
+    names(update_list) <- new_names
   } else {
-    update_list <- list() 
+    update_list <- list()
   }
 
   if ("na" %in% names(update_list)) {
