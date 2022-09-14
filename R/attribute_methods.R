@@ -189,7 +189,7 @@ list.edge.attributes.networkLite <- function(x, ...) {
   if (network.edgecount(x, na.omit = FALSE) == 0) {
     return(character(0))
   } else {
-    return(sort(unique(colnames(x$el)[-c(1, 2)])))
+    return(sort(unique(setdiff(names(x$el), c(".tail", ".head")))))
   }
 }
 

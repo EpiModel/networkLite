@@ -46,10 +46,11 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
     } else {
       update_list <- c(update_list, list(na = logical(nv)))
     }
-    new_names <- names(update_list) # including "na"
     update_tibble <- as_tibble(update_list)
 
+    new_names <- names(update_tibble) # including "na"
     old_names <- names(x$attr)
+
     for (name in setdiff(old_names, new_names)) {
       update_tibble[[name]] <- vector(mode = "list", length = NROW(update_tibble))
     }
