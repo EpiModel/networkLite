@@ -29,9 +29,9 @@
 
 \method{list.network.attributes}{networkLite}(x, ...)
 
-\method{get.edge.attribute}{networkLite}(x, attrname, ..., null.na = TRUE, unlist = TRUE)
+\method{get.edge.attribute}{networkLite}(x, attrname, ..., null.na = FALSE, unlist = TRUE)
 
-\method{get.edge.value}{networkLite}(x, attrname, ..., null.na = TRUE, unlist = TRUE)
+\method{get.edge.value}{networkLite}(x, attrname, ..., null.na = FALSE, unlist = TRUE)
 
 \method{set.edge.attribute}{networkLite}(
   x,

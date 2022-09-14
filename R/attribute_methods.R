@@ -78,6 +78,7 @@ set.vertex.attribute.networkLite <- function(x,
 #'
 list.vertex.attributes.networkLite <- function(x, ...) {
   if (network.size(x) == 0) {
+    ## as in network...
     return(NULL)
   } else {
     return(sort(unique(names(x$attr))))
@@ -119,7 +120,7 @@ list.network.attributes.networkLite <- function(x, ...) {
 #' @rdname attribute_methods
 #' @export
 #'
-get.edge.attribute.networkLite <- function(x, attrname, ..., null.na = TRUE, unlist = TRUE) {
+get.edge.attribute.networkLite <- function(x, attrname, ..., null.na = FALSE, unlist = TRUE) {
   if (attrname %in% list.edge.attributes(x)) {
     out <- x$el[[attrname]]
   } else {
@@ -187,6 +188,7 @@ set.edge.value.networkLite <- function(
 #'
 list.edge.attributes.networkLite <- function(x, ...) {
   if (network.edgecount(x, na.omit = FALSE) == 0) {
+    ## as in network...
     return(character(0))
   } else {
     return(sort(unique(setdiff(names(x$el), c(".tail", ".head")))))
