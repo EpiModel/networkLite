@@ -24,7 +24,17 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
       m <- cbind(m, get.edge.attribute(x, attrname, null.na = TRUE, unlist = TRUE))
     }
   } else {
-    m <- x$el[c(".tail", ".head", attrname)]
+    if (is.null(attrname)) {
+      tibble_list <- list(x$el$.tail,
+                          x$el$.head)
+      names(tibble_list) <- c(".tail", ".head")
+    } else {
+      tibble_list <- list(x$el$.tail,
+                          x$el$.head,
+                          get.edge.attribute(x, attrname, null.na = FALSE, unlist = FALSE))
+      names(tibble_list) <- c(".tail", ".head", attrname)
+    }
+    m <- as_tibble(tibble_list)
   }
 
   if (na.rm && NROW(m) > 0) {
@@ -54,7 +64,10 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
 as_tibble.networkLite <- function(x, attrnames = NULL, na.rm = TRUE, ...) {
   if (is.logical(attrnames) || is.numeric(attrnames))
     attrnames <- na.omit(list.edge.attributes(x)[attrnames])
-  out <- x$el[, c(".tail", ".head", attrnames)]
+  attr_list <- lapply(attrnames, function(attrname) get.edge.attribute(x, attrname, null.na = FALSE, unlist = FALSE))
+  names(attr_list) <- attrnames
+  tibble_list <- c(list(.tail = x$el$.tail, .head = x$el$.head), attr_list)
+  out <- as_tibble(tibble_list)
   if (na.rm && NROW(out) > 0) {
     na <- NVL(x %e% "na", logical(NROW(out)))
     out <- out[!na, ]
