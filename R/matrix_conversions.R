@@ -83,7 +83,7 @@ as.matrix.networkLite.adjacency <- function(x, attrname = NULL, ...) {
   el <- as.edgelist(x, na.rm = FALSE)
 
   if (!is.null(attrname)) {
-    vals <- x %e% attrname
+    vals <- get.edge.attribute(x, attrname, null.na = TRUE, unlist = TRUE)
   } else {
     vals <- rep(1, network.edgecount(x, na.omit = FALSE))
   }
@@ -109,7 +109,7 @@ as.matrix.networkLite.adjacency <- function(x, attrname = NULL, ...) {
 as.matrix.networkLite.incidence <- function(x, attrname = NULL, ...) {
   el <- as.edgelist(x, na.rm = FALSE)
 
-  vals <- NVL2(attrname, x %e% attrname,
+  vals <- NVL2(attrname, get.edge.attribute(x, attrname, null.na = TRUE, unlist = TRUE),
                rep(1, network.edgecount(x, na.omit = FALSE)))
   vals[NVL(x %e% "na", logical(length(vals)))] <- NA
 
@@ -127,7 +127,7 @@ as.matrix.networkLite.edgelist <- function(x, attrname = NULL,
 
   m <- matrix(c(x$el$.tail, x$el$.head), ncol = 2)
   if (!is.null(attrname)) {
-    m <- cbind(m, get.edge.attribute(x, attrname))
+    m <- cbind(m, get.edge.attribute(x, attrname, null.na = TRUE, unlist = TRUE))
   }
   if (na.rm == TRUE) {
     m <- m[!NVL(x %e% "na", logical(NROW(m))), , drop = FALSE]
