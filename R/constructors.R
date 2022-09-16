@@ -27,6 +27,8 @@
 #'        \code{"mnext"}; these are not copied from the \code{edgelist} to the
 #'        \code{networkLite}.
 #' @param attr A named list of vertex attributes, coerced to \code{tibble}.
+#'        Each element of \code{attr} should be an atomic vector or list of
+#'        length equal to the number of nodes in the network.
 #' @param directed,bipartite Common network attributes that may be set via
 #'        arguments to the \code{networkLite.numeric} method.
 #' @param ... additional arguments

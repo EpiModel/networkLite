@@ -81,12 +81,15 @@ is.na.networkLite <- function(x) {
     stop("adding networkLites with missing edges is not currently supported")
   }
 
-  out <- e1
   if (network.edgecount(e2, na.omit = FALSE) > 0) {
     edgelist <- dplyr::bind_rows(ensure_list(list(e1$el, e2$el)))
     edgelist <- edgelist[!duplicated(edgelist[, c(".tail", ".head")]), ]
-    out$el <- edgelist[order(edgelist$.tail, edgelist$.head), ]
+    edgelist <- edgelist[order(edgelist$.tail, edgelist$.head), ]
+  } else {
+    edgelist <- e1$el
   }
+  out <- networkLite(e1 %n% "n", e1 %n% "directed", e1 %n% "bipartite")
+  out <- add.edges(out, edgelist$.tail, edgelist$.head)
   out
 }
 
@@ -105,12 +108,15 @@ is.na.networkLite <- function(x) {
          " supported")
   }
 
-  out <- e1
   if (network.edgecount(e2, na.omit = FALSE) > 0) {
     edgelist <- dplyr::bind_rows(ensure_list(list(e2$el, e1$el)))
     nd <- !duplicated(edgelist[, c(".tail", ".head")])
-    out$el <- out$el[nd[-seq_len(network.edgecount(e2, na.omit = FALSE))], ]
-    out$el <- out$el[order(out$el$.tail, out$el$.head), ]
+    edgelist <- e1$el[nd[-seq_len(network.edgecount(e2, na.omit = FALSE))], ]
+    edgelist <- edgelist[order(edgelist$.tail, edgelist$.head), ]
+  } else {
+    edgelist <- e1$el
   }
+  out <- networkLite(e1 %n% "n", e1 %n% "directed", e1 %n% "bipartite")
+  out <- add.edges(out, edgelist$.tail, edgelist$.head)
   out
 }

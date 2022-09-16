@@ -159,6 +159,76 @@ test_that("various attribute operations function equivalently for network and ne
   expect_equiv_nets(nw, nwL)
 })
 
+test_that("is.na, +, and - treat attributes as for network", {
+  net_size <- 100
+  bip_size <- 40
+  edges_target <- net_size
+
+  for(directed in list(FALSE, TRUE)) {
+    for(bipartite in list(FALSE, bip_size)) {
+      if(directed && bipartite) {
+        next
+      }
+
+      for(last.mode in list(FALSE, TRUE)) {
+        set.seed(0)
+        nw0 <- network(create_random_edgelist(net_size, directed, bipartite, edges_target), directed = directed, bipartite = bipartite, matrix.type = "edgelist")
+        nw0 %v% "b" <- runif(net_size)
+        nw0 %e% "eattr" <- runif(network.edgecount(nw0))
+        nw0 %n% "nattr" <- "attr"
+        add.vertices(nw0, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
+
+        set.seed(1)
+        nw1 <- network(create_random_edgelist(net_size, directed, bipartite, edges_target), directed = directed, bipartite = bipartite, matrix.type = "edgelist")
+        nw1 %v% "b" <- runif(net_size)
+        nw1 %e% "eattr" <- runif(network.edgecount(nw1))
+        nw1 %n% "nattr" <- "attr"
+        add.vertices(nw1, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
+
+        nw2 <- network.initialize(nw0 %n% "n", directed = nw0 %n% "directed", bipartite = nw0 %n% "bipartite")
+
+        set.seed(0)
+        nwL0 <- networkLite(create_random_edgelist(net_size, directed, bipartite, edges_target))
+        nwL0 %v% "b" <- runif(net_size)
+        set.edge.attribute(nwL0, "eattr", runif(network.edgecount(nwL0)))
+        nwL0 %n% "nattr" <- "attr"
+        add.vertices(nwL0, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
+
+        set.seed(1)
+        nwL1 <- networkLite(create_random_edgelist(net_size, directed, bipartite, edges_target))
+        nwL1 %v% "b" <- runif(net_size)
+        set.edge.attribute(nwL1, "eattr", runif(network.edgecount(nwL1)))
+        nwL1 %n% "nattr" <- "attr"
+        add.vertices(nwL1, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
+
+        nwL2 <- networkLite(nwL0 %n% "n", directed = nwL0 %n% "directed", bipartite = nwL0 %n% "bipartite")
+
+        expect_equiv_nets(nw0, nwL0)
+        expect_equiv_nets(is.na(nw0), is.na(nwL0))
+        expect_equiv_nets(is.na(is.na(nw0)), is.na(is.na(nwL0)))
+        expect_equiv_nets(nw1, nwL1)
+        expect_equiv_nets(nw0 + nw1, nwL0 + nwL1)
+        expect_equiv_nets(nw0 - nw1, nwL0 - nwL1)
+        expect_equiv_nets(nw0 + nw2, nwL0 + nwL2)
+        expect_equiv_nets(nw0 - nw2, nwL0 - nwL2)
+        expect_equiv_nets(nw2 + nw1, nwL2 + nwL1)
+        expect_equiv_nets(nw2 - nw1, nwL2 - nwL1)
+
+        set.seed(2)
+        set.edge.attribute(nw0, "na", sample(c(FALSE, TRUE), network.edgecount(nw0, na.omit = FALSE), TRUE))
+        set.seed(2)
+        set.edge.attribute(nwL0, "na", sample(c(FALSE, TRUE), network.edgecount(nwL0, na.omit = FALSE), TRUE))
+        expect_equiv_nets(nw0, nwL0)
+        expect_equiv_nets(is.na(nw0), is.na(nwL0))
+        expect_equiv_nets(is.na(is.na(nw0)), is.na(is.na(nwL0)))
+        expect_equiv_nets(is.na(is.na(is.na(nw0))), is.na(is.na(is.na(nwL0))))
+        expect_error(nwL0 + nwL1, "missing edges")
+        expect_error(nwL0 - nwL1, "missing edges")
+      }
+    }
+  }
+})
+
 test_that("initially atomic attribute assigns non-atomic values consistently", {
   nw <- network.initialize(5, directed = FALSE)
   nw %v% "verts" <- 1:5

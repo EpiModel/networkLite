@@ -54,7 +54,9 @@ networkLite_initialize(x, directed = FALSE, bipartite = FALSE, ...)
 
 \item{...}{additional arguments}
 
-\item{attr}{A named list of vertex attributes, coerced to \code{tibble}.}
+\item{attr}{A named list of vertex attributes, coerced to \code{tibble}.
+Each element of \code{attr} should be an atomic vector or list of
+length equal to the number of nodes in the network.}
 
 \item{directed, bipartite}{Common network attributes that may be set via
 arguments to the \code{networkLite.numeric} method.}
