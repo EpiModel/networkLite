@@ -29,7 +29,8 @@ significance. These are
  and heads of edges, and \code{"na"}, which is a logical attribute indicating
  if the edge is missing or not;
  \item for \code{attr}: \code{"na"}, which is a logical attribute indicating
- if the vertex is missing or not;
+ if the vertex is missing or not, and \code{"vertex.names"}, which provides
+ names for the vertices in the network;
  \item for \code{gal}: \code{"n"} (the network size), \code{"directed"} (a
  logical indicating if the network is directed), \code{"bipartite"} (either
  \code{FALSE} to indicate the network is not bipartite, or the size of the

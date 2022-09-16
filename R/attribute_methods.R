@@ -41,7 +41,7 @@ get.vertex.attribute.networkLite <- function(x, attrname, ..., null.na = TRUE, u
   }
 
   if (null.na == TRUE && is.list(out)) {
-    out <- lapply(out, NVL, NA)
+    out <- lapply(out, function(val) if (!is.null(val)) val else NA)
   }
 
   if (unlist == TRUE) {
@@ -128,7 +128,7 @@ get.edge.attribute.networkLite <- function(x, attrname, ..., null.na = FALSE, un
   }
 
   if (null.na == TRUE && is.list(out)) {
-    out <- lapply(out, NVL, NA)
+    out <- lapply(out, function(val) if (!is.null(val)) val else NA)
   }
 
   if (unlist == TRUE) {

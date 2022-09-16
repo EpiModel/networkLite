@@ -12,6 +12,7 @@ atomize_tibble <- function(x) {
   for (name in names(x)) {
     value <- x[[name]]
     if (length(value) > 0 &&
+        !is.atomic(value) &&
         all(unlist(lapply(value, is.atomic))) &&
         all(unlist(lapply(value, length)) == 1)) {
       x[[name]] <- unlist(value)
