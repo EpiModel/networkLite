@@ -89,6 +89,74 @@ create_random_edgelist <- function(n_nodes, directed, bipartite, target_n_edges)
   structure(el, n = n_nodes, directed = directed, bipartite = bipartite)
 }
 
+test_that("setting vertex and edge attributes in strange ways", {
+  el <- cbind(c(1,2,3,3), c(2,5,4,5))
+  attr(el, "n") <- 5
+  nw <- network(el, directed = FALSE, bipartite = FALSE, matrix.type = "edgelist")
+  set.edge.attribute(nw, "ae1", 1:4)
+  set.edge.attribute(nw, "ae2", 1:4)
+  set.vertex.attribute(nw, "av1", letters[1:5])
+  set.vertex.attribute(nw, "av2", letters[1:5])
+
+  set.edge.attribute(nw, "ae1", 1:2, c(1,2,4))
+  set.edge.attribute(nw, "ae2", 1:3, c(3,1,4,2))
+  set.vertex.attribute(nw, "av1", letters[1:7])
+  set.vertex.attribute(nw, "av2", c("1","2","3"), 1:2)
+
+  nwL <- networkLite(el)
+  set.edge.attribute(nwL, "ae1", 1:4)
+  set.edge.attribute(nwL, "ae2", 1:4)
+  set.vertex.attribute(nwL, "av1", letters[1:5])
+  set.vertex.attribute(nwL, "av2", letters[1:5])
+  nwL <- atomize(nwL)
+
+  set.edge.attribute(nwL, "ae1", 1:2, c(1,2,4))
+  set.edge.attribute(nwL, "ae2", 1:3, c(3,1,4,2))
+  set.vertex.attribute(nwL, "av1", letters[1:7])
+  set.vertex.attribute(nwL, "av2", c("1","2","3"), 1:2)
+  
+  expect_equiv_nets(nw, nwL)
+
+  set.edge.attribute(nw, "ae1", list(list(1,2), list(3)), c(1,2,4))
+  set.edge.attribute(nw, "ae2", list(list("a"), network.initialize(3), 1), c(3,1,4,2))
+  set.vertex.attribute(nw, "av1", list(list(network.initialize(3)), 2, 3, "a", "b"))
+  set.vertex.attribute(nw, "av2", list(list(network.initialize(3)), 2, 3, "a", "b"), 4:5)
+  
+  set.edge.attribute(nwL, "ae1", list(list(1,2), list(3)), c(1,2,4))
+  set.edge.attribute(nwL, "ae2", list(list("a"), network.initialize(3), 1), c(3,1,4,2))
+  set.vertex.attribute(nwL, "av1", list(list(network.initialize(3)), 2, 3, "a", "b", "c"))
+  set.vertex.attribute(nwL, "av2", list(list(network.initialize(3)), 2, 3, "a", "b"), 4:5)
+
+  expect_equiv_nets(nw, nwL)
+
+})
+
+test_that("accessing non-present attributes", {
+  nwL <- networkLite(0)
+  expect_identical(logical(0), get.vertex.attribute(nwL, "not_here", null.na = TRUE, unlist = TRUE))
+  expect_identical(list(), get.vertex.attribute(nwL, "not_here", null.na = TRUE, unlist = FALSE))
+  expect_identical(NULL, get.vertex.attribute(nwL, "not_here", null.na = FALSE, unlist = TRUE))
+  expect_identical(list(), get.vertex.attribute(nwL, "not_here", null.na = FALSE, unlist = FALSE))
+
+  expect_identical(logical(0), get.edge.attribute(nwL, "not_here", null.na = TRUE, unlist = TRUE))
+  expect_identical(list(), get.edge.attribute(nwL, "not_here", null.na = TRUE, unlist = FALSE))
+  expect_identical(NULL, get.edge.attribute(nwL, "not_here", null.na = FALSE, unlist = TRUE))
+  expect_identical(list(), get.edge.attribute(nwL, "not_here", null.na = FALSE, unlist = FALSE))
+
+  el <- cbind(c(1,1,2),c(2,3,4))
+  attr(el, "n") <- 4
+  nwL <- networkLite(el)
+  expect_identical(c(NA,NA,NA,NA), get.vertex.attribute(nwL, "not_here", null.na = TRUE, unlist = TRUE))
+  expect_identical(list(NA,NA,NA,NA), get.vertex.attribute(nwL, "not_here", null.na = TRUE, unlist = FALSE))
+  expect_identical(NULL, get.vertex.attribute(nwL, "not_here", null.na = FALSE, unlist = TRUE))
+  expect_identical(list(NULL,NULL,NULL,NULL), get.vertex.attribute(nwL, "not_here", null.na = FALSE, unlist = FALSE))
+
+  expect_identical(c(NA,NA,NA), get.edge.attribute(nwL, "not_here", null.na = TRUE, unlist = TRUE))
+  expect_identical(list(NA,NA,NA), get.edge.attribute(nwL, "not_here", null.na = TRUE, unlist = FALSE))
+  expect_identical(NULL, get.edge.attribute(nwL, "not_here", null.na = FALSE, unlist = TRUE))
+  expect_identical(list(NULL,NULL,NULL), get.edge.attribute(nwL, "not_here", null.na = FALSE, unlist = FALSE))  
+})
+
 test_that("various attribute operations function equivalently for network and networkLite", {
   ## vertex attributes
   nw <- network.initialize(5, directed = FALSE)  

@@ -67,7 +67,9 @@ character vector.}
 
 \item{null.na}{Logical. If \code{TRUE}, replace \code{NULL} attribute values
 with \code{NA} in \code{get.vertex.attribute} and
-\code{get.edge.attribute}. Applied before the \code{unlist} argument.}
+\code{get.edge.attribute}. Applied before the \code{unlist} argument.
+Note that the behavior of \code{null.na} in \code{network} is
+somewhat different.}
 
 \item{unlist}{Logical. In \code{get.vertex.attribute} and
 \code{get.edge.attribute}, if \code{unlist} is \code{TRUE}, we call
@@ -95,5 +97,9 @@ S3 attribute methods for the \code{networkLite} class, for
              generics defined in the \code{network} package.
 }
 \details{
-Allows basic attribute manipulation for \code{networkLite}s.
+Allows basic attribute manipulation for \code{networkLite}s. Note
+         that an edge or vertex attribute not present in the
+         \code{networkLite} is treated as a list of \code{NULL}s of length
+         equal to the number of edges or vertices (respectively) before
+         applying the \code{null.na} and \code{unlist} arguments.
 }

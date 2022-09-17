@@ -15,6 +15,8 @@
 #' @param null.na Logical. If \code{TRUE}, replace \code{NULL} attribute values
 #'        with \code{NA} in \code{get.vertex.attribute} and
 #'        \code{get.edge.attribute}. Applied before the \code{unlist} argument.
+#'        Note that the behavior of \code{null.na} in \code{network} is
+#'        somewhat different.
 #' @param unlist Logical. In \code{get.vertex.attribute} and
 #'        \code{get.edge.attribute}, if \code{unlist} is \code{TRUE}, we call
 #'        \code{unlist} on the attribute value before returning it, and if
@@ -25,7 +27,11 @@
 #'        \code{FALSE}, we return the attribute value without any modification.
 #' @param ... additional arguments
 #'
-#' @details Allows basic attribute manipulation for \code{networkLite}s.
+#' @details Allows basic attribute manipulation for \code{networkLite}s. Note
+#'          that an edge or vertex attribute not present in the
+#'          \code{networkLite} is treated as a list of \code{NULL}s of length
+#'          equal to the number of edges or vertices (respectively) before
+#'          applying the \code{null.na} and \code{unlist} arguments.
 #'
 #' @return Behavior and return values are analogous to those of the
 #'         corresponding \code{network} methods, with network data structured
@@ -34,11 +40,20 @@
 #' @export
 #'
 get.vertex.attribute.networkLite <- function(x, attrname, ..., null.na = TRUE, unlist = TRUE) {
-  if (attrname %in% list.vertex.attributes(x)) {
-    out <- x$attr[[attrname]]
-  } else {
-    out <- vector(mode = "list", length = network.size(x))
+  if (!(attrname %in% list.vertex.attributes(x))) {
+    ## special case handling relevant to netsim efficiency
+    if (null.na == TRUE && unlist == TRUE) {
+      return(rep(NA, length.out = network.size(x)))
+    } else if (null.na == TRUE && unlist == FALSE) {
+      return(as.list(rep(NA, length.out = network.size(x))))
+    } else if (null.na == FALSE && unlist == TRUE) {
+      return(NULL)
+    } else {
+      return(vector(mode = "list", length = network.size(x)))
+    }
   }
+
+  out <- x$attr[[attrname]]
 
   if (null.na == TRUE && is.list(out)) {
     out <- lapply(out, function(val) if (!is.null(val)) val else NA)
@@ -67,6 +82,7 @@ set.vertex.attribute.networkLite <- function(x,
     x$attr[[attrname]] <- vector(mode = "list", length = network.size(x))
   }
 
+  ## may upcast atomic types if both are atomic
   x$attr[[attrname]][v] <- value
 
   on.exit(eval.parent(call("<-", xn, x)))
@@ -121,11 +137,20 @@ list.network.attributes.networkLite <- function(x, ...) {
 #' @export
 #'
 get.edge.attribute.networkLite <- function(x, attrname, ..., null.na = FALSE, unlist = TRUE) {
-  if (attrname %in% list.edge.attributes(x)) {
-    out <- x$el[[attrname]]
-  } else {
-    out <- vector(mode = "list", length = network.edgecount(x, na.omit = FALSE))
+  if (!(attrname %in% list.edge.attributes(x))) {
+    ## special case handling consistent as for vertex attributes
+    if (null.na == TRUE && unlist == TRUE) {
+      return(rep(NA, length.out = network.edgecount(x, na.omit = FALSE)))
+    } else if (null.na == TRUE && unlist == FALSE) {
+      return(as.list(rep(NA, length.out = network.edgecount(x, na.omit = FALSE))))
+    } else if (null.na == FALSE && unlist == TRUE) {
+      return(NULL)
+    } else {
+      return(vector(mode = "list", length = network.edgecount(x, na.omit = FALSE)))
+    }
   }
+
+  out <- x$el[[attrname]]
 
   if (null.na == TRUE && is.list(out)) {
     out <- lapply(out, function(val) if (!is.null(val)) val else NA)
@@ -158,6 +183,7 @@ set.edge.attribute.networkLite <- function(
     x$el[[attrname]] <- vector(mode = "list", length = network.edgecount(x, na.omit = FALSE))
   }
 
+  ## may upcast atomic types if both are atomic
   x$el[[attrname]][e] <- value
 
   on.exit(eval.parent(call("<-", xn, x)))
