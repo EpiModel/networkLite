@@ -8,7 +8,12 @@
 #'          \code{loops} must be \code{FALSE} for \code{networkLite}s;
 #'          attempting to convert a \code{network} to a \code{networkLite} when
 #'          this is not the case will result in an error.
+#'
+#'          The \code{...} are passed to \code{\link{atomize}} and can be used
+#'          to set the \code{upcast} argument controlling attribute conversion.
 #' @param x A \code{network} or \code{networkLite} object.
+#' @param atomize Logical; should we call \code{\link{atomize}} on the
+#'        \code{networkLite} before returning it?
 #' @param ... additional arguments
 #' @return A corresponding \code{networkLite} object.
 #' @seealso \code{\link{to_network_networkLite}}
@@ -19,7 +24,7 @@ as.networkLite <- function(x, ...) {
 
 #' @rdname as_networkLite
 #' @export
-as.networkLite.network <- function(x, ...) {
+as.networkLite.network <- function(x, ..., atomize = TRUE) {
   if (is.hyper(x) || is.multiplex(x) || has.loops(x)) {
     stop("cannot coerce `network` to `networkLite` unless `hyper`,",
          " `multiple`, and `loops` are all `FALSE`")
@@ -54,7 +59,9 @@ as.networkLite.network <- function(x, ...) {
     attr(rv, name) <- attr(x, name)
   }
 
-  rv <- atomize(rv)
+  if (atomize == TRUE) {
+    rv <- atomize(rv, ...)
+  }
 
   rv
 }

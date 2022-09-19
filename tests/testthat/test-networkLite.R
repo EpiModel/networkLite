@@ -89,6 +89,128 @@ create_random_edgelist <- function(n_nodes, directed, bipartite, target_n_edges)
   structure(el, n = n_nodes, directed = directed, bipartite = bipartite)
 }
 
+test_that("setting vertex and edge attributes", {
+  nw <- network.initialize(5, directed = FALSE)
+
+  nw[1,2] <- 1
+  nw[1,3] <- 1
+  nw[2,4] <- 1
+  nw[3,5] <- 1
+
+  set.vertex.attribute(nw, "v1", list(1,2L))
+  set.vertex.attribute(nw, "v2", list(1,2L,"a"))
+  set.vertex.attribute(nw, "v3", c(1,2))
+  set.edge.attribute(nw, "e1", list(1,2L))
+  set.edge.attribute(nw, "e2", list(1,2L,"a"))
+  set.edge.attribute(nw, "e3", c(1,2))
+
+  nwL <- as.networkLite(nw)
+  set.vertex.attribute(nwL, "v1", list(1,2L))
+  set.vertex.attribute(nwL, "v2", list(1,2L,"a"))
+  set.vertex.attribute(nwL, "v3", c(1,2))
+  set.edge.attribute(nwL, "e1", list(1,2L))
+  set.edge.attribute(nwL, "e2", list(1,2L,"a"))
+  set.edge.attribute(nwL, "e3", c(1,2))
+
+  expect_equiv_nets(nw, nwL)
+
+  expect_identical(nwL$el[["e3"]], c(1,2,1,2))
+
+  set.edge.attribute(nwL, "e3", c(1L, 2L), c(1,3), upcast = FALSE)
+  expect_identical(nwL$el[["e3"]], list(1L,2,2L,2))
+  set.edge.attribute(nwL, "e3", c(1,2))
+  expect_identical(nwL$el[["e3"]], c(1,2,1,2))
+  nwL <- atomize(nwL)
+  expect_identical(nwL$el[["e3"]], c(1,2,1,2))
+  set.edge.attribute(nwL, "e3", c(1L, 2L), c(1,3), upcast = TRUE)
+  expect_identical(nwL$el[["e3"]], c(1,2,2,2))
+  delete.edge.attribute(nwL, "e3")
+  set.edge.attribute(nwL, "e3", c(1L,2L,3L,4L))
+  expect_identical(nwL$el[["e3"]], c(1L,2L,3L,4L))
+  set.edge.attribute(nwL, "e3", c(1, 2), c(1,3), upcast = FALSE)
+  expect_identical(nwL$el[["e3"]], list(1,2L,2,4L))
+  set.edge.attribute(nwL, "e3", c(1L,2L,3L,4L))
+  expect_identical(nwL$el[["e3"]], c(1L,2L,3L,4L))
+  set.edge.attribute(nwL, "e3", c(1, 2), c(1,3), upcast = TRUE)
+  expect_identical(nwL$el[["e3"]], c(1,2,2,4))
+  set.edge.attribute(nwL, "e3", list(1, 2))
+  expect_identical(nwL$el[["e3"]], list(1,2,1,2))
+
+  expect_identical(nwL$attr[["v3"]], c(1,2,1,2,1))
+
+  set.vertex.attribute(nwL, "v3", c(1L, 2L), c(1,3), upcast = FALSE)
+  expect_identical(nwL$attr[["v3"]], list(1L,2,2L,2,1))
+  set.vertex.attribute(nwL, "v3", c(1,2))
+  expect_identical(nwL$attr[["v3"]], c(1,2,1,2,1))
+  nwL <- atomize(nwL)
+  expect_identical(nwL$attr[["v3"]], c(1,2,1,2,1))
+  set.vertex.attribute(nwL, "v3", c(1L, 2L), c(1,3), upcast = TRUE)
+  expect_identical(nwL$attr[["v3"]], c(1,2,2,2,1))
+  delete.vertex.attribute(nwL, "v3")
+  set.vertex.attribute(nwL, "v3", c(1L,2L,3L,4L,5L))
+  expect_identical(nwL$attr[["v3"]], c(1L,2L,3L,4L,5L))
+  set.vertex.attribute(nwL, "v3", c(1, 2), c(1,3), upcast = FALSE)
+  expect_identical(nwL$attr[["v3"]], list(1,2L,2,4L,5L))
+  set.vertex.attribute(nwL, "v3", c(1L,2L,3L,4L,5L))
+  expect_identical(nwL$attr[["v3"]], c(1L,2L,3L,4L,5L))
+  set.vertex.attribute(nwL, "v3", c(1, 2), c(1,3), upcast = TRUE)
+  expect_identical(nwL$attr[["v3"]], c(1,2,2,4,5))
+  set.vertex.attribute(nwL, "v3", list(1, 2))
+  expect_identical(nwL$attr[["v3"]], list(1,2,1,2,1))
+})
+
+test_that("atomize and upcast work as intended", {
+  nw <- network.initialize(5, directed = FALSE)
+
+  nw[1,2] <- 1
+  nw[1,3] <- 1
+  nw[2,4] <- 1
+  nw[3,5] <- 1
+
+  set.vertex.attribute(nw, "v1", list(1,2,"a","b",FALSE))
+  set.vertex.attribute(nw, "v2", list(1,2,NULL,4,5))
+  set.vertex.attribute(nw, "v3", list(1,2,3L,4,5))
+  set.vertex.attribute(nw, "v4", list(1,2,3,4,5))
+  set.edge.attribute(nw, "e1", list(1,2,"a",FALSE))
+  set.edge.attribute(nw, "e2", list(1,2,NULL,4))
+  set.edge.attribute(nw, "e3", list(1,2,3L,4))
+  set.edge.attribute(nw, "e4", list(1,2,3,4))
+
+  nwL <- as.networkLite(nw)
+  nwL_na <- as.networkLite(nw, atomize = FALSE)
+  nwL_nu <- as.networkLite(nw, upcast = FALSE)
+  
+  expect_identical(nwL$el[["e1"]], c("1","2","a","FALSE"))
+  expect_identical(nwL$el[["e2"]], list(1,2,NULL,4))
+  expect_identical(nwL$el[["e3"]], c(1,2,3,4))
+  expect_identical(nwL$el[["e4"]], c(1,2,3,4))
+
+  expect_identical(nwL$attr[["v1"]], c("1","2","a","b","FALSE"))
+  expect_identical(nwL$attr[["v2"]], list(1,2,NULL,4,5))
+  expect_identical(nwL$attr[["v3"]], c(1,2,3,4,5))
+  expect_identical(nwL$attr[["v4"]], c(1,2,3,4,5))
+  
+  expect_identical(nwL_na$el[["e1"]], list(1,2,"a",FALSE))
+  expect_identical(nwL_na$el[["e2"]], list(1,2,NULL,4))
+  expect_identical(nwL_na$el[["e3"]], list(1,2,3L,4))
+  expect_identical(nwL_na$el[["e4"]], list(1,2,3,4))
+
+  expect_identical(nwL_na$attr[["v1"]], list(1,2,"a","b",FALSE))
+  expect_identical(nwL_na$attr[["v2"]], list(1,2,NULL,4,5))
+  expect_identical(nwL_na$attr[["v3"]], list(1,2,3L,4,5))
+  expect_identical(nwL_na$attr[["v4"]], list(1,2,3,4,5))
+
+  expect_identical(nwL_nu$el[["e1"]], list(1,2,"a",FALSE))
+  expect_identical(nwL_nu$el[["e2"]], list(1,2,NULL,4))
+  expect_identical(nwL_nu$el[["e3"]], list(1,2,3L,4))
+  expect_identical(nwL_nu$el[["e4"]], c(1,2,3,4))
+
+  expect_identical(nwL_nu$attr[["v1"]], list(1,2,"a","b",FALSE))
+  expect_identical(nwL_nu$attr[["v2"]], list(1,2,NULL,4,5))
+  expect_identical(nwL_nu$attr[["v3"]], list(1,2,3L,4,5))
+  expect_identical(nwL_nu$attr[["v4"]], c(1,2,3,4,5))
+})
+
 test_that("setting vertex and edge attributes in strange ways", {
   el <- cbind(c(1,2,3,3), c(2,5,4,5))
   attr(el, "n") <- 5

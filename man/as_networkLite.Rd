@@ -8,7 +8,7 @@
 \usage{
 as.networkLite(x, ...)
 
-\method{as.networkLite}{network}(x, ...)
+\method{as.networkLite}{network}(x, ..., atomize = TRUE)
 
 \method{as.networkLite}{networkLite}(x, ...)
 }
@@ -16,6 +16,9 @@ as.networkLite(x, ...)
 \item{x}{A \code{network} or \code{networkLite} object.}
 
 \item{...}{additional arguments}
+
+\item{atomize}{Logical; should we call \code{\link{atomize}} on the
+\code{networkLite} before returning it?}
 }
 \value{
 A corresponding \code{networkLite} object.
@@ -32,6 +35,9 @@ Convert to \code{networkLite} Representation
          \code{loops} must be \code{FALSE} for \code{networkLite}s;
          attempting to convert a \code{network} to a \code{networkLite} when
          this is not the case will result in an error.
+
+         The \code{...} are passed to \code{\link{atomize}} and can be used
+         to set the \code{upcast} argument controlling attribute conversion.
 }
 \seealso{
 \code{\link{to_network_networkLite}}

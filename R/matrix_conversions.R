@@ -43,7 +43,7 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
   }
 
   if (output == "tibble") {
-    m <- atomize_tibble(m)
+    m <- atomize(m, ...)
   }
   attr(m, "dimnames") <- NULL
 
@@ -72,7 +72,7 @@ as_tibble.networkLite <- function(x, attrnames = NULL, na.rm = TRUE, ...) {
     na <- NVL(x %e% "na", logical(NROW(out)))
     out <- out[!na, ]
   }
-  out <- atomize_tibble(out)
+  out <- atomize(out, ...)
   attr(out, "n") <- network.size(x)
   attr(out, "vnames") <- network.vertex.names(x)
   if (is.bipartite(x)) attr(out, "bipartite") <- x %n% "bipartite"

@@ -1,20 +1,47 @@
-## atomize a networkLite
-## convert vertex and edge attributes to atomic vectors where possible;
-## note that this may upcast atomic types, e.g. logical -> numeric -> character
-atomize <- function(nwL) {
-  nwL$el <- atomize_tibble(nwL$el) # also applies to .tail, .head
-  nwL$attr <- atomize_tibble(nwL$attr)
-  nwL
+#' @rdname atomize
+#' @title Convert Lists to Atomic Vectors Where Possible
+#' @param x A \code{networkLite} or \code{tibble} object.
+#' @param upcast logical; are we allowed to upcast atomic types when converting
+#'        lists to atomic vectors?
+#' @param ... additional arguments
+#' @details The \code{tibble} method examines each column of the \code{tibble}
+#'          and replaces the column with the result of calling \code{unlist} on
+#'          the column if all of the following are true: the column
+#'          \code{is.list} of length greater than zero, each element of which
+#'          \code{is.atomic} of length one, and either \code{upcast} is
+#'          \code{TRUE} or there is only one unique class amongst all elements
+#'          of the column.
+#'
+#'          The \code{networkLite} method applies the \code{tibble} method to
+#'          the edgelist and vertex attribute \code{tibble}s in the
+#'          \code{networkLite}.
+#'
+#' @export
+#'
+atomize <- function(x, ...) {
+  UseMethod("atomize")
 }
 
-## atomize a tibble; as for networkLites
-atomize_tibble <- function(x) {
+#' @rdname atomize
+#' @export
+#'
+atomize.networkLite <- function(x, ..., upcast = TRUE) {
+  x$el <- atomize(x$el, ..., upcast = upcast) # also applies to .tail, .head
+  x$attr <- atomize(x$attr, ..., upcast = upcast)
+  x
+}
+
+#' @rdname atomize
+#' @export
+#'
+atomize.tbl_df <- function(x, ..., upcast = TRUE) {
   for (name in names(x)) {
     value <- x[[name]]
-    if (length(value) > 0 &&
-        !is.atomic(value) &&
+    if (is.list(value) &&
+        length(value) > 0 &&
         all(unlist(lapply(value, is.atomic))) &&
-        all(unlist(lapply(value, length)) == 1)) {
+        all(unlist(lapply(value, length)) == 1) &&
+        (upcast == TRUE || length(unique(unlist(lapply(value, class)))) == 1)) {
       x[[name]] <- unlist(value)
     }
   }

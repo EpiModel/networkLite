@@ -14,14 +14,16 @@ networkLite(x, ...)
   x,
   attr = list(vertex.names = seq_len(attributes(x)[["n"]]), na =
     logical(attributes(x)[["n"]])),
-  ...
+  ...,
+  atomize = FALSE
 )
 
 \method{networkLite}{matrix}(
   x,
   attr = list(vertex.names = seq_len(attributes(x)[["n"]]), na =
     logical(attributes(x)[["n"]])),
-  ...
+  ...,
+  atomize = FALSE
 )
 
 \method{networkLite}{numeric}(x, directed = FALSE, bipartite = FALSE, ...)
@@ -57,6 +59,10 @@ networkLite_initialize(x, directed = FALSE, bipartite = FALSE, ...)
 \item{attr}{A named list of vertex attributes, coerced to \code{tibble}.
 Each element of \code{attr} should be an atomic vector or list of
 length equal to the number of nodes in the network.}
+
+\item{atomize}{Logical; should we call \code{\link{atomize}} on the
+\code{networkLite} before returning it? Note that unlike
+\code{\link{as.networkLite}}, the default value here is \code{FALSE}.}
 
 \item{directed, bipartite}{Common network attributes that may be set via
 arguments to the \code{networkLite.numeric} method.}

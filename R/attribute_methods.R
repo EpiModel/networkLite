@@ -9,7 +9,9 @@
 #' @param attrname The name of an attribute in \code{x}; must be a length one
 #'        character vector.
 #' @param value The attribute value to set in vertex, edge, and network
-#'        attribute setters.
+#'        attribute setters. For vertex and edge attribute methods,
+#'        \code{value} should be either an atomic vector or a list, of length
+#'        equal to that of \code{v} or \code{e}.
 #' @param v Indices at which to set vertex attribute values.
 #' @param e Indices at which to set edge attribute values.
 #' @param null.na Logical. If \code{TRUE}, replace \code{NULL} attribute values
@@ -25,6 +27,10 @@
 #'        if \code{unlist} is \code{TRUE}, we call \code{unlist} on the
 #'        attribute value before returning it, and if \code{unlist} is
 #'        \code{FALSE}, we return the attribute value without any modification.
+#' @param upcast Logical. Are we allowed to upcast atomic types when setting
+#'        vertex or edge attribute values on the \code{networkLite}? Setting
+#'        \code{upcast = FALSE} prevents upcasting, while setting
+#'        \code{upcast = TRUE} allows but does not guarantee upcasting.
 #' @param ... additional arguments
 #'
 #' @details Allows basic attribute manipulation for \code{networkLite}s. Note
@@ -75,15 +81,23 @@ set.vertex.attribute.networkLite <- function(x,
                                              attrname,
                                              value,
                                              v = seq_len(network.size(x)),
-                                             ...) {
+                                             ...,
+                                             upcast = TRUE) {
   xn <- substitute(x)
 
-  if (!(attrname %in% list.vertex.attributes(x))) {
-    x$attr[[attrname]] <- vector(mode = "list", length = network.size(x))
+  if (missing(v)) {
+    ## just set everything
+    x$attr[[attrname]] <- rep(value, length.out = network.size(x))
+  } else {
+    if (!(attrname %in% list.vertex.attributes(x))) {
+      ## new attr; set up as list since v isn't missing
+      x$attr[[attrname]] <- vector(mode = "list", length = network.size(x))
+    } else if (upcast == FALSE && !identical(class(value), class(x$attr[[attrname]]))) {
+      ## existing attr; need to watch upcasting
+      x$attr[[attrname]] <- as.list(x$attr[[attrname]])
+    }
+    x$attr[[attrname]][v] <- value
   }
-
-  ## may upcast atomic types if both are atomic
-  x$attr[[attrname]][v] <- value
 
   on.exit(eval.parent(call("<-", xn, x)))
   invisible(x)
@@ -175,16 +189,23 @@ get.edge.value.networkLite <- get.edge.attribute.networkLite
 #'
 set.edge.attribute.networkLite <- function(
     x, attrname, value,
-    e = seq_len(network.edgecount(x, na.omit = FALSE)), ...) {
+    e = seq_len(network.edgecount(x, na.omit = FALSE)), ..., upcast = TRUE) {
 
   xn <- substitute(x)
 
-  if (!(attrname %in% list.edge.attributes(x))) {
-    x$el[[attrname]] <- vector(mode = "list", length = network.edgecount(x, na.omit = FALSE))
+  if (missing(e)) {
+    ## just set everything
+    x$el[[attrname]] <- rep(value, length.out = network.edgecount(x, na.omit = FALSE))
+  } else {
+    if (!(attrname %in% list.edge.attributes(x))) {
+      ## new attr; set up as list since e isn't missing
+      x$el[[attrname]] <- vector(mode = "list", length = network.edgecount(x, na.omit = FALSE))
+    } else if (upcast == FALSE && !identical(class(value), class(x$el[[attrname]]))) {
+      ## existing attr; need to watch upcasting
+      x$el[[attrname]] <- as.list(x$el[[attrname]])
+    }
+    x$el[[attrname]][e] <- value
   }
-
-  ## may upcast atomic types if both are atomic
-  x$el[[attrname]][e] <- value
 
   on.exit(eval.parent(call("<-", xn, x)))
   invisible(x)
@@ -195,15 +216,25 @@ set.edge.attribute.networkLite <- function(
 #'
 set.edge.value.networkLite <- function(
     x, attrname, value,
-    e = seq_len(network.edgecount(x, na.omit = FALSE)), ...) {
+    e = seq_len(network.edgecount(x, na.omit = FALSE)), ..., upcast = TRUE) {
 
   xn <- substitute(x)
 
-  if (!(attrname %in% list.edge.attributes(x))) {
-    x$el[[attrname]] <- vector(mode = "list", length = network.edgecount(x, na.omit = FALSE))
-  }
+  value <- value[cbind(x$el$.tail[e], x$el$.head[e])]
 
-  x$el[[attrname]][e] <- value[as.matrix(x$el[e, c(".tail", ".head")])]
+  if (missing(e)) {
+    ## just set everything
+    x$el[[attrname]] <- rep(value, length.out = network.edgecount(x, na.omit = FALSE))
+  } else {
+    if (!(attrname %in% list.edge.attributes(x))) {
+      ## new attr; set up as list since e isn't missing
+      x$el[[attrname]] <- vector(mode = "list", length = network.edgecount(x, na.omit = FALSE))
+    } else if (upcast == FALSE && !identical(class(value), class(x$el[[attrname]]))) {
+      ## existing attr; need to watch upcasting
+      x$el[[attrname]] <- as.list(x$el[[attrname]])
+    }
+    x$el[[attrname]][e] <- value
+  }
 
   on.exit(eval.parent(call("<-", xn, x)))
   invisible(x)

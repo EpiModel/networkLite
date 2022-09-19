@@ -19,7 +19,14 @@
 \usage{
 \method{get.vertex.attribute}{networkLite}(x, attrname, ..., null.na = TRUE, unlist = TRUE)
 
-\method{set.vertex.attribute}{networkLite}(x, attrname, value, v = seq_len(network.size(x)), ...)
+\method{set.vertex.attribute}{networkLite}(
+  x,
+  attrname,
+  value,
+  v = seq_len(network.size(x)),
+  ...,
+  upcast = TRUE
+)
 
 \method{list.vertex.attributes}{networkLite}(x, ...)
 
@@ -38,7 +45,8 @@
   attrname,
   value,
   e = seq_len(network.edgecount(x, na.omit = FALSE)),
-  ...
+  ...,
+  upcast = TRUE
 )
 
 \method{set.edge.value}{networkLite}(
@@ -46,7 +54,8 @@
   attrname,
   value,
   e = seq_len(network.edgecount(x, na.omit = FALSE)),
-  ...
+  ...,
+  upcast = TRUE
 )
 
 \method{list.edge.attributes}{networkLite}(x, ...)
@@ -81,9 +90,16 @@ attribute value before returning it, and if \code{unlist} is
 \code{FALSE}, we return the attribute value without any modification.}
 
 \item{value}{The attribute value to set in vertex, edge, and network
-attribute setters.}
+attribute setters. For vertex and edge attribute methods,
+\code{value} should be either an atomic vector or a list, of length
+equal to that of \code{v} or \code{e}.}
 
 \item{v}{Indices at which to set vertex attribute values.}
+
+\item{upcast}{Logical. Are we allowed to upcast atomic types when setting
+vertex or edge attribute values on the \code{networkLite}? Setting
+\code{upcast = FALSE} prevents upcasting, while setting
+\code{upcast = TRUE} allows but does not guarantee upcasting.}
 
 \item{e}{Indices at which to set edge attribute values.}
 }

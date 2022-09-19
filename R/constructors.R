@@ -31,6 +31,9 @@
 #'        length equal to the number of nodes in the network.
 #' @param directed,bipartite Common network attributes that may be set via
 #'        arguments to the \code{networkLite.numeric} method.
+#' @param atomize Logical; should we call \code{\link{atomize}} on the
+#'        \code{networkLite} before returning it? Note that unlike
+#'        \code{\link{as.networkLite}}, the default value here is \code{FALSE}.
 #' @param ... additional arguments
 #'
 #' @details Currently there are several distinct \code{networkLite} constructor
@@ -83,7 +86,8 @@ networkLite.edgelist <- function(
     x,
     attr = list(vertex.names = seq_len(attributes(x)[["n"]]),
                 na = logical(attributes(x)[["n"]])),
-    ...) {
+    ...,
+    atomize = FALSE) {
 
   if (is_tibble(x)) {
     if (!(".tail" %in% names(x)) || !(".head" %in% names(x))) {
@@ -141,6 +145,11 @@ networkLite.edgelist <- function(
   nw$gal[["n"]] <- as.numeric(nw$gal[["n"]])
 
   class(nw) <- c("networkLite", "network")
+
+  if (atomize == TRUE) {
+    nw <- atomize(nw, ...)
+  }
+
   return(nw)
 }
 
