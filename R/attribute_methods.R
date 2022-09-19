@@ -9,9 +9,11 @@
 #' @param attrname The name of an attribute in \code{x}; must be a length one
 #'        character vector.
 #' @param value The attribute value to set in vertex, edge, and network
-#'        attribute setters. For vertex and edge attribute methods,
-#'        \code{value} should be either an atomic vector or a list, of length
-#'        equal to that of \code{v} or \code{e}.
+#'        attribute setters. For \code{set.vertex.attribute} and
+#'        \code{set.edge.attribute}, \code{value} should be either an atomic
+#'        vector or a list, of length equal to that of \code{v} or \code{e}.
+#'        For \code{set.edge.value}, it should be an \code{n} by \code{n}
+#'        matrix where \code{n} is the network size of \code{x}.
 #' @param v Indices at which to set vertex attribute values.
 #' @param e Indices at which to set edge attribute values.
 #' @param null.na Logical. If \code{TRUE}, replace \code{NULL} attribute values

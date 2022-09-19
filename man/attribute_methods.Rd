@@ -90,9 +90,11 @@ attribute value before returning it, and if \code{unlist} is
 \code{FALSE}, we return the attribute value without any modification.}
 
 \item{value}{The attribute value to set in vertex, edge, and network
-attribute setters. For vertex and edge attribute methods,
-\code{value} should be either an atomic vector or a list, of length
-equal to that of \code{v} or \code{e}.}
+attribute setters. For \code{set.vertex.attribute} and
+\code{set.edge.attribute}, \code{value} should be either an atomic
+vector or a list, of length equal to that of \code{v} or \code{e}.
+For \code{set.edge.value}, it should be an \code{n} by \code{n}
+matrix where \code{n} is the network size of \code{x}.}
 
 \item{v}{Indices at which to set vertex attribute values.}
 
