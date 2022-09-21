@@ -42,7 +42,7 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
     }
 
     if ("na" %in% names(update_list)) {
-      update_list[["na"]] <- lapply(update_list[["na"]], function(val) if (is.null(val) || is.na(val)) FALSE else val)
+      update_list[["na"]] <- lapply(update_list[["na"]], isTRUE)
     } else {
       update_list <- c(update_list, list(na = logical(nv)))
     }
@@ -59,8 +59,8 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
     }
 
     x$attr <- dplyr::bind_rows(ensure_list(list(x$attr[seq_len(offset), ],
-                                           update_tibble,
-                                           x$attr[offset + seq_len(oldsize - offset), ])))
+                                                update_tibble,
+                                                x$attr[offset + seq_len(oldsize - offset), ])))
   }
 
   on.exit(eval.parent(call("<-", xn, x)))

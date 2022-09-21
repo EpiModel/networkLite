@@ -22,12 +22,18 @@
 #' Certain names in \code{el}, \code{attr}, and \code{gal} have special
 #' significance. These are
 #' \itemize{
-#'  \item for \code{el}: \code{".tail"} and \code{".head"}, which are the tails
-#'  and heads of edges, and \code{"na"}, which is a logical attribute indicating
-#'  if the edge is missing or not;
+#'  \item for \code{el}: \code{".tail"} and \code{".head"}, of class integer,
+#'  which are the tails and heads of edges, and must be preserved as atomic
+#'  integer vectors with no \code{NA}s; \code{"na"}, which is a logical
+#'  attribute indicating if the edge is missing or not, and should take
+#'  \code{TRUE}/\code{FALSE} values only (behavior for other values is
+#'  undefined, and \code{NA}s are not allowed); \code{"na"} may be structured
+#'  as either an atomic logical vector or a list
 #'  \item for \code{attr}: \code{"na"}, which is a logical attribute indicating
 #'  if the vertex is missing or not, and \code{"vertex.names"}, which provides
-#'  names for the vertices in the network;
+#'  names for the vertices in the network; the attribute \code{"na"} should
+#'  take values \code{TRUE} or \code{FALSE} only (behavior for other values is
+#'  undefined)
 #'  \item for \code{gal}: \code{"n"} (the network size), \code{"directed"} (a
 #'  logical indicating if the network is directed), \code{"bipartite"} (either
 #'  \code{FALSE} to indicate the network is not bipartite, or the size of the

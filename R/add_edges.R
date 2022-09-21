@@ -25,8 +25,8 @@
 add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
                                   vals.eval = NULL, ...) {
   ## convert to atomic...
-  tail <- NVL(unlist(tail), integer(0))
-  head <- NVL(unlist(head), integer(0))
+  tail <- NVL(as.integer(unlist(tail)), integer(0))
+  head <- NVL(as.integer(unlist(head)), integer(0))
 
   ## if we were passed any attribute information...
   if (length(unlist(names.eval))  > 0) {
@@ -48,7 +48,7 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
   }
 
   if ("na" %in% names(update_list)) {
-    update_list[["na"]] <- lapply(update_list[["na"]], function(val) if (is.null(val) || is.na(val)) FALSE else val)
+    update_list[["na"]] <- lapply(update_list[["na"]], isTRUE)
   } else {
     update_list <- c(update_list, list(na = logical(length(tail))))
   }
@@ -123,8 +123,8 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
       w <- w[w[, 1] != w[, 2], , drop = FALSE]
     }
     w <- w[order(w[, 1], w[, 2]), , drop = FALSE]
-    x$el <- as_tibble(list(.tail = w[, 1],
-                           .head = w[, 2],
+    x$el <- as_tibble(list(.tail = as.integer(w[, 1]),
+                           .head = as.integer(w[, 2]),
                            na = logical(NROW(w))))
   } else {
     if (!add.edges) {
@@ -153,12 +153,12 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
       w <- w[order(w[, 1], w[, 2]), , drop = FALSE]
       if (names.eval == "na") {
         vals[is.na(vals)] <- FALSE
-        tbl_list <- list(w[, 1], w[, 2], vals)
+        tbl_list <- list(as.integer(w[, 1]), as.integer(w[, 2]), vals)
         names(tbl_list) <- c(".tail",
                              ".head",
                              names.eval)
       } else {
-        tbl_list <- list(w[, 1], w[, 2], vals, logical(NROW(w)))
+        tbl_list <- list(as.integer(w[, 1]), as.integer(w[, 2]), vals, logical(NROW(w)))
         names(tbl_list) <- c(".tail", ".head", names.eval, "na")
       }
       x$el <- as_tibble(tbl_list)

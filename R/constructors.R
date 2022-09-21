@@ -109,8 +109,15 @@ networkLite.edgelist <- function(
                                            "vnames", "row.names", "names",
                                            "mnext"))])
 
-  nw$el[["na"]] <- NVL(nw$el[["na"]], logical(NROW(nw$el)))
-  nw$el[["na"]][is.na(nw$el[["na"]])] <- FALSE
+  if ("na" %in% names(nw$el)) {
+    if (is.logical(nw$el[["na"]])) {
+      nw$el[["na"]][is.na(nw$el[["na"]])] <- FALSE
+    } else {
+      nw$el[["na"]] <- lapply(nw$el[["na"]], isTRUE)
+    }
+  } else {
+    nw$el[["na"]] <- logical(NROW(nw$el))
+  }
 
   # network size attribute is required
   if (is.null(nw$gal[["n"]])) {

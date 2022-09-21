@@ -82,11 +82,12 @@ is.na.networkLite <- function(x) {
   }
 
   if (network.edgecount(e2, na.omit = FALSE) > 0) {
-    edgelist <- dplyr::bind_rows(ensure_list(list(e1$el, e2$el)))
-    edgelist <- edgelist[!duplicated(edgelist[, c(".tail", ".head")]), ]
+    edgelist <- tibble(.tail = c(e1$el$.tail, e2$el$.tail),
+                       .head = c(e1$el$.head, e2$el$.head))
+    edgelist <- edgelist[!duplicated(edgelist), ]
     edgelist <- edgelist[order(edgelist$.tail, edgelist$.head), ]
   } else {
-    edgelist <- e1$el
+    edgelist <- tibble(.tail = e1$el$.tail, .head = e1$el$.head)
   }
   out <- networkLite(e1 %n% "n", e1 %n% "directed", e1 %n% "bipartite")
   out <- add.edges(out, edgelist$.tail, edgelist$.head)
@@ -109,12 +110,13 @@ is.na.networkLite <- function(x) {
   }
 
   if (network.edgecount(e2, na.omit = FALSE) > 0) {
-    edgelist <- dplyr::bind_rows(ensure_list(list(e2$el, e1$el)))
-    nd <- !duplicated(edgelist[, c(".tail", ".head")])
+    edgelist <- tibble(.tail = c(e2$el$.tail, e1$el$.tail),
+                       .head = c(e2$el$.head, e1$el$.head))
+    nd <- !duplicated(edgelist)
     edgelist <- e1$el[nd[-seq_len(network.edgecount(e2, na.omit = FALSE))], ]
     edgelist <- edgelist[order(edgelist$.tail, edgelist$.head), ]
   } else {
-    edgelist <- e1$el
+    edgelist <- tibble(.tail = e1$el$.tail, .head = e1$el$.head)
   }
   out <- networkLite(e1 %n% "n", e1 %n% "directed", e1 %n% "bipartite")
   out <- add.edges(out, edgelist$.tail, edgelist$.head)

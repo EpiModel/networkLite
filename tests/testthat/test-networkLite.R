@@ -89,6 +89,34 @@ create_random_edgelist <- function(n_nodes, directed, bipartite, target_n_edges)
   structure(el, n = n_nodes, directed = directed, bipartite = bipartite)
 }
 
+test_that("add edges, add vertices, and ensure_list", {
+  el <- cbind(1:3, 2:4)
+  attr(el, "n") <- 5
+  nwL <- networkLite(el)
+  set.edge.attribute(nwL, "e1", 1:3) # compatible atomics
+  set.edge.attribute(nwL, "e2", 1:3 + 0.5) # incompatible atomics
+  set.edge.attribute(nwL, "e3", letters[1:3]) # NULL atomic
+  ## no e4 here # atomic NULL
+  set.edge.attribute(nwL, "e5", list("a","b","c")) # NULL list
+  ## no e6 here # list NULL
+  set.edge.attribute(nwL, "e7", list("a","b","c")) # atomic list
+  set.edge.attribute(nwL, "e8", c(FALSE, FALSE, TRUE)) # list atomic
+
+  tail <- c(1,3)
+  head <- c(4,5)
+  names <- c("e1", "e2", "e4", "e6", "e7", "e8")
+  names <- rep(list(names), length.out = 2)
+  vals <- list(list(1L, 1L, FALSE, list(1), "a", list("a")),
+               list(2L, 2L, TRUE, list(2), "b", list("b")))
+  
+  nwL <- add.edges(nwL, tail = tail, head = head, names.eval = names, vals.eval = vals)
+  expect_identical(nwL$el$na, logical(5))
+  nwL <- add.edges(nwL, tail = c(1,1), head = c(3,5), names.eval = list("na", "na"), vals.eval = list(list(FALSE),list(TRUE)))
+  expect_identical(nwL$el$na, as.list(c(rep(FALSE, 3), TRUE, rep(FALSE, 3))))
+  nwL <- atomize(nwL, upcast = FALSE)
+  nwL <- atomize(nwL, upcast = TRUE)
+})
+
 test_that("setting vertex and edge attributes", {
   nw <- network.initialize(5, directed = FALSE)
 
