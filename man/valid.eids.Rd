@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{A \code{networkLite} object.}
+
+\item{...}{additional arguments.}
 }
 \description{
 valid.eids

@@ -1,9 +1,11 @@
+
 #' @rdname delete_vertices
 #' @title Delete vertices from a networkLite.
 #' @param x A \code{networkLite} object.
 #' @param vid Vertex ids (between \code{1} and \code{network.size(x)}) to delete
 #'            from \code{x}. Note that edges involving deleted vertices will
 #'            also be deleted.
+#' @param ... additional arguments.
 #' @export
 delete.vertices.networkLite <- function(x, vid, ...) {
   xn <- substitute(x)

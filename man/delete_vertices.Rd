@@ -12,6 +12,8 @@
 \item{vid}{Vertex ids (between \code{1} and \code{network.size(x)}) to delete
 from \code{x}. Note that edges involving deleted vertices will
 also be deleted.}
+
+\item{...}{additional arguments.}
 }
 \description{
 Delete vertices from a networkLite.

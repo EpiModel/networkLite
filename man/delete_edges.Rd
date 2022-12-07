@@ -13,6 +13,8 @@
 \code{network.edgecount(x, na.omit = FALSE)}) to delete in
 \code{x}. Note that the edge id of an edge in \code{x} is simply
 its row index in \code{x$el}.}
+
+\item{...}{additional arguments.}
 }
 \description{
 Delete edges from a networkLite.

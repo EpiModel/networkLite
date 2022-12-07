@@ -126,6 +126,7 @@ is.na.networkLite <- function(x) {
 #' @rdname valid.eids
 #' @title valid.eids
 #' @param x A \code{networkLite} object.
+#' @param ... additional arguments.
 #' @details Returns \code{seq_len(network.edgecount(x, na.omit = FALSE))}, to
 #'          support the edge attribute assignment operator \code{\%e\%<-}. Note
 #'          that the edge id of an edge in \code{x} is simply its row index
