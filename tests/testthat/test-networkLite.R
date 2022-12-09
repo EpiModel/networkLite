@@ -95,6 +95,36 @@ create_random_edgelist <- function(n_nodes, directed, bipartite, target_n_edges)
   structure(el, n = n_nodes, directed = directed, bipartite = bipartite)
 }
 
+test_that("%e%<- behaves as expected", {
+  net_size <- 100
+  bip_size <- 40
+  edges_target <- net_size
+
+  for(directed in list(FALSE, TRUE)) {
+    for(bipartite in list(FALSE, bip_size)) {
+      if(directed && bipartite) {
+        next
+      }
+
+      set.seed(0)
+      nw <- network(create_random_edgelist(net_size, directed, bipartite, edges_target), directed = directed, bipartite = bipartite, matrix.type = "edgelist")
+      vals <- runif(network.edgecount(nw))
+      valmat <- matrix(runif(network.size(nw)*network.size(nw)), nrow = network.size(nw))
+      nw %e% "a1" <- vals
+      nw %e% "a2" <- valmat
+
+      set.seed(0)
+      nwL <- networkLite(create_random_edgelist(net_size, directed, bipartite, edges_target))
+      vals <- runif(network.edgecount(nwL))
+      valmat <- matrix(runif(network.size(nwL)*network.size(nwL)), nrow = network.size(nwL))
+      nwL %e% "a1" <- vals
+      nwL %e% "a2" <- valmat
+
+      expect_equiv_nets(nw, nwL)
+    }
+  }
+})
+
 test_that("add edges, add vertices, and ensure_list", {
   el <- cbind(1:3, 2:4)
   attr(el, "n") <- 5
