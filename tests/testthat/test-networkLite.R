@@ -1,6 +1,6 @@
 ## test two networks or networkLites for equivalent attributes, edges, etc.
 ## note that atomic type upcasting in as.networkLite can create comparison issues
-expect_equiv_nets <- function(nw1, nw2) {
+expect_equiv_nets <- function(nw1, nw2, skip.mnext = FALSE) {
   if ((is(nw1, "networkLite") && is(nw2, "networkLite")) ||
       (!is(nw1, "networkLite") && !is(nw2, "networkLite"))) {
     net_attr_1 <- list.network.attributes(nw1)
@@ -14,6 +14,12 @@ expect_equiv_nets <- function(nw1, nw2) {
       net_attr_2 <- list.network.attributes(nw2)
     }
   }
+
+  if (skip.mnext == TRUE) {
+    net_attr_1 <- setdiff(net_attr_1, "mnext")
+    net_attr_2 <- setdiff(net_attr_2, "mnext")
+  }
+
   expect_identical(net_attr_1,
                    net_attr_2)
 
@@ -537,7 +543,7 @@ test_that("more tibble tests", {
 test_that("direct conversion between network and networkLite functions as expected", {
   net_size <- 100
   bip_size <- 40
-  edges_target <- net_size
+  edges_target <- 2*net_size
 
   for(directed in list(FALSE, TRUE)) {
     for(bipartite in list(FALSE, bip_size)) {
@@ -546,29 +552,48 @@ test_that("direct conversion between network and networkLite functions as expect
       }
 
       for(last.mode in list(FALSE, TRUE)) {
-        set.seed(0)
-        nw <- network(create_random_edgelist(net_size, directed, bipartite, edges_target), directed = directed, bipartite = bipartite, matrix.type = "edgelist")
-        nw %v% "b" <- runif(net_size)
-        nw %e% "eattr" <- runif(network.edgecount(nw))
-        nw %n% "nattr" <- "attr"
-        add.vertices(nw, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
-        set.edge.attribute(nw, "na", sample(c(FALSE, TRUE), network.edgecount(nw), TRUE))
+        for(delete in list(FALSE, TRUE)) {
+          set.seed(0)
+          nw <- network(create_random_edgelist(net_size, directed, bipartite, edges_target), directed = directed, bipartite = bipartite, matrix.type = "edgelist")
+          nw %v% "b" <- runif(net_size)
+          nw %e% "eattr" <- runif(network.edgecount(nw))
+          nw %n% "nattr" <- "attr"
+          add.vertices(nw, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
+          set.edge.attribute(nw, "na", sample(c(FALSE, TRUE), network.edgecount(nw), TRUE))
+          if(delete) {
+            el <- as.edgelist(nw, attrname = "na", na.rm = FALSE)
+            w1 <- sample(which(as.logical(el[,3])))[1:3]
+            w2 <- sample(which(!as.logical(el[,3])))[1:4]
+            delete.edges(nw, unlist(get.dyads.eids(nw, el[w1,1], el[w1,2], na.omit = FALSE)))
+            delete.edges(nw, unlist(get.dyads.eids(nw, el[w2,1], el[w2,2], na.omit = FALSE)))
+            vd <- sample(seq_len(net_size), 10, FALSE)
+            delete.vertices(nw, vd)
+          }
 
-        set.seed(0)
-        nwL <- networkLite(create_random_edgelist(net_size, directed, bipartite, edges_target))
-        nwL %v% "b" <- runif(net_size)
-        set.edge.attribute(nwL, "eattr", runif(network.edgecount(nwL)))
-        nwL %n% "nattr" <- "attr"
-        add.vertices(nwL, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
-        set.edge.attribute(nwL, "na", sample(c(FALSE, TRUE), network.edgecount(nwL), TRUE))
+          set.seed(0)
+          nwL <- networkLite(create_random_edgelist(net_size, directed, bipartite, edges_target))
+          nwL %v% "b" <- runif(net_size)
+          set.edge.attribute(nwL, "eattr", runif(network.edgecount(nwL)))
+          nwL %n% "nattr" <- "attr"
+          add.vertices(nwL, 9, vattr = rep(list(list(na = FALSE, vertex.names = NA_integer_, b = NA_real_)), 9), last.mode = last.mode)
+          set.edge.attribute(nwL, "na", sample(c(FALSE, TRUE), network.edgecount(nwL), TRUE))
+          if(delete) {
+            el <- as.edgelist(nwL, attrname = "na", na.rm = FALSE)
+            w1 <- sample(which(as.logical(el[,3])))[1:3]
+            w2 <- sample(which(!as.logical(el[,3])))[1:4]
+            delete.edges(nwL, c(w1,w2))
+            vd <- sample(seq_len(net_size), 10, FALSE)
+            delete.vertices(nwL, vd)
+          }
+        }
 
         expect_equiv_nets(as.networkLite(nw), nwL)
         expect_equiv_nets(as.networkLite(is.na(nw)), is.na(nwL))
         expect_equiv_nets(as.networkLite(is.na(is.na(nw))), is.na(is.na(nwL)))
         expect_equiv_nets(as.networkLite(is.na(is.na(is.na(nw)))), is.na(is.na(is.na(nwL))))
 
-        expect_equiv_nets(nw, to_network_networkLite(nwL))
-        expect_equiv_nets(is.na(nw), to_network_networkLite(is.na(nwL)))
+        expect_equiv_nets(nw, to_network_networkLite(nwL), skip.mnext = TRUE)
+        expect_equiv_nets(is.na(nw), to_network_networkLite(is.na(nwL)), skip.mnext = TRUE)
       }
     }
   }
@@ -806,7 +831,7 @@ test_that("network and networkLite behave equivalently for basic access and muta
       nwL %v% "vattr3" <- vattr3
 
       expect_identical(as.edgelist(nw, attrname = "eattr1"), as.edgelist(nwL, attrname = "eattr1"))
-#      expect_identical(as.edgelist(nw, attrname = "eattr2"), as.edgelist(nwL, attrname = "eattr2"))
+      expect_identical(as.edgelist(nw, attrname = "eattr2"), as.edgelist(nwL, attrname = "eattr2"))
       expect_identical(as.edgelist(nw, attrname = "eattr3"), as.edgelist(nwL, attrname = "eattr3"))
 
       expect_identical(nw %v% "vattr1", nwL %v% "vattr1")
