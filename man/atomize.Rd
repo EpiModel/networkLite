@@ -8,9 +8,9 @@
 \usage{
 atomize(x, ...)
 
-\method{atomize}{networkLite}(x, ..., upcast = TRUE)
+\method{atomize}{networkLite}(x, ..., upcast = FALSE)
 
-\method{atomize}{tbl_df}(x, ..., upcast = TRUE)
+\method{atomize}{tbl_df}(x, ..., upcast = FALSE)
 }
 \arguments{
 \item{x}{A \code{networkLite} or \code{tibble} object.}

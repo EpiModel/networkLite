@@ -84,7 +84,7 @@ set.vertex.attribute.networkLite <- function(x,
                                              value,
                                              v = seq_len(network.size(x)),
                                              ...,
-                                             upcast = TRUE) {
+                                             upcast = FALSE) {
   xn <- substitute(x)
 
   if (missing(v)) {
@@ -191,7 +191,7 @@ get.edge.value.networkLite <- get.edge.attribute.networkLite
 #'
 set.edge.attribute.networkLite <- function(
     x, attrname, value,
-    e = seq_len(network.edgecount(x, na.omit = FALSE)), ..., upcast = TRUE) {
+    e = seq_len(network.edgecount(x, na.omit = FALSE)), ..., upcast = FALSE) {
 
   xn <- substitute(x)
 
@@ -218,7 +218,7 @@ set.edge.attribute.networkLite <- function(
 #'
 set.edge.value.networkLite <- function(
     x, attrname, value,
-    e = seq_len(network.edgecount(x, na.omit = FALSE)), ..., upcast = TRUE) {
+    e = seq_len(network.edgecount(x, na.omit = FALSE)), ..., upcast = FALSE) {
 
   xn <- substitute(x)
 

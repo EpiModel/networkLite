@@ -25,7 +25,7 @@
   value,
   v = seq_len(network.size(x)),
   ...,
-  upcast = TRUE
+  upcast = FALSE
 )
 
 \method{list.vertex.attributes}{networkLite}(x, ...)
@@ -46,7 +46,7 @@
   value,
   e = seq_len(network.edgecount(x, na.omit = FALSE)),
   ...,
-  upcast = TRUE
+  upcast = FALSE
 )
 
 \method{set.edge.value}{networkLite}(
@@ -55,7 +55,7 @@
   value,
   e = seq_len(network.edgecount(x, na.omit = FALSE)),
   ...,
-  upcast = TRUE
+  upcast = FALSE
 )
 
 \method{list.edge.attributes}{networkLite}(x, ...)

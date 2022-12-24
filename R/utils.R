@@ -25,7 +25,7 @@ atomize <- function(x, ...) {
 #' @rdname atomize
 #' @export
 #'
-atomize.networkLite <- function(x, ..., upcast = TRUE) {
+atomize.networkLite <- function(x, ..., upcast = FALSE) {
   x$el <- atomize(x$el, ..., upcast = upcast) # also applies to .tail, .head
   x$attr <- atomize(x$attr, ..., upcast = upcast)
   x
@@ -34,7 +34,7 @@ atomize.networkLite <- function(x, ..., upcast = TRUE) {
 #' @rdname atomize
 #' @export
 #'
-atomize.tbl_df <- function(x, ..., upcast = TRUE) {
+atomize.tbl_df <- function(x, ..., upcast = FALSE) {
   for (name in names(x)) {
     value <- x[[name]]
     if (is.list(value) &&

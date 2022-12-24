@@ -240,7 +240,7 @@ test_that("atomize and upcast work as intended", {
   set.edge.attribute(nw, "e3", list(1,2,3L,4))
   set.edge.attribute(nw, "e4", list(1,2,3,4))
 
-  nwL <- as.networkLite(nw)
+  nwL <- as.networkLite(nw, upcast = TRUE)
   nwL_na <- as.networkLite(nw, atomize = FALSE)
   nwL_nu <- as.networkLite(nw, upcast = FALSE)
   
