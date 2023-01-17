@@ -32,27 +32,28 @@ networkLite_initialize(x, directed = FALSE, bipartite = FALSE, ...)
 }
 \arguments{
 \item{x}{Either an \code{edgelist} class network representation, including
-       network attributes as \code{attr}-style attributes on the
-       \code{edgelist}, or a number specifying the network size. The
-       \code{edgelist} may be either a \code{tibble} or a \code{matrix}. If
-       a \code{tibble} is passed, it should have integer columns named
-       \code{".tail"} and \code{".head"} for the tails and heads of edges,
-       and may include edge attributes as additional columns. If a
-       \code{matrix} is passed, it should have two columns, the first being
-       the tails of edges and the second being the heads of edges; edge
-       attributes are not supported for \code{matrix} arguments. Edges
-       should be sorted, first on tails then on heads. See
-       \code{\link[network]{as.edgelist}} for information on producing such
-       \code{edgelist} objects from \code{network} objects.
+network attributes as \code{attr}-style attributes on the
+\code{edgelist}, or a number specifying the network size. The
+\code{edgelist} may be either a \code{tibble} or a \code{matrix}. If
+a \code{tibble} is passed, it should have integer columns named
+\code{".tail"} and \code{".head"} for the tails and heads of edges,
+and may include edge attributes as additional columns. If a
+\code{matrix} is passed, it should have two columns, the first being
+the tails of edges and the second being the heads of edges; edge
+attributes are not supported for \code{matrix} arguments. Edges
+should be sorted, first on tails then on heads. See
+\code{\link[network]{as.edgelist}} for information on producing such
+\code{edgelist} objects from \code{network} objects.
 
-       The \code{edgelist} \emph{must} have the \code{"n"} attribute
-       indicating the network size, and may include additional named
-       \code{attr}-style attributes that will be interpreted as network
-       attributes and copied to the \code{networkLite}. Exceptions to this
-       are attributes named \code{"class"}, \code{"dim"}, \code{"dimnames"},
-       \code{"vnames"}, \code{"row.names"}, \code{"names"}, and
-       \code{"mnext"}; these are not copied from the \code{edgelist} to the
-       \code{networkLite}.}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{   The \code{edgelist} \\emph\{must\} have the \code{"n"} attribute
+   indicating the network size, and may include additional named
+   \code{attr}-style attributes that will be interpreted as network
+   attributes and copied to the \code{networkLite}. Exceptions to this
+   are attributes named \code{"class"}, \code{"dim"}, \code{"dimnames"},
+   \code{"vnames"}, \code{"row.names"}, \code{"names"}, and
+   \code{"mnext"}; these are not copied from the \code{edgelist} to the
+   \code{networkLite}.
+}\if{html}{\out{</div>}}}
 
 \item{...}{additional arguments}
 

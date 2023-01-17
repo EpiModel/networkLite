@@ -22,10 +22,11 @@ Convert a \code{networkLite} object to a \code{network} object
 }
 \details{
 The \code{to_network_networkLite} function takes a
-         \code{networkLite} and returns a corresponding \code{network}.
+\code{networkLite} and returns a corresponding \code{network}.
 
-         The \code{as.network.networkLite} method returns the
-         \code{networkLite} unchanged, for compatibility with \code{ergm}.
+\if{html}{\out{<div class="sourceCode">}}\preformatted{     The \code{as.network.networkLite} method returns the
+     \code{networkLite} unchanged, for compatibility with \code{ergm}.
+}\if{html}{\out{</div>}}
 }
 \seealso{
 \code{\link{as.networkLite}}

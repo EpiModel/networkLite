@@ -17,7 +17,7 @@ Add and Subtract \code{networkLite}s
 }
 \details{
 \code{e1 + e2} produces a \code{networkLite} whose edges are those
-         in either \code{e1} or \code{e2}, and \code{e1 - e2} produces a
-         \code{networkLite} whose edges are those in \code{e1} and not in
-         \code{e2}.
+in either \code{e1} or \code{e2}, and \code{e1 - e2} produces a
+\code{networkLite} whose edges are those in \code{e1} and not in
+\code{e2}.
 }

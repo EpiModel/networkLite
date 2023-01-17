@@ -16,5 +16,5 @@ Print Basic Summary of a \code{networkLite}
 }
 \details{
 This method prints a basic summary of a \code{networkLite} object,
-         including network size, edge count, and attribute names.
+including network size, edge count, and attribute names.
 }

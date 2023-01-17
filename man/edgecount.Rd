@@ -21,8 +21,8 @@ Count Edges in a \code{networkLite}
 }
 \details{
 The \code{network.edgecount} method provides a count of the number
-         of edges in the \code{networkLite}, including missing edges if
-         \code{na.omit = FALSE} and omitting them if \code{na.omit = TRUE}.
-         The \code{network.naedgecount} method provides a count of the
-         number of missing edges in the \code{networkLite}.
+of edges in the \code{networkLite}, including missing edges if
+\code{na.omit = FALSE} and omitting them if \code{na.omit = TRUE}.
+The \code{network.naedgecount} method provides a count of the
+number of missing edges in the \code{networkLite}.
 }

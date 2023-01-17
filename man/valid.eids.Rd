@@ -16,7 +16,7 @@ valid.eids
 }
 \details{
 Returns \code{seq_len(network.edgecount(x, na.omit = FALSE))}, to
-         support the edge attribute assignment operator \code{\%e\%<-}. Note
-         that the edge id of an edge in \code{x} is simply its row index
-         within \code{x$el}.
+support the edge attribute assignment operator \code{\%e\%<-}. Note
+that the edge id of an edge in \code{x} is simply its row index
+within \code{x$el}.
 }

@@ -14,6 +14,6 @@ Extract \code{networkLite} with Missing Edges Only
 }
 \details{
 The \code{is.na} method creates a \code{networkLite} whose edges
-         are precisely those edges in \code{x} that are missing.  The edges
-         in the return value are marked as not missing.
+are precisely those edges in \code{x} that are missing.  The edges
+in the return value are marked as not missing.
 }

@@ -25,14 +25,15 @@ Convert Lists to Atomic Vectors Where Possible
 }
 \details{
 The \code{tibble} method examines each column of the \code{tibble}
-         and replaces the column with the result of calling \code{unlist} on
-         the column if all of the following are true: the column
-         \code{is.list} of length greater than zero, each element of which
-         \code{is.atomic} of length one, and either \code{upcast} is
-         \code{TRUE} or there is only one unique class amongst all elements
-         of the column.
+and replaces the column with the result of calling \code{unlist} on
+the column if all of the following are true: the column
+\code{is.list} of length greater than zero, each element of which
+\code{is.atomic} of length one, and either \code{upcast} is
+\code{TRUE} or there is only one unique class amongst all elements
+of the column.
 
-         The \code{networkLite} method applies the \code{tibble} method to
-         the edgelist and vertex attribute \code{tibble}s in the
-         \code{networkLite}.
+\if{html}{\out{<div class="sourceCode">}}\preformatted{     The \code{networkLite} method applies the \code{tibble} method to
+     the edgelist and vertex attribute \code{tibble}s in the
+     \code{networkLite}.
+}\if{html}{\out{</div>}}
 }

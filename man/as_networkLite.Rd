@@ -28,16 +28,17 @@ Convert to \code{networkLite} Representation
 }
 \details{
 \code{as.networkLite.network} converts a \code{network} object
-         to a \code{networkLite} object.  \code{as.networkLite.networkLite}
-         returns the \code{networkLite} object unchanged.
+to a \code{networkLite} object.  \code{as.networkLite.networkLite}
+returns the \code{networkLite} object unchanged.
 
-         Currently the network attributes \code{hyper}, \code{multiple}, and
-         \code{loops} must be \code{FALSE} for \code{networkLite}s;
-         attempting to convert a \code{network} to a \code{networkLite} when
-         this is not the case will result in an error.
+\if{html}{\out{<div class="sourceCode">}}\preformatted{     Currently the network attributes \code{hyper}, \code{multiple}, and
+     \code{loops} must be \code{FALSE} for \code{networkLite}s;
+     attempting to convert a \code{network} to a \code{networkLite} when
+     this is not the case will result in an error.
 
-         The \code{...} are passed to \code{\link{atomize}} and can be used
-         to set the \code{upcast} argument controlling attribute conversion.
+     The \code{...} are passed to \code{\link{atomize}} and can be used
+     to set the \code{upcast} argument controlling attribute conversion.
+}\if{html}{\out{</div>}}
 }
 \seealso{
 \code{\link{to_network_networkLite}}
