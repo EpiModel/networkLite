@@ -5,7 +5,7 @@
 #'    Package: \tab networkLite\cr
 #'    Type: \tab Package\cr
 #'    Version: \tab 1.0.0\cr
-#'    Date: \tab 2023-01-17\cr
+#'    Date: \tab 2023-01-23\cr
 #'    License: \tab GPL-3\cr
 #'    LazyLoad: \tab yes\cr
 #' }

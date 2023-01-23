@@ -12,7 +12,7 @@ to_network_networkLite(x, ...)
 \arguments{
 \item{x}{A \code{networkLite} object.}
 
-\item{...}{additional arguments}
+\item{...}{additional arguments.}
 }
 \value{
 For \code{to_network_networkLite}, a \code{network} object
@@ -24,12 +24,11 @@ returned unchanged.
 Convert a \code{networkLite} object to a \code{network} object
 }
 \details{
-The \code{to_network_networkLite} function takes a
-\code{networkLite} and returns a corresponding \code{network}.
+The \code{to_network_networkLite} function takes a \code{networkLite} and returns a
+corresponding \code{network}.
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{     The \code{as.network.networkLite} method returns the
-     \code{networkLite} unchanged, for compatibility with \code{ergm}.
-}\if{html}{\out{</div>}}
+The \code{as.network.networkLite} method returns the \code{networkLite} unchanged, for
+compatibility with \code{ergm}.
 }
 \seealso{
 \code{\link{as.networkLite}}

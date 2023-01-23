@@ -1,5 +1,6 @@
 
 #' @rdname attribute_methods
+#'
 #' @title \code{networkLite} Attribute Methods
 #'
 #' @description S3 attribute methods for the \code{networkLite} class, for
@@ -36,14 +37,14 @@
 #' @param ... additional arguments
 #'
 #' @details Allows basic attribute manipulation for \code{networkLite}s. Note
-#'          that an edge or vertex attribute not present in the
-#'          \code{networkLite} is treated as a list of \code{NULL}s of length
-#'          equal to the number of edges or vertices (respectively) before
-#'          applying the \code{null.na} and \code{unlist} arguments.
+#' that an edge or vertex attribute not present in the
+#' \code{networkLite} is treated as a list of \code{NULL}s of length
+#' equal to the number of edges or vertices (respectively) before
+#' applying the \code{null.na} and \code{unlist} arguments.
 #'
 #' @return Behavior and return values are analogous to those of the
-#'         corresponding \code{network} methods, with network data structured
-#'         in the \code{networkLite} format.
+#' corresponding \code{network} methods, with network data structured
+#' in the \code{networkLite} format.
 #'
 #' @export
 #'

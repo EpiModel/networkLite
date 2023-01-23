@@ -4,7 +4,7 @@
 \alias{as.networkLite}
 \alias{as.networkLite.network}
 \alias{as.networkLite.networkLite}
-\title{Convert to \code{networkLite} Representation}
+\title{Convert to \code{networkLite} Representation.}
 \usage{
 as.networkLite(x, ...)
 
@@ -24,21 +24,20 @@ as.networkLite(x, ...)
 A corresponding \code{networkLite} object.
 }
 \description{
-Convert to \code{networkLite} Representation
+Convert to \code{networkLite} Representation.
 }
 \details{
 \code{as.networkLite.network} converts a \code{network} object
-to a \code{networkLite} object.  \code{as.networkLite.networkLite}
+to a \code{networkLite} object. \code{as.networkLite.networkLite}
 returns the \code{networkLite} object unchanged.
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{     Currently the network attributes \code{hyper}, \code{multiple}, and
-     \code{loops} must be \code{FALSE} for \code{networkLite}s;
-     attempting to convert a \code{network} to a \code{networkLite} when
-     this is not the case will result in an error.
+Currently the network attributes \code{hyper}, \code{multiple}, and
+\code{loops} must be \code{FALSE} for \code{networkLite}s;
+attempting to convert a \code{network} to a \code{networkLite} when
+this is not the case will result in an error.
 
-     The \code{...} are passed to \code{\link{atomize}} and can be used
-     to set the \code{upcast} argument controlling attribute conversion.
-}\if{html}{\out{</div>}}
+The \code{...} are passed to \code{\link{atomize}} and can be used
+to set the \code{upcast} argument controlling attribute conversion.
 }
 \seealso{
 \code{\link{to_network_networkLite}}

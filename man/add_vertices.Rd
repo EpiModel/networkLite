@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_vertices.R
 \name{add.vertices.networkLite}
 \alias{add.vertices.networkLite}
-\title{Add Vertices to a \code{networkLite}}
+\title{Add Vertices to a \code{networkLite}.}
 \usage{
 \method{add.vertices}{networkLite}(x, nv, vattr = NULL, last.mode = TRUE, ...)
 }
@@ -24,5 +24,5 @@ be added to the second mode?}
 A \code{networkLite} object with vertices added.
 }
 \description{
-Add Vertices to a \code{networkLite}
+Add Vertices to a \code{networkLite}.
 }

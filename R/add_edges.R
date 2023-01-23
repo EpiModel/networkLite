@@ -1,6 +1,8 @@
 
 #' @rdname add_edges
-#' @title Methods to Add or Modify Edges in a \code{networkLite}
+#'
+#' @title Methods to Add or Modify Edges in a \code{networkLite}.
+#'
 #' @param x A \code{networkLite}.
 #' @param tail Vector of tails of edges to add to the \code{networkLite}.
 #' @param head Vector of heads of edges to add to the \code{networkLite}.
@@ -21,10 +23,13 @@
 #'        are not already present?
 #' @param value Edge values to assign (coerced to a matrix).
 #' @param ... additional arguments
+#'
 #' @return A \code{networkLite} object with edges added (if calling
 #'         \code{add.edges}) or set to specified values (if calling
 #'         \code{[<-.networkLite}).
+#'
 #' @export
+#'
 add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
                                   vals.eval = NULL, ...) {
   ## convert to atomic...

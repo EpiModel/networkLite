@@ -3,7 +3,7 @@
 \name{add.edges.networkLite}
 \alias{add.edges.networkLite}
 \alias{[<-.networkLite}
-\title{Methods to Add or Modify Edges in a \code{networkLite}}
+\title{Methods to Add or Modify Edges in a \code{networkLite}.}
 \usage{
 \method{add.edges}{networkLite}(x, tail, head, names.eval = NULL, vals.eval = NULL, ...)
 
@@ -45,5 +45,5 @@ A \code{networkLite} object with edges added (if calling
 \code{[<-.networkLite}).
 }
 \description{
-Methods to Add or Modify Edges in a \code{networkLite}
+Methods to Add or Modify Edges in a \code{networkLite}.
 }

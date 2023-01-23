@@ -1,5 +1,7 @@
 #' @rdname add_vertices
-#' @title Add Vertices to a \code{networkLite}
+#'
+#' @title Add Vertices to a \code{networkLite}.
+#'
 #' @param x A \code{networkLite} object.
 #' @param nv Number of vertices to add to the \code{networkLite}.
 #' @param vattr A list (of length \code{nv}) of named lists of vertex
@@ -8,8 +10,11 @@
 #' @param last.mode logical; if \code{x} is bipartite, should the new vertices
 #'        be added to the second mode?
 #' @param ... additional arguments
+#'
 #' @return A \code{networkLite} object with vertices added.
+#'
 #' @export
+#'
 add.vertices.networkLite <- function(x, nv, vattr = NULL,
                                      last.mode = TRUE, ...) {
   xn <- substitute(x)

@@ -43,17 +43,15 @@ the tails of edges and the second being the heads of edges; edge
 attributes are not supported for \code{matrix} arguments. Edges
 should be sorted, first on tails then on heads. See
 \code{\link[network]{as.edgelist}} for information on producing such
-\code{edgelist} objects from \code{network} objects.
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{   The \code{edgelist} \\emph\{must\} have the \code{"n"} attribute
-   indicating the network size, and may include additional named
-   \code{attr}-style attributes that will be interpreted as network
-   attributes and copied to the \code{networkLite}. Exceptions to this
-   are attributes named \code{"class"}, \code{"dim"}, \code{"dimnames"},
-   \code{"vnames"}, \code{"row.names"}, \code{"names"}, and
-   \code{"mnext"}; these are not copied from the \code{edgelist} to the
-   \code{networkLite}.
-}\if{html}{\out{</div>}}}
+\code{edgelist} objects from \code{network} objects. The \code{edgelist}
+\emph{must} have the \code{"n"} attribute
+indicating the network size, and may include additional named
+\code{attr}-style attributes that will be interpreted as network
+attributes and copied to the \code{networkLite}. Exceptions to this
+are attributes named \code{"class"}, \code{"dim"}, \code{"dimnames"},
+\code{"vnames"}, \code{"row.names"}, \code{"names"}, and
+\code{"mnext"}; these are not copied from the \code{edgelist} to the
+\code{networkLite}.}
 
 \item{...}{additional arguments}
 
@@ -103,7 +101,7 @@ calls to \code{ergm} and \code{tergm} \code{simulate} and \code{summary}
 functions.
 }
 \examples{
-edgelist <- cbind(c(1,2,3), c(2,4,7))
+edgelist <- cbind(c(1, 2, 3), c(2, 4, 7))
 attr(edgelist, "n") <- 10 # network size
 vertex_attributes <- list(a = 1:10, b = runif(10))
 nwL <- networkLite(edgelist, vertex_attributes)

@@ -36,8 +36,7 @@ the column if all of the following are true: the column
 \code{TRUE} or there is only one unique class amongst all elements
 of the column.
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{     The \code{networkLite} method applies the \code{tibble} method to
-     the edgelist and vertex attribute \code{tibble}s in the
-     \code{networkLite}.
-}\if{html}{\out{</div>}}
+The \code{networkLite} method applies the \code{tibble} method to
+the edgelist and vertex attribute \code{tibble}s in the
+\code{networkLite}.
 }

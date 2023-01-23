@@ -1,5 +1,8 @@
+
 #' @rdname matrix_conversions
+#'
 #' @title Convert a \code{networkLite} to a Matrix or \code{tibble}.
+#'
 #' @param x A \code{networkLite}.
 #' @param attrname Name of an edge attribute in \code{x}.
 #' @param attrnames Vector specifying edge attributes to include in the tibble;
@@ -11,8 +14,10 @@
 #' @param matrix.type type of matrix to return from
 #'        \code{as.matrix.networkLite}
 #' @param ... additional arguments
+#'
 #' @return A \code{matrix} or \code{tibble} (possibly of class \code{edgelist})
-#'         constructed from the \code{networkLite}.
+#' constructed from the \code{networkLite}.
+#'
 #' @export
 #'
 as.edgelist.networkLite <- function(x, attrname = NULL,

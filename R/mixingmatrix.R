@@ -1,11 +1,17 @@
+
 #' @rdname mixingmatrix
+#'
 #' @title Extract Mixing Matrix from \code{networkLite}
+#'
 #' @param object A \code{networkLite} object.
 #' @param attr The name of a vertex attribute in \code{object}.
 #' @param ... additional arguments
-#' @return The mixing matrix (of class \code{table}) for \code{object} and
-#'         \code{attr}.
+#'
+#' @return
+#' The mixing matrix (of class \code{table}) for \code{object} and \code{attr}.
+#'
 #' @export
+#'
 mixingmatrix.networkLite <- function(object, attr, ...) {
   nw <- object
 

@@ -1,18 +1,28 @@
+
 #' @rdname to_network_networkLite
-#' @title Convert a \code{networkLite} object to a \code{network} object
-#' @param x A \code{networkLite} object.
-#' @param ... additional arguments
-#' @return For \code{to_network_networkLite}, a \code{network} object
-#'         corresponding to \code{x} is returned. For
-#'         \code{as.network.networkLite}, the \code{networkLite} \code{x} is
-#'         returned unchanged.
-#' @seealso \code{\link{as.networkLite}}
-#' @details The \code{to_network_networkLite} function takes a
-#'          \code{networkLite} and returns a corresponding \code{network}.
 #'
-#'          The \code{as.network.networkLite} method returns the
-#'          \code{networkLite} unchanged, for compatibility with \code{ergm}.
+#' @title Convert a \code{networkLite} object to a \code{network} object
+#'
+#' @param x A \code{networkLite} object.
+#' @param ... additional arguments.
+#'
+#' @return
+#' For \code{to_network_networkLite}, a \code{network} object
+#' corresponding to \code{x} is returned. For
+#' \code{as.network.networkLite}, the \code{networkLite} \code{x} is
+#' returned unchanged.
+#'
+#' @seealso \code{\link{as.networkLite}}
+#'
+#' @details
+#' The \code{to_network_networkLite} function takes a \code{networkLite} and returns a
+#' corresponding \code{network}.
+#'
+#' The \code{as.network.networkLite} method returns the \code{networkLite} unchanged, for
+#' compatibility with \code{ergm}.
+#'
 #' @export
+#'
 to_network_networkLite <- function(x, ...) {
   nw <- network.initialize(network.size(x),
                            directed = x %n% "directed",

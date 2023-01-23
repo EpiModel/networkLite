@@ -14,8 +14,7 @@
 \item{...}{additional arguments}
 }
 \value{
-The mixing matrix (of class \code{table}) for \code{object} and
-\code{attr}.
+The mixing matrix (of class \code{table}) for \code{object} and \code{attr}.
 }
 \description{
 Extract Mixing Matrix from \code{networkLite}

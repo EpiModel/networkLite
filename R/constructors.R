@@ -1,5 +1,6 @@
 
 #' @rdname constructors
+#'
 #' @title networkLite Constructor Utilities
 #'
 #' @description Constructor methods for \code{networkLite} objects.
@@ -16,9 +17,8 @@
 #'        attributes are not supported for \code{matrix} arguments. Edges
 #'        should be sorted, first on tails then on heads. See
 #'        \code{\link[network]{as.edgelist}} for information on producing such
-#'        \code{edgelist} objects from \code{network} objects.
-#'
-#'        The \code{edgelist} \emph{must} have the \code{"n"} attribute
+#'        \code{edgelist} objects from \code{network} objects. The \code{edgelist}
+#'        \emph{must} have the \code{"n"} attribute
 #'        indicating the network size, and may include additional named
 #'        \code{attr}-style attributes that will be interpreted as network
 #'        attributes and copied to the \code{networkLite}. Exceptions to this
@@ -67,7 +67,7 @@
 #' @export
 #'
 #' @examples
-#' edgelist <- cbind(c(1,2,3), c(2,4,7))
+#' edgelist <- cbind(c(1, 2, 3), c(2, 4, 7))
 #' attr(edgelist, "n") <- 10 # network size
 #' vertex_attributes <- list(a = 1:10, b = runif(10))
 #' nwL <- networkLite(edgelist, vertex_attributes)
