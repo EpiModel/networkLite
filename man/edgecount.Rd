@@ -16,6 +16,9 @@
 
 \item{...}{additional arguments}
 }
+\value{
+The number of edges (of the appropriate type) in \code{x}.
+}
 \description{
 Count Edges in a \code{networkLite}
 }

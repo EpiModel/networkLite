@@ -6,6 +6,7 @@
 #'            from \code{x}. Note that edges involving deleted vertices will
 #'            also be deleted.
 #' @param ... additional arguments.
+#' @return A \code{networkLite} object with the specified vertices deleted.
 #' @export
 delete.vertices.networkLite <- function(x, vid, ...) {
   xn <- substitute(x)

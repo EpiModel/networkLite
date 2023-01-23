@@ -12,12 +12,12 @@
 \arguments{
 \item{e1, e2}{\code{networkLite} objects}
 }
-\description{
-Add and Subtract \code{networkLite}s
-}
-\details{
-\code{e1 + e2} produces a \code{networkLite} whose edges are those
-in either \code{e1} or \code{e2}, and \code{e1 - e2} produces a
+\value{
+For the \code{+} method, a \code{networkLite} whose edges are those
+in either \code{e1} or \code{e2}. For the \code{-} method, a
 \code{networkLite} whose edges are those in \code{e1} and not in
 \code{e2}.
+}
+\description{
+Add and Subtract \code{networkLite}s
 }

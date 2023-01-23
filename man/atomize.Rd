@@ -20,6 +20,10 @@ atomize(x, ...)
 \item{upcast}{logical; are we allowed to upcast atomic types when converting
 lists to atomic vectors?}
 }
+\value{
+The \code{networkLite} or \code{tibble} with list columns replaced by
+atomic vector columns where possible.
+}
 \description{
 Convert Lists to Atomic Vectors Where Possible
 }

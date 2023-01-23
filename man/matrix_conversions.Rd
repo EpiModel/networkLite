@@ -42,6 +42,10 @@ and the latter being used as the attribute names themselves}
 \item{matrix.type}{type of matrix to return from
 \code{as.matrix.networkLite}}
 }
+\value{
+A \code{matrix} or \code{tibble} (possibly of class \code{edgelist})
+constructed from the \code{networkLite}.
+}
 \description{
 Convert a \code{networkLite} to a Matrix or \code{tibble}.
 }

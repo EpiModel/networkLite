@@ -8,6 +8,7 @@
 #' @param last.mode logical; if \code{x} is bipartite, should the new vertices
 #'        be added to the second mode?
 #' @param ... additional arguments
+#' @return A \code{networkLite} object with vertices added.
 #' @export
 add.vertices.networkLite <- function(x, nv, vattr = NULL,
                                      last.mode = TRUE, ...) {

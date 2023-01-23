@@ -35,6 +35,7 @@
 #'        \code{networkLite} before returning it? Note that unlike
 #'        \code{\link{as.networkLite}}, the default value here is \code{FALSE}.
 #' @param ... additional arguments
+#' @return A \code{networkLite} object constructed according to the inputs.
 #'
 #' @details Currently there are several distinct \code{networkLite} constructor
 #' methods available.
@@ -62,10 +63,6 @@
 #' Within \code{EpiModel}, the \code{networkLite} data structure is used in the
 #' calls to \code{ergm} and \code{tergm} \code{simulate} and \code{summary}
 #' functions.
-#'
-#' @return
-#' A \code{networkLite} object with edgelist \code{el}, vertex attributes
-#' \code{attr}, and network attributes \code{gal}.
 #'
 #' @export
 #'

@@ -15,6 +15,9 @@ also be deleted.}
 
 \item{...}{additional arguments.}
 }
+\value{
+A \code{networkLite} object with the specified vertices deleted.
+}
 \description{
 Delete vertices from a networkLite.
 }

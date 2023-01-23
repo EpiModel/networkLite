@@ -11,6 +11,9 @@
 
 \item{...}{additional arguments.}
 }
+\value{
+The sequence \code{seq_len(network.edgecount(x, na.omit = FALSE))}.
+}
 \description{
 valid.eids
 }

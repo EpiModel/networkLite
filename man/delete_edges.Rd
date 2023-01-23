@@ -16,6 +16,9 @@ its row index in \code{x$el}.}
 
 \item{...}{additional arguments.}
 }
+\value{
+A \code{networkLite} object with the specified edges deleted.
+}
 \description{
 Delete edges from a networkLite.
 }

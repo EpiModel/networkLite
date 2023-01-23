@@ -9,11 +9,12 @@
 \arguments{
 \item{x}{A \code{networkLite}.}
 }
+\value{
+A \code{networkLite} with the same network size, directedness, and
+bipartiteness as \code{x}, whose edges are precisely those edges in
+\code{x} that are missing in \code{x}. Edges in the returned
+\code{networkLite} are marked as not missing.
+}
 \description{
 Extract \code{networkLite} with Missing Edges Only
-}
-\details{
-The \code{is.na} method creates a \code{networkLite} whose edges
-are precisely those edges in \code{x} that are missing.  The edges
-in the return value are marked as not missing.
 }

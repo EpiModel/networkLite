@@ -4,6 +4,8 @@
 #' @param upcast logical; are we allowed to upcast atomic types when converting
 #'        lists to atomic vectors?
 #' @param ... additional arguments
+#' @return The \code{networkLite} or \code{tibble} with list columns replaced by
+#'         atomic vector columns where possible.
 #' @details The \code{tibble} method examines each column of the \code{tibble}
 #'          and replaces the column with the result of calling \code{unlist} on
 #'          the column if all of the following are true: the column

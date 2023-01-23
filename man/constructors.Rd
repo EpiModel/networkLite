@@ -69,8 +69,7 @@ length equal to the number of nodes in the network.}
 arguments to the \code{networkLite.numeric} method.}
 }
 \value{
-A \code{networkLite} object with edgelist \code{el}, vertex attributes
-\code{attr}, and network attributes \code{gal}.
+A \code{networkLite} object constructed according to the inputs.
 }
 \description{
 Constructor methods for \code{networkLite} objects.

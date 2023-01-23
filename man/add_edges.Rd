@@ -39,6 +39,11 @@ are not already present?}
 
 \item{value}{Edge values to assign (coerced to a matrix).}
 }
+\value{
+A \code{networkLite} object with edges added (if calling
+\code{add.edges}) or set to specified values (if calling
+\code{[<-.networkLite}).
+}
 \description{
 Methods to Add or Modify Edges in a \code{networkLite}
 }

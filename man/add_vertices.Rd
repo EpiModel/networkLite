@@ -20,6 +20,9 @@ be added to the second mode?}
 
 \item{...}{additional arguments}
 }
+\value{
+A \code{networkLite} object with vertices added.
+}
 \description{
 Add Vertices to a \code{networkLite}
 }

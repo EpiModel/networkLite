@@ -11,6 +11,8 @@
 #' @param matrix.type type of matrix to return from
 #'        \code{as.matrix.networkLite}
 #' @param ... additional arguments
+#' @return A \code{matrix} or \code{tibble} (possibly of class \code{edgelist})
+#'         constructed from the \code{networkLite}.
 #' @export
 #'
 as.edgelist.networkLite <- function(x, attrname = NULL,

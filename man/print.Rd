@@ -11,6 +11,9 @@
 
 \item{...}{additional arguments}
 }
+\value{
+The \code{networkLite} is returned invisibly.
+}
 \description{
 Print Basic Summary of a \code{networkLite}
 }
