@@ -21,7 +21,7 @@ attributes are not being specified. For \code{add.edges}, this
 argument should be structured as a list of length equal to
 \code{length(tail)}, each element of which is a character vector
 of attribute names for the corresponding edge. For the replacement
-method \code{[<-.networkLite}, this should argument should be a
+method \verb{[<-.networkLite}, this should argument should be a
 single attribute name, which is applied to all edges.}
 
 \item{vals.eval}{Value(s) of edge attributes, or \code{NULL} to indicate
@@ -42,7 +42,7 @@ are not already present?}
 \value{
 A \code{networkLite} object with edges added (if calling
 \code{add.edges}) or set to specified values (if calling
-\code{[<-.networkLite}).
+\verb{[<-.networkLite}).
 }
 \description{
 Methods to Add or Modify Edges in a \code{networkLite}.

@@ -3,14 +3,14 @@
 #'
 #' @title Delete edges from a networkLite.
 #'
-#' @param x A \code{networkLite} object.
-#' @param eid Edge ids (between \code{1} and
-#'            \code{network.edgecount(x, na.omit = FALSE)}) to delete in
-#'            \code{x}. Note that the edge id of an edge in \code{x} is simply
-#'            its row index in \code{x$el}.
+#' @param x A `networkLite` object.
+#' @param eid Edge ids (between `1` and
+#'            `network.edgecount(x, na.omit = FALSE)`) to delete in
+#'            `x`. Note that the edge id of an edge in `x` is simply
+#'            its row index in `x$el`.
 #' @param ... additional arguments.
 #'
-#' @return A \code{networkLite} object with the specified edges deleted.
+#' @return A `networkLite` object with the specified edges deleted.
 #'
 #' @export
 #'

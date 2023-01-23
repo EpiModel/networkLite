@@ -1,50 +1,50 @@
 
 #' @rdname attribute_methods
 #'
-#' @title \code{networkLite} Attribute Methods
+#' @title `networkLite` Attribute Methods
 #'
-#' @description S3 attribute methods for the \code{networkLite} class, for
-#'              generics defined in the \code{network} package.
+#' @description S3 attribute methods for the `networkLite` class, for
+#'              generics defined in the `network` package.
 #'
-#' @param x A \code{networkLite} object.
-#' @param attrname The name of an attribute in \code{x}; must be a length one
+#' @param x A `networkLite` object.
+#' @param attrname The name of an attribute in `x`; must be a length one
 #'        character vector.
 #' @param value The attribute value to set in vertex, edge, and network
-#'        attribute setters. For \code{set.vertex.attribute} and
-#'        \code{set.edge.attribute}, \code{value} should be either an atomic
-#'        vector or a list, of length equal to that of \code{v} or \code{e}.
-#'        For \code{set.edge.value}, it should be an \code{n} by \code{n}
-#'        matrix where \code{n} is the network size of \code{x}.
+#'        attribute setters. For `set.vertex.attribute` and
+#'        `set.edge.attribute`, `value` should be either an atomic
+#'        vector or a list, of length equal to that of `v` or `e`.
+#'        For `set.edge.value`, it should be an `n` by `n`
+#'        matrix where `n` is the network size of `x`.
 #' @param v Indices at which to set vertex attribute values.
 #' @param e Indices at which to set edge attribute values.
-#' @param null.na Logical. If \code{TRUE}, replace \code{NULL} attribute values
-#'        with \code{NA} in \code{get.vertex.attribute} and
-#'        \code{get.edge.attribute}. Applied before the \code{unlist} argument.
-#'        Note that the behavior of \code{null.na} in \code{network} is
+#' @param null.na Logical. If `TRUE`, replace `NULL` attribute values
+#'        with `NA` in `get.vertex.attribute` and
+#'        `get.edge.attribute`. Applied before the `unlist` argument.
+#'        Note that the behavior of `null.na` in `network` is
 #'        somewhat different.
-#' @param unlist Logical. In \code{get.vertex.attribute} and
-#'        \code{get.edge.attribute}, if \code{unlist} is \code{TRUE}, we call
-#'        \code{unlist} on the attribute value before returning it, and if
-#'        \code{unlist} is \code{FALSE}, we call \code{as.list} on the
-#'        attribute value before returning it. In \code{get.network.attribute},
-#'        if \code{unlist} is \code{TRUE}, we call \code{unlist} on the
-#'        attribute value before returning it, and if \code{unlist} is
-#'        \code{FALSE}, we return the attribute value without any modification.
+#' @param unlist Logical. In `get.vertex.attribute` and
+#'        `get.edge.attribute`, if `unlist` is `TRUE`, we call
+#'        `unlist` on the attribute value before returning it, and if
+#'        `unlist` is `FALSE`, we call `as.list` on the
+#'        attribute value before returning it. In `get.network.attribute`,
+#'        if `unlist` is `TRUE`, we call `unlist` on the
+#'        attribute value before returning it, and if `unlist` is
+#'        `FALSE`, we return the attribute value without any modification.
 #' @param upcast Logical. Are we allowed to upcast atomic types when setting
-#'        vertex or edge attribute values on the \code{networkLite}? Setting
-#'        \code{upcast = FALSE} prevents upcasting, while setting
-#'        \code{upcast = TRUE} allows but does not guarantee upcasting.
+#'        vertex or edge attribute values on the `networkLite`? Setting
+#'        `upcast = FALSE` prevents upcasting, while setting
+#'        `upcast = TRUE` allows but does not guarantee upcasting.
 #' @param ... additional arguments
 #'
-#' @details Allows basic attribute manipulation for \code{networkLite}s. Note
+#' @details Allows basic attribute manipulation for `networkLite`s. Note
 #' that an edge or vertex attribute not present in the
-#' \code{networkLite} is treated as a list of \code{NULL}s of length
+#' `networkLite` is treated as a list of `NULL`s of length
 #' equal to the number of edges or vertices (respectively) before
-#' applying the \code{null.na} and \code{unlist} arguments.
+#' applying the `null.na` and `unlist` arguments.
 #'
 #' @return Behavior and return values are analogous to those of the
-#' corresponding \code{network} methods, with network data structured
-#' in the \code{networkLite} format.
+#' corresponding `network` methods, with network data structured
+#' in the `networkLite` format.
 #'
 #' @export
 #'

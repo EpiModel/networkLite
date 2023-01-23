@@ -3,13 +3,13 @@
 #'
 #' @title Delete vertices from a networkLite.
 #'
-#' @param x A \code{networkLite} object.
-#' @param vid Vertex ids (between \code{1} and \code{network.size(x)}) to delete
-#'            from \code{x}. Note that edges involving deleted vertices will
+#' @param x A `networkLite` object.
+#' @param vid Vertex ids (between `1` and `network.size(x)`) to delete
+#'            from `x`. Note that edges involving deleted vertices will
 #'            also be deleted.
 #' @param ... additional arguments.
 #'
-#' @return A \code{networkLite} object with the specified vertices deleted.
+#' @return A `networkLite` object with the specified vertices deleted.
 #'
 #' @export
 #'

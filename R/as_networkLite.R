@@ -1,27 +1,29 @@
+
 #' @rdname as_networkLite
 #'
-#' @title Convert to \code{networkLite} Representation.
+#' @title Convert to `networkLite` Representation.
 #'
-#' @param x A \code{network} or \code{networkLite} object.
-#' @param atomize Logical; should we call \code{\link{atomize}} on the
-#'        \code{networkLite} before returning it?
+#' @param x A `network` or `networkLite` object.
+#' @param atomize Logical; should we call [`atomize`] on the
+#'        `networkLite` before returning it?
 #' @param ... additional arguments
 #'
-#' @details \code{as.networkLite.network} converts a \code{network} object
-#' to a \code{networkLite} object. \code{as.networkLite.networkLite}
-#' returns the \code{networkLite} object unchanged.
+#' @details `as.networkLite.network` converts a `network` object
+#' to a `networkLite` object. `as.networkLite.networkLite`
+#' returns the `networkLite` object unchanged.
 #'
-#' Currently the network attributes \code{hyper}, \code{multiple}, and
-#' \code{loops} must be \code{FALSE} for \code{networkLite}s;
-#' attempting to convert a \code{network} to a \code{networkLite} when
+#' Currently the network attributes `hyper`, `multiple`, and
+#' `loops` must be `FALSE` for `networkLite`s;
+#' attempting to convert a `network` to a `networkLite` when
 #' this is not the case will result in an error.
 #'
-#' The \code{...} are passed to \code{\link{atomize}} and can be used
-#' to set the \code{upcast} argument controlling attribute conversion.
+#' The `...` are passed to [`atomize`] and can be used
+#' to set the `upcast` argument controlling attribute conversion.
 #'
-#' @return A corresponding \code{networkLite} object.
+#' @return
+#' A corresponding `networkLite` object.
 #'
-#' @seealso \code{\link{to_network_networkLite}}
+#' @seealso [`to_network_networkLite`]
 #'
 #' @export
 #'

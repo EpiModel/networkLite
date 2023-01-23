@@ -3,65 +3,65 @@
 #'
 #' @title networkLite Constructor Utilities
 #'
-#' @description Constructor methods for \code{networkLite} objects.
+#' @description Constructor methods for `networkLite` objects.
 #'
-#' @param x Either an \code{edgelist} class network representation, including
-#'        network attributes as \code{attr}-style attributes on the
-#'        \code{edgelist}, or a number specifying the network size. The
-#'        \code{edgelist} may be either a \code{tibble} or a \code{matrix}. If
-#'        a \code{tibble} is passed, it should have integer columns named
-#'        \code{".tail"} and \code{".head"} for the tails and heads of edges,
+#' @param x Either an `edgelist` class network representation, including
+#'        network attributes as `attr`-style attributes on the
+#'        `edgelist`, or a number specifying the network size. The
+#'        `edgelist` may be either a `tibble` or a `matrix`. If
+#'        a `tibble` is passed, it should have integer columns named
+#'        `".tail"` and `".head"` for the tails and heads of edges,
 #'        and may include edge attributes as additional columns. If a
-#'        \code{matrix} is passed, it should have two columns, the first being
+#'        `matrix` is passed, it should have two columns, the first being
 #'        the tails of edges and the second being the heads of edges; edge
-#'        attributes are not supported for \code{matrix} arguments. Edges
+#'        attributes are not supported for `matrix` arguments. Edges
 #'        should be sorted, first on tails then on heads. See
-#'        \code{\link[network]{as.edgelist}} for information on producing such
-#'        \code{edgelist} objects from \code{network} objects. The \code{edgelist}
-#'        \emph{must} have the \code{"n"} attribute
+#'        [`network::as.edgelist`] for information on producing such
+#'        `edgelist` objects from `network` objects. The `edgelist`
+#'        *must* have the `"n"` attribute
 #'        indicating the network size, and may include additional named
-#'        \code{attr}-style attributes that will be interpreted as network
-#'        attributes and copied to the \code{networkLite}. Exceptions to this
-#'        are attributes named \code{"class"}, \code{"dim"}, \code{"dimnames"},
-#'        \code{"vnames"}, \code{"row.names"}, \code{"names"}, and
-#'        \code{"mnext"}; these are not copied from the \code{edgelist} to the
-#'        \code{networkLite}.
-#' @param attr A named list of vertex attributes, coerced to \code{tibble}.
-#'        Each element of \code{attr} should be an atomic vector or list of
+#'        `attr`-style attributes that will be interpreted as network
+#'        attributes and copied to the `networkLite`. Exceptions to this
+#'        are attributes named `"class"`, `"dim"`, `"dimnames"`,
+#'        `"vnames"`, `"row.names"`, `"names"`, and
+#'        `"mnext"`; these are not copied from the `edgelist` to the
+#'        `networkLite`.
+#' @param attr A named list of vertex attributes, coerced to `tibble`.
+#'        Each element of `attr` should be an atomic vector or list of
 #'        length equal to the number of nodes in the network.
 #' @param directed,bipartite Common network attributes that may be set via
-#'        arguments to the \code{networkLite.numeric} method.
-#' @param atomize Logical; should we call \code{\link{atomize}} on the
-#'        \code{networkLite} before returning it? Note that unlike
-#'        \code{\link{as.networkLite}}, the default value here is \code{FALSE}.
+#'        arguments to the `networkLite.numeric` method.
+#' @param atomize Logical; should we call [`atomize`] on the
+#'        `networkLite` before returning it? Note that unlike
+#'        [`as.networkLite`], the default value here is `FALSE`.
 #' @param ... additional arguments
-#' @return A \code{networkLite} object constructed according to the inputs.
+#' @return A `networkLite` object constructed according to the inputs.
 #'
-#' @details Currently there are several distinct \code{networkLite} constructor
+#' @details Currently there are several distinct `networkLite` constructor
 #' methods available.
 #'
-#' The \code{edgelist} method takes an \code{edgelist} class object \code{x}
-#' with network attributes attached in its \code{attributes} list, and a named
-#' list of vertex attributes \code{attr}, and returns a \code{networkLite}
-#' object, which is a named list with fields \code{el}, \code{attr}, and
-#' \code{gal}. The fields \code{el} and \code{attr} are \code{tibble}s
-#' corresponding to the \code{x} and \code{attr} arguments, respectively, and
-#' the field \code{gal} is the list of network attributes (copied from
-#' \code{attributes(x)}, with the exceptions noted above). Missing network
-#' attributes \code{directed} and \code{bipartite} are defaulted to
-#' \code{FALSE}; the network size attribute \code{n} must not be missing.
+#' The `edgelist` method takes an `edgelist` class object `x`
+#' with network attributes attached in its `attributes` list, and a named
+#' list of vertex attributes `attr`, and returns a `networkLite`
+#' object, which is a named list with fields `el`, `attr`, and
+#' `gal`. The fields `el` and `attr` are `tibble`s
+#' corresponding to the `x` and `attr` arguments, respectively, and
+#' the field `gal` is the list of network attributes (copied from
+#' `attributes(x)`, with the exceptions noted above). Missing network
+#' attributes `directed` and `bipartite` are defaulted to
+#' `FALSE`; the network size attribute `n` must not be missing.
 #'
-#' The \code{numeric} method takes a number \code{x} as well as the network
-#' attributes \code{directed} and \code{bipartite} (defaulting to \code{FALSE}),
-#' and returns an empty \code{networkLite} with these network attributes and
-#' number of nodes \code{x}.
+#' The `numeric` method takes a number `x` as well as the network
+#' attributes `directed` and `bipartite` (defaulting to `FALSE`),
+#' and returns an empty `networkLite` with these network attributes and
+#' number of nodes `x`.
 #'
-#' The constructor \code{networkLite_initialize} is also available for creating
-#' an empty \code{networkLite}, and its \code{x} argument should be a number
-#' indicating the size of the \code{networkLite} to create.
+#' The constructor `networkLite_initialize` is also available for creating
+#' an empty `networkLite`, and its `x` argument should be a number
+#' indicating the size of the `networkLite` to create.
 #'
-#' Within \code{EpiModel}, the \code{networkLite} data structure is used in the
-#' calls to \code{ergm} and \code{tergm} \code{simulate} and \code{summary}
+#' Within `EpiModel`, the `networkLite` data structure is used in the
+#' calls to `ergm` and `tergm` `simulate` and `summary`
 #' functions.
 #'
 #' @export

@@ -1,22 +1,22 @@
 
 #' @rdname matrix_conversions
 #'
-#' @title Convert a \code{networkLite} to a Matrix or \code{tibble}.
+#' @title Convert a `networkLite` to a Matrix or `tibble`.
 #'
-#' @param x A \code{networkLite}.
-#' @param attrname Name of an edge attribute in \code{x}.
+#' @param x A `networkLite`.
+#' @param attrname Name of an edge attribute in `x`.
 #' @param attrnames Vector specifying edge attributes to include in the tibble;
 #'        may be logical, integer, or character vector, the former two being
-#'        used to select attribute names from \code{list.edge.attributes(x)},
+#'        used to select attribute names from `list.edge.attributes(x)`,
 #'        and the latter being used as the attribute names themselves
 #' @param output Type of edgelist to output.
 #' @param na.rm should missing edges be dropped from edgelist?
 #' @param matrix.type type of matrix to return from
-#'        \code{as.matrix.networkLite}
+#'        `as.matrix.networkLite`
 #' @param ... additional arguments
 #'
-#' @return A \code{matrix} or \code{tibble} (possibly of class \code{edgelist})
-#' constructed from the \code{networkLite}.
+#' @return A `matrix` or `tibble` (possibly of class `edgelist`)
+#' constructed from the `networkLite`.
 #'
 #' @export
 #'

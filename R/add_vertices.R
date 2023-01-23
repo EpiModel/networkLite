@@ -1,17 +1,18 @@
+
 #' @rdname add_vertices
 #'
-#' @title Add Vertices to a \code{networkLite}.
+#' @title Add Vertices to a `networkLite`.
 #'
-#' @param x A \code{networkLite} object.
-#' @param nv Number of vertices to add to the \code{networkLite}.
-#' @param vattr A list (of length \code{nv}) of named lists of vertex
-#'        attribute values for added vertices, or \code{NULL} to indicate vertex
+#' @param x A `networkLite` object.
+#' @param nv Number of vertices to add to the `networkLite`.
+#' @param vattr A list (of length `nv`) of named lists of vertex
+#'        attribute values for added vertices, or `NULL` to indicate vertex
 #'        attribute values are not being passed.
-#' @param last.mode logical; if \code{x} is bipartite, should the new vertices
+#' @param last.mode logical; if `x` is bipartite, should the new vertices
 #'        be added to the second mode?
 #' @param ... additional arguments
 #'
-#' @return A \code{networkLite} object with vertices added.
+#' @return A `networkLite` object with vertices added.
 #'
 #' @export
 #'

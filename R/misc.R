@@ -1,19 +1,19 @@
 
 #' @rdname edgecount
 #'
-#' @title Count Edges in a \code{networkLite}
+#' @title Count Edges in a `networkLite`
 #'
-#' @param x A \code{networkLite} object.
+#' @param x A `networkLite` object.
 #' @param na.omit logical; omit missing edges from edge count?
 #' @param ... additional arguments
 #'
-#' @return The number of edges (of the appropriate type) in \code{x}.
+#' @return The number of edges (of the appropriate type) in `x`.
 #'
-#' @details The \code{network.edgecount} method provides a count of the number
-#' of edges in the \code{networkLite}, including missing edges if
-#' \code{na.omit = FALSE} and omitting them if \code{na.omit = TRUE}.
-#' The \code{network.naedgecount} method provides a count of the
-#' number of missing edges in the \code{networkLite}.
+#' @details The `network.edgecount` method provides a count of the number
+#' of edges in the `networkLite`, including missing edges if
+#' `na.omit = FALSE` and omitting them if `na.omit = TRUE`.
+#' The `network.naedgecount` method provides a count of the
+#' number of missing edges in the `networkLite`.
 #'
 #' @export
 #'
@@ -33,15 +33,15 @@ network.naedgecount.networkLite <- function(x, ...) {
 
 #' @rdname print
 #'
-#' @title Print Basic Summary of a \code{networkLite}
+#' @title Print Basic Summary of a `networkLite`
 #'
-#' @param x A \code{networkLite} object.
+#' @param x A `networkLite` object.
 #' @param ... additional arguments
 #'
-#' @return The \code{networkLite} is returned invisibly.
+#' @return The `networkLite` is returned invisibly.
 #'
 #' @details
-#' This method prints a basic summary of a \code{networkLite} object,
+#' This method prints a basic summary of a `networkLite` object,
 #' including network size, edge count, and attribute names.
 #'
 #' @export
@@ -60,15 +60,15 @@ print.networkLite <- function(x, ...) {
 
 #' @rdname is.na
 #'
-#' @title Extract \code{networkLite} with Missing Edges Only
+#' @title Extract `networkLite` with Missing Edges Only
 #'
-#' @param x A \code{networkLite}.
+#' @param x A `networkLite`.
 #'
 #' @return
-#' A \code{networkLite} with the same network size, directedness, and
-#' bipartiteness as \code{x}, whose edges are precisely those edges in
-#' \code{x} that are missing in \code{x}. Edges in the returned
-#' \code{networkLite} are marked as not missing.
+#' A `networkLite` with the same network size, directedness, and
+#' bipartiteness as `x`, whose edges are precisely those edges in
+#' `x` that are missing in `x`. Edges in the returned
+#' `networkLite` are marked as not missing.
 #'
 #' @export
 #'
@@ -84,14 +84,14 @@ is.na.networkLite <- function(x) {
 
 #' @rdname operators
 #'
-#' @title Add and Subtract \code{networkLite}s
+#' @title Add and Subtract `networkLite`s
 #'
-#' @param e1,e2 \code{networkLite} objects
+#' @param e1,e2 `networkLite` objects
 #' @return
-#' For the \code{+} method, a \code{networkLite} whose edges are those
-#' in either \code{e1} or \code{e2}. For the \code{-} method, a
-#' \code{networkLite} whose edges are those in \code{e1} and not in
-#' \code{e2}.
+#' For the `+` method, a `networkLite` whose edges are those
+#' in either `e1` or `e2`. For the `-` method, a
+#' `networkLite` whose edges are those in `e1` and not in
+#' `e2`.
 #'
 #' @export
 #'
@@ -153,17 +153,17 @@ is.na.networkLite <- function(x) {
 #'
 #' @title valid.eids
 #'
-#' @param x A \code{networkLite} object.
+#' @param x A `networkLite` object.
 #' @param ... additional arguments.
 #'
 #' @return
-#' The sequence \code{seq_len(network.edgecount(x, na.omit = FALSE))}.
+#' The sequence `seq_len(network.edgecount(x, na.omit = FALSE))`.
 #'
 #' @details
-#' Returns \code{seq_len(network.edgecount(x, na.omit = FALSE))}, to
-#' support the edge attribute assignment operator \code{\%e\%<-}. Note
-#' that the edge id of an edge in \code{x} is simply its row index
-#' within \code{x$el}.
+#' Returns `seq_len(network.edgecount(x, na.omit = FALSE))`, to
+#' support the edge attribute assignment operator `\%e\%<-`. Note
+#' that the edge id of an edge in `x` is simply its row index
+#' within `x$el`.
 #'
 #' @export
 #'

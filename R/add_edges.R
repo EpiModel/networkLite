@@ -1,32 +1,33 @@
 
 #' @rdname add_edges
 #'
-#' @title Methods to Add or Modify Edges in a \code{networkLite}.
+#' @title Methods to Add or Modify Edges in a `networkLite`.
 #'
-#' @param x A \code{networkLite}.
-#' @param tail Vector of tails of edges to add to the \code{networkLite}.
-#' @param head Vector of heads of edges to add to the \code{networkLite}.
-#' @param names.eval Names of edge attributes, or \code{NULL} to indicate that
-#'        attributes are not being specified. For \code{add.edges}, this
+#' @param x A `networkLite`.
+#' @param tail Vector of tails of edges to add to the `networkLite`.
+#' @param head Vector of heads of edges to add to the `networkLite`.
+#' @param names.eval Names of edge attributes, or `NULL` to indicate that
+#'        attributes are not being specified. For `add.edges`, this
 #'        argument should be structured as a list of length equal to
-#'        \code{length(tail)}, each element of which is a character vector
+#'        `length(tail)`, each element of which is a character vector
 #'        of attribute names for the corresponding edge. For the replacement
-#'        method \code{[<-.networkLite}, this should argument should be a
+#'        method `[<-.networkLite`, this should argument should be a
 #'        single attribute name, which is applied to all edges.
-#' @param vals.eval Value(s) of edge attributes, or \code{NULL} to indicate
+#' @param vals.eval Value(s) of edge attributes, or `NULL` to indicate
 #'        that attributes are not being specified. This argument should be
-#'        structured as a list of length equal to \code{length(tail)}, each
+#'        structured as a list of length equal to `length(tail)`, each
 #'        element of which is a list of attribute values, in the same order
-#'        as the corresponding attribute names in \code{names.eval}.
-#' @param i,j Nodal indices (must be missing for \code{networkLite} method).
+#'        as the corresponding attribute names in `names.eval`.
+#' @param i,j Nodal indices (must be missing for `networkLite` method).
 #' @param add.edges logical; should edges being assigned to be added if they
 #'        are not already present?
 #' @param value Edge values to assign (coerced to a matrix).
 #' @param ... additional arguments
 #'
-#' @return A \code{networkLite} object with edges added (if calling
-#'         \code{add.edges}) or set to specified values (if calling
-#'         \code{[<-.networkLite}).
+#' @return
+#' A `networkLite` object with edges added (if calling
+#' `add.edges`) or set to specified values (if calling
+#' `[<-.networkLite`).
 #'
 #' @export
 #'

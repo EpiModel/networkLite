@@ -15,10 +15,8 @@ to_network_networkLite(x, ...)
 \item{...}{additional arguments.}
 }
 \value{
-For \code{to_network_networkLite}, a \code{network} object
-corresponding to \code{x} is returned. For
-\code{as.network.networkLite}, the \code{networkLite} \code{x} is
-returned unchanged.
+For \code{to_network_networkLite}, a \code{network} object corresponding to \code{x} is returned. For
+\code{as.network.networkLite}, the \code{networkLite} \code{x} is returned unchanged.
 }
 \description{
 Convert a \code{networkLite} object to a \code{network} object

@@ -1,14 +1,14 @@
 
 #' @rdname mixingmatrix
 #'
-#' @title Extract Mixing Matrix from \code{networkLite}
+#' @title Extract Mixing Matrix from `networkLite`
 #'
-#' @param object A \code{networkLite} object.
-#' @param attr The name of a vertex attribute in \code{object}.
+#' @param object A `networkLite` object.
+#' @param attr The name of a vertex attribute in `object`.
 #' @param ... additional arguments
 #'
 #' @return
-#' The mixing matrix (of class \code{table}) for \code{object} and \code{attr}.
+#' The mixing matrix (of class `table`) for `object` and `attr`.
 #'
 #' @export
 #'

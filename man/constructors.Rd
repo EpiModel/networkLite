@@ -42,7 +42,7 @@ and may include edge attributes as additional columns. If a
 the tails of edges and the second being the heads of edges; edge
 attributes are not supported for \code{matrix} arguments. Edges
 should be sorted, first on tails then on heads. See
-\code{\link[network]{as.edgelist}} for information on producing such
+\code{\link[network:as.edgelist]{network::as.edgelist}} for information on producing such
 \code{edgelist} objects from \code{network} objects. The \code{edgelist}
 \emph{must} have the \code{"n"} attribute
 indicating the network size, and may include additional named

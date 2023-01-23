@@ -1,25 +1,23 @@
 
 #' @rdname to_network_networkLite
 #'
-#' @title Convert a \code{networkLite} object to a \code{network} object
+#' @title Convert a `networkLite` object to a `network` object
 #'
-#' @param x A \code{networkLite} object.
+#' @param x A `networkLite` object.
 #' @param ... additional arguments.
 #'
-#' @return
-#' For \code{to_network_networkLite}, a \code{network} object
-#' corresponding to \code{x} is returned. For
-#' \code{as.network.networkLite}, the \code{networkLite} \code{x} is
-#' returned unchanged.
-#'
-#' @seealso \code{\link{as.networkLite}}
-#'
 #' @details
-#' The \code{to_network_networkLite} function takes a \code{networkLite} and returns a
-#' corresponding \code{network}.
+#' The `to_network_networkLite` function takes a `networkLite` and returns a
+#' corresponding `network`.
 #'
-#' The \code{as.network.networkLite} method returns the \code{networkLite} unchanged, for
-#' compatibility with \code{ergm}.
+#' The `as.network.networkLite` method returns the `networkLite` unchanged, for
+#' compatibility with `ergm`.
+#'
+#' @return
+#' For `to_network_networkLite`, a `network` object corresponding to `x` is returned. For
+#' `as.network.networkLite`, the `networkLite` `x` is returned unchanged.
+#'
+#' @seealso [`as.networkLite`]
 #'
 #' @export
 #'
