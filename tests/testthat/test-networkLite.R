@@ -537,11 +537,13 @@ test_that("more tibble tests", {
   tbl <- as_tibble(nw, na.rm = FALSE)
   tbl <- tbl[order(tbl$.tail, tbl$.head),]
   class(tbl) <- c("edgelist", class(tbl))
+  attr(tbl, "n") <- network.size(nw)
   nwL <- networkLite(tbl)
   expect_error(expect_equiv_nets(nw, nwL))
   expect_equal(list.edge.attributes(nwL), c("na"))
 
   tbl <- as_tibble(nw, attrnames = "e1", na.rm = FALSE)
+  attr(tbl, "n") <- network.size(nw)
   tbl <- tbl[order(tbl$.tail, tbl$.head),]
   class(tbl) <- c("edgelist", class(tbl))
   nwL <- networkLite(tbl)
@@ -551,6 +553,7 @@ test_that("more tibble tests", {
   tbl <- as_tibble(nw, attrnames = c("e1", "e2"), na.rm = FALSE)
   tbl <- tbl[order(tbl$.tail, tbl$.head),]
   class(tbl) <- c("edgelist", class(tbl))
+  attr(tbl, "n") <- network.size(nw)
   nwL <- networkLite(tbl)
   expect_error(expect_equiv_nets(nw, nwL))
   expect_equal(list.edge.attributes(nwL), c("e1", "e2", "na"))
@@ -558,6 +561,7 @@ test_that("more tibble tests", {
   tbl <- as_tibble(nw, attrnames = c("e1", "e2", "na"), na.rm = FALSE)
   tbl <- tbl[order(tbl$.tail, tbl$.head),]
   class(tbl) <- c("edgelist", class(tbl))
+  attr(tbl, "n") <- network.size(nw)
   nwL <- networkLite(tbl)
   expect_equiv_nets(nw, nwL)
   expect_equal(list.edge.attributes(nwL), c("e1", "e2", "na"))
@@ -565,6 +569,7 @@ test_that("more tibble tests", {
   tbl <- as_tibble(nw, attrnames = c("e1", "e2", "na"), na.rm = TRUE)
   tbl <- tbl[order(tbl$.tail, tbl$.head),]
   class(tbl) <- c("edgelist", class(tbl))
+  attr(tbl, "n") <- network.size(nw)
   nwL <- networkLite(tbl)
   expect_error(expect_equiv_nets(nw, nwL))
   expect_equal(list.edge.attributes(nwL), c("e1", "e2", "na"))
@@ -662,7 +667,9 @@ test_that("network and networkLite produce identical matrices, edgelists, and ti
           expect_identical(as.edgelist(nw, attrname = attrname, na.rm = na.rm, output = "tibble"),
                            as.edgelist(nwL, attrname = attrname, na.rm = na.rm, output = "tibble"))
 
-          expect_identical(tibble::as_tibble(nw, attrname = attrname, na.rm = na.rm),
+          tbl <- tibble::as_tibble(nw, attrname = attrname, na.rm = na.rm)
+          attr(tbl, "n") <- network.size(nw)
+          expect_identical(tbl,
                            tibble::as_tibble(nwL, attrname = attrname, na.rm = na.rm))
         }
       }
