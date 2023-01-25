@@ -33,7 +33,7 @@ and replaces the column with the result of calling \code{unlist} on
 the column if all of the following are true: the column
 \code{is.list} of length greater than zero, each element of which
 \code{is.atomic} of length one, and either \code{upcast} is
-\code{TRUE} or there is only one unique class amongst all elements
+\code{TRUE} or there is only one unique class among all elements
 of the column.
 
 The \code{networkLite} method applies the \code{tibble} method to

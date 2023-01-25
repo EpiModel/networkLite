@@ -1,6 +1,6 @@
 Package: networkLite
-Version: 1.0.0
-Date: 2023-01-23
+Version: 1.0.1
+Date: 2023-01-25
 Title: An Simplified Implementation of the 'network' Package Functionality
 Description: An implementation of some of the core 'network' package functionality based on a 
     simplified data structure that is faster in many research applications. This package is designed 

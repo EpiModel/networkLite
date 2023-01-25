@@ -18,7 +18,7 @@
 #' the column if all of the following are true: the column
 #' `is.list` of length greater than zero, each element of which
 #' `is.atomic` of length one, and either `upcast` is
-#' `TRUE` or there is only one unique class amongst all elements
+#' `TRUE` or there is only one unique class among all elements
 #' of the column.
 #'
 #' The `networkLite` method applies the `tibble` method to
