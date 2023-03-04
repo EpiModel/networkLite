@@ -95,6 +95,17 @@ create_random_edgelist <- function(n_nodes, directed, bipartite, target_n_edges)
   structure(el, n = n_nodes, directed = directed, bipartite = bipartite)
 }
 
+test_that("net_attr overrides attributes(x)", {
+  nw <- network.initialize(10, directed = FALSE)
+  nw[3,7] <- 1
+  el <- as.edgelist(nw)
+  expect_error(nwL <- networkLite(el, net_attr = list(newattr = "val")),
+               "`n` attribute")
+  nwL <- networkLite(el, net_attr = list(n = 10, newattr = "val"))
+  expect_equal(network.size(nwL), 10)
+  expect_equal(get.network.attribute(nwL, "newattr"), "val")
+})
+
 test_that("%e%<- behaves as expected", {
   net_size <- 100
   bip_size <- 40
