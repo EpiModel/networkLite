@@ -72,8 +72,8 @@ networkLite <- function(x, ...) {
 #' @export
 networkLite.edgelist <- function(
     x,
-    attr = list(vertex.names = seq_len(attributes(x)[["n"]]),
-                na = logical(attributes(x)[["n"]])),
+    attr = list(vertex.names = seq_len(net_attr[["n"]]),
+                na = logical(net_attr[["n"]])),
     net_attr = attributes(x)[setdiff(names(attributes(x)),
                                          c("class", "dim", "dimnames",
                                            "vnames", "row.names", "names",

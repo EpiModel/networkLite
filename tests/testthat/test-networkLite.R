@@ -100,7 +100,7 @@ test_that("net_attr overrides attributes(x)", {
   nw[3,7] <- 1
   el <- as.edgelist(nw)
   expect_error(nwL <- networkLite(el, net_attr = list(newattr = "val")),
-               "`n` attribute")
+               "non-negative integer")
   nwL <- networkLite(el, net_attr = list(n = 10, newattr = "val"))
   expect_equal(network.size(nwL), 10)
   expect_equal(get.network.attribute(nwL, "newattr"), "val")
