@@ -5,30 +5,25 @@
 #'
 #' @description Constructor methods for `networkLite` objects.
 #'
-#' @param x Either an `edgelist` class network representation, including
-#'        network attributes as `attr`-style attributes on the
-#'        `edgelist`, or a number specifying the network size. The
-#'        `edgelist` may be either a `tibble` or a `matrix`. If
-#'        a `tibble` is passed, it should have integer columns named
-#'        `".tail"` and `".head"` for the tails and heads of edges,
+#' @param x Either an `edgelist` class network representation, or a number
+#'        specifying the network size. The `edgelist` may be either a `tibble`
+#'        or a `matrix`. If a `tibble` is passed, it should have integer columns
+#'        named `".tail"` and `".head"` for the tails and heads of edges,
 #'        and may include edge attributes as additional columns. If a
 #'        `matrix` is passed, it should have two columns, the first being
 #'        the tails of edges and the second being the heads of edges; edge
 #'        attributes are not supported for `matrix` arguments. Edges
 #'        should be sorted, first on tails then on heads. See
 #'        [`network::as.edgelist`] for information on producing such
-#'        `edgelist` objects from `network` objects. The `edgelist`
-#'        *must* have the `"n"` attribute
-#'        indicating the network size, and may include additional named
-#'        `attr`-style attributes that will be interpreted as network
-#'        attributes and copied to the `networkLite`. Exceptions to this
-#'        are attributes named `"class"`, `"dim"`, `"dimnames"`,
-#'        `"vnames"`, `"row.names"`, `"names"`, and
-#'        `"mnext"`; these are not copied from the `edgelist` to the
-#'        `networkLite`.
+#'        `edgelist` objects from `network` objects.
 #' @param attr A named list of vertex attributes, coerced to `tibble`.
 #'        Each element of `attr` should be an atomic vector or list of
 #'        length equal to the number of nodes in the network.
+#' @param net_attr A named list of network attributes. Must include the network
+#'        size attribute named `"n"`. Defaults to a subset of the `attr`-style
+#'        attributes of `x` for backwards compatibility; it is recommended that
+#'        new code specify `net_attr` explicitly rather than relying on this
+#'        default.
 #' @param directed,bipartite Common network attributes that may be set via
 #'        arguments to the `networkLite.numeric` method.
 #' @param atomize Logical; should we call [`atomize`] on the
@@ -40,16 +35,12 @@
 #' @details Currently there are several distinct `networkLite` constructor
 #' methods available.
 #'
-#' The `edgelist` method takes an `edgelist` class object `x`
-#' with network attributes attached in its `attributes` list, and a named
-#' list of vertex attributes `attr`, and returns a `networkLite`
-#' object, which is a named list with fields `el`, `attr`, and
-#' `gal`. The fields `el` and `attr` are `tibble`s
-#' corresponding to the `x` and `attr` arguments, respectively, and
-#' the field `gal` is the list of network attributes (copied from
-#' `attributes(x)`, with the exceptions noted above). Missing network
-#' attributes `directed` and `bipartite` are defaulted to
-#' `FALSE`; the network size attribute `n` must not be missing.
+#' The `edgelist` method takes an `edgelist` class object `x`, a named
+#' list of vertex attributes `attr`, and a named list of network attributes
+#' `net_attr`, and returns a `networkLite` object, which is a named list with
+#' fields `el`, `attr`, and `gal`, corresponding to the arguments `x`, `attr`,
+#' and `net_attr`. Missing network attributes `directed` and `bipartite` are
+#' defaulted to `FALSE`; the network size attribute `n` must not be missing.
 #'
 #' The `numeric` method takes a number `x` as well as the network
 #' attributes `directed` and `bipartite` (defaulting to `FALSE`),
@@ -81,8 +72,12 @@ networkLite <- function(x, ...) {
 #' @export
 networkLite.edgelist <- function(
     x,
-    attr = list(vertex.names = seq_len(attributes(x)[["n"]]),
-                na = logical(attributes(x)[["n"]])),
+    attr = list(vertex.names = seq_len(net_attr[["n"]]),
+                na = logical(net_attr[["n"]])),
+    net_attr = attributes(x)[setdiff(names(attributes(x)),
+                                         c("class", "dim", "dimnames",
+                                           "vnames", "row.names", "names",
+                                           "mnext"))],
     ...,
     atomize = FALSE) {
 
@@ -101,10 +96,7 @@ networkLite.edgelist <- function(
 
   nw <- list(el = el,
              attr = as_tibble(attr),
-             gal = attributes(x)[setdiff(names(attributes(x)),
-                                         c("class", "dim", "dimnames",
-                                           "vnames", "row.names", "names",
-                                           "mnext"))])
+             gal = net_attr)
 
   if ("na" %in% names(nw$el)) {
     if (is.logical(nw$el[["na"]])) {
