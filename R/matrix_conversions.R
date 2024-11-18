@@ -82,7 +82,7 @@ as_tibble.networkLite <- function(x, attrnames = NULL, na.rm = TRUE, ...) {
   out <- atomize(out, ...)
   attr(out, "n") <- network.size(x)
   attr(out, "vnames") <- network.vertex.names(x)
-  if (is.bipartite(x)) attr(out, "bipartite") <- x %n% "bipartite"
+  attr(out, "bipartite") <- NVL(x %n% "bipartite", FALSE)
   out
 }
 
