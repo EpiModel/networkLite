@@ -28,7 +28,7 @@ to_network_networkLite <- function(x, ...) {
 
   el <- as.edgelist(x, na.rm = FALSE)
 
-  nw <- add.edges(nw, el[, 1], el[, 2])
+  add.edges(nw, el[, 1], el[, 2])
 
   for (name in list.vertex.attributes(x)) {
     value <- get.vertex.attribute(x, name, null.na = FALSE, unlist = FALSE)

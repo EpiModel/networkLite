@@ -1132,3 +1132,20 @@ test_that("as.edgelist with attrname", {
   expect_equal(nwL$el[["eattr"]], list(1, 2, NULL, NA, 3))
   expect_equal(el[,3], c(1, 2, NA, NA, 3))
 })
+
+test_that("in-place modification fails gracefully", {
+  nw <- network.initialize(10, directed = FALSE)
+  nwL0 <- nwL <- as.networkLite(nw)
+  expect_silent(set.vertex.attribute(identity(nwL), "a", 1))
+  expect_equal(nwL, nwL0) 
+})
+
+test_that("in-place modification with a complex LHS", {
+  nw <- network.initialize(10, directed = FALSE)
+  nwL <- as.networkLite(nw)
+  nwLl <- list(nwL, list(a = nwL, b = nwL))
+  set.vertex.attribute(nwLl[[2]]$a, "a", 1)
+  expect_equal(nwLl[[1]], nwL) 
+  expect_equal(nwLl[[2]]$b, nwL) 
+  expect_failure(expect_equal(nwLl[[2]]$a, nwL))
+})

@@ -18,8 +18,6 @@
 #'
 add.vertices.networkLite <- function(x, nv, vattr = NULL,
                                      last.mode = TRUE, ...) {
-  xn <- substitute(x)
-
   nv <- as.integer(nv)
   if (nv > 0) {
     oldsize <- network.size(x)
@@ -70,6 +68,5 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
                                                 x$attr[offset + seq_len(oldsize - offset), ])))
   }
 
-  on.exit(eval.parent(call("<-", xn, x)))
-  invisible(x)
+  modify_in_place(x)
 }

@@ -86,8 +86,6 @@ set.vertex.attribute.networkLite <- function(x,
                                              v = seq_len(network.size(x)),
                                              ...,
                                              upcast = FALSE) {
-  xn <- substitute(x)
-
   if (missing(v)) {
     ## just set everything
     x$attr[[attrname]] <- rep(value, length.out = network.size(x))
@@ -102,8 +100,7 @@ set.vertex.attribute.networkLite <- function(x,
     x$attr[[attrname]][v] <- value
   }
 
-  on.exit(eval.parent(call("<-", xn, x)))
-  invisible(x)
+  modify_in_place(x)
 }
 
 #' @rdname attribute_methods
@@ -135,12 +132,9 @@ get.network.attribute.networkLite <- function(x, attrname, ..., unlist = FALSE) 
 #' @export
 #'
 set.network.attribute.networkLite <- function(x, attrname, value, ...) {
-  xn <- substitute(x)
-
   x$gal[[attrname]] <- value
 
-  on.exit(eval.parent(call("<-", xn, x)))
-  invisible(x)
+  modify_in_place(x)
 }
 
 #' @rdname attribute_methods
@@ -194,8 +188,6 @@ set.edge.attribute.networkLite <- function(
     x, attrname, value,
     e = seq_len(network.edgecount(x, na.omit = FALSE)), ..., upcast = FALSE) {
 
-  xn <- substitute(x)
-
   if (missing(e)) {
     ## just set everything
     x$el[[attrname]] <- rep(value, length.out = network.edgecount(x, na.omit = FALSE))
@@ -210,8 +202,7 @@ set.edge.attribute.networkLite <- function(
     x$el[[attrname]][e] <- value
   }
 
-  on.exit(eval.parent(call("<-", xn, x)))
-  invisible(x)
+  modify_in_place(x)
 }
 
 #' @rdname attribute_methods
@@ -220,8 +211,6 @@ set.edge.attribute.networkLite <- function(
 set.edge.value.networkLite <- function(
     x, attrname, value,
     e = seq_len(network.edgecount(x, na.omit = FALSE)), ..., upcast = FALSE) {
-
-  xn <- substitute(x)
 
   value <- value[cbind(x$el$.tail[e], x$el$.head[e])]
 
@@ -239,8 +228,7 @@ set.edge.value.networkLite <- function(
     x$el[[attrname]][e] <- value
   }
 
-  on.exit(eval.parent(call("<-", xn, x)))
-  invisible(x)
+  modify_in_place(x)
 }
 
 #' @rdname attribute_methods
@@ -258,32 +246,23 @@ list.edge.attributes.networkLite <- function(x, ...) {
 #' @rdname attribute_methods
 #' @export
 delete.vertex.attribute.networkLite <- function(x, attrname, ...) {
-  xn <- substitute(x)
-
   x$attr[[attrname]] <- NULL
 
-  on.exit(eval.parent(call("<-", xn, x)))
-  invisible(x)
+  modify_in_place(x)
 }
 
 #' @rdname attribute_methods
 #' @export
 delete.edge.attribute.networkLite <- function(x, attrname, ...) {
-  xn <- substitute(x)
-
   x$el[[attrname]] <- NULL
 
-  on.exit(eval.parent(call("<-", xn, x)))
-  invisible(x)
+  modify_in_place(x)
 }
 
 #' @rdname attribute_methods
 #' @export
 delete.network.attribute.networkLite <- function(x, attrname, ...) {
-  xn <- substitute(x)
-
   x$gal[[attrname]] <- NULL
 
-  on.exit(eval.parent(call("<-", xn, x)))
-  invisible(x)
+  modify_in_place(x)
 }

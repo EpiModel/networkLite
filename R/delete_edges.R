@@ -15,14 +15,11 @@
 #' @export
 #'
 delete.edges.networkLite <- function(x, eid, ...) {
-  xn <- substitute(x)
-
   eid <- as.integer(eid)
   eid <- eid[eid >= 1 & eid <= network.edgecount(x, na.omit = FALSE)]
   if (length(eid) > 0) {
     x$el <- x$el[-eid, ]
   }
 
-  on.exit(eval.parent(call("<-", xn, x)))
-  invisible(x)
+  modify_in_place(x)
 }

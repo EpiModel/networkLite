@@ -14,8 +14,6 @@
 #' @export
 #'
 delete.vertices.networkLite <- function(x, vid, ...) {
-  xn <- substitute(x)
-
   vid <- as.integer(vid)
   vid <- vid[vid >= 1 & vid <= network.size(x)]
   if (length(vid) > 0) {
@@ -41,6 +39,5 @@ delete.vertices.networkLite <- function(x, vid, ...) {
     }
   }
 
-  on.exit(eval.parent(call("<-", xn, x)))
-  invisible(x)
+  modify_in_place(x)
 }

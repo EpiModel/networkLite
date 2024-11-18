@@ -54,7 +54,7 @@
 #' @name networkLite-package
 #'
 #' @import network
-#' @importFrom statnet.common NVL NVL2
+#' @importFrom statnet.common NVL NVL2 attr modify_in_place
 #' @importFrom tibble tibble as_tibble is_tibble
 #' @importFrom dplyr bind_rows bind_cols
 #' @importFrom stats na.omit

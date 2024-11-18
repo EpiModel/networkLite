@@ -116,7 +116,7 @@ is.na.networkLite <- function(x) {
     edgelist <- tibble(.tail = e1$el$.tail, .head = e1$el$.head)
   }
   out <- networkLite(e1 %n% "n", e1 %n% "directed", e1 %n% "bipartite")
-  out <- add.edges(out, edgelist$.tail, edgelist$.head)
+  add.edges(out, edgelist$.tail, edgelist$.head)
   out
 }
 
@@ -145,7 +145,7 @@ is.na.networkLite <- function(x) {
     edgelist <- tibble(.tail = e1$el$.tail, .head = e1$el$.head)
   }
   out <- networkLite(e1 %n% "n", e1 %n% "directed", e1 %n% "bipartite")
-  out <- add.edges(out, edgelist$.tail, edgelist$.head)
+  add.edges(out, edgelist$.tail, edgelist$.head)
   out
 }
 

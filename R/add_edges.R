@@ -70,8 +70,6 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
     update_tibble[[name]] <- vector(mode = "list", length = NROW(update_tibble))
   }
 
-  xn <- substitute(x)
-
   for (name in setdiff(new_names, old_names)) {
     x$el[[name]] <- vector(mode = "list", length = NROW(x$el))
   }
@@ -80,8 +78,7 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
   x$el <- x$el[order(x$el$.tail, x$el$.head), ]
   x$el <- x$el[!duplicated(x$el[, c(".tail", ".head")]), ]
 
-  on.exit(eval.parent(call("<-", xn, x)))
-  invisible(x)
+  modify_in_place(x)
 }
 
 #' @rdname add_edges
