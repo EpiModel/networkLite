@@ -7,7 +7,7 @@
 \method{permute.vertexIDs}{networkLite}(x, vids, ...)
 }
 \arguments{
-\item{x, vids}{see \code{\link[network:permute.vertexIDs]{network::permute.vertexIDs()}}}
+\item{x, vids, ...}{see \code{\link[network:permute.vertexIDs]{network::permute.vertexIDs()}}}
 }
 \description{
 Permute vertices

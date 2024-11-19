@@ -678,6 +678,32 @@ test_that("network and networkLite produce identical matrices, edgelists, and ti
                            tibble::as_tibble(nwL, attrname = attrname, na.rm = na.rm))
         }
       }
+
+            n <- network.size(nw)
+      for(into_bipartite in c(FALSE, TRUE)){
+        if(is.bipartite(nw)){
+          if(into_bipartite){
+            b <- nw %n% "bipartite"
+            v <- sample.int(b, round(b/2))
+            a <- b + round((n-b)/2)
+          }else{
+            v <- sort(sample.int(n, round(n/2)))
+            a <- NULL
+          }
+        }else{
+          v <- sample.int(n, round(n/2))
+          if(into_bipartite){
+            a <- sample(v, round(n/4))
+            v <- setdiff(v, a)
+          }else a <- NULL
+        }
+
+        nwS <- get.inducedSubgraph(nw, v, a)
+        nwLS <- get.inducedSubgraph(nwL, v, a)
+
+        expect_equiv_nets(as.networkLite(nwS), nwLS)
+        expect_equiv_nets(as.networkLite(nwS), as.networkLite(to_network_networkLite(nwLS)))
+      }
     }
   }
 })
