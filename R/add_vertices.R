@@ -73,7 +73,7 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
 
 #' Permute vertices
 #'
-#' @param x,vids see [network::permute.vertexIDs()]
+#' @param x,vids,... see [network::permute.vertexIDs()]
 #' @export
 permute.vertexIDs.networkLite <- function(x, vids, ...) {
   #Sanity check: is this a permutation vector?
