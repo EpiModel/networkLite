@@ -883,7 +883,7 @@ test_that("network and networkLite behave equivalently for basic access and muta
   }
 })
 
-test_that("add.vertices and add.edges with irregular attribute arguments behave equivalently for network and networkLite", {
+test_that("add.vertices and add.edges with irregular attribute arguments and vertex permutation behave equivalently for network and networkLite", {
   net_size <- 100
   bip_size <- 40
   edges_target <- net_size
@@ -976,6 +976,15 @@ test_that("add.vertices and add.edges with irregular attribute arguments behave 
 
         expect_equiv_nets(as.networkLite(nw), nwL)
         expect_equiv_nets(as.networkLite(nw), as.networkLite(to_network_networkLite(nwL)))
+
+        P <- if(is.bipartite(nw)){
+               b <- nw %n% "bipartite"
+               c(sample.int(b), b + sample.int(network.size(nw) - b))
+             }else sample.int(network.size(nw))
+        nwP <- permute.vertexIDs((nw), P)
+        nwLP <- permute.vertexIDs((nwL), P)
+        expect_equiv_nets(as.networkLite(nwP), nwLP)
+        expect_equiv_nets(as.networkLite(nwP), as.networkLite(to_network_networkLite(nwLP)))
       }
     }
   }
