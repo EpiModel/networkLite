@@ -1,5 +1,9 @@
+library(tibble)
+
 ## test two networks or networkLites for equivalent attributes, edges, etc.
 ## note that atomic type upcasting in as.networkLite can create comparison issues
+order_cols <- function(df) df[, sort(names(df))]
+
 expect_equiv_nets <- function(nw1, nw2, skip.mnext = FALSE) {
   if ((is(nw1, "networkLite") && is(nw2, "networkLite")) ||
       (!is(nw1, "networkLite") && !is(nw2, "networkLite"))) {
@@ -653,29 +657,35 @@ test_that("network and networkLite produce identical matrices, edgelists, and ti
 
       set.seed(0)
       nw <- network(create_random_edgelist(net_size, directed, bipartite, edges_target), directed = directed, bipartite = bipartite, matrix.type = "edgelist")
-      nw %e% "eattr" <- runif(network.edgecount(nw))
+      nw %e% "attr" <- runif(network.edgecount(nw))
+      nw %v% "attr" <- runif(network.size(nw))
       nw %e% "na" <- sample(c(FALSE, TRUE), network.edgecount(nw), TRUE)
 
       set.seed(0)
       nwL <- networkLite(create_random_edgelist(net_size, directed, bipartite, edges_target))
-      set.edge.attribute(nwL, "eattr", runif(network.edgecount(nwL)))
+      set.edge.attribute(nwL, "attr", runif(network.edgecount(nwL)))
+      set.vertex.attribute(nwL, "attr", runif(network.size(nwL)))
       set.edge.attribute(nwL, "na", sample(c(FALSE, TRUE), network.edgecount(nwL), TRUE))
 
-      for(attrname in list(NULL, "eattr", "na")) {
+      for(attrname in list(NULL, "attr", "na", TRUE)) {
         for(na.rm in list(FALSE, TRUE)) {
-          for(matrix.type in c("adjacency", "incidence", "edgelist")) {
-            expect_identical(as.matrix(nw, matrix.type = matrix.type, attrname = attrname, na.rm = na.rm),
-                             as.matrix(nwL, matrix.type = matrix.type, attrname = attrname, na.rm = na.rm))
+          for(unit in c("edges", "vertices")){
+            expect_identical(order_cols(as_tibble(nw, attrname = attrname, na.rm = na.rm, unit = unit)),
+                             order_cols(as_tibble(nwL, attrname = attrname, na.rm = na.rm, unit = unit)))
           }
+
+          if(identical(attrname, TRUE)) next
+
+          for(matrix.type in c("adjacency", "incidence", "edgelist")) {
+              expect_identical(as.matrix(nw, matrix.type = matrix.type, attrname = attrname, na.rm = na.rm),
+                               as.matrix(nwL, matrix.type = matrix.type, attrname = attrname, na.rm = na.rm))
+          }
+
           expect_identical(as.edgelist(nw, attrname = attrname, na.rm = na.rm),
                            as.edgelist(nwL, attrname = attrname, na.rm = na.rm))
 
           expect_identical(as.edgelist(nw, attrname = attrname, na.rm = na.rm, output = "tibble"),
                            as.edgelist(nwL, attrname = attrname, na.rm = na.rm, output = "tibble"))
-
-          tbl <- tibble::as_tibble(nw, attrname = attrname, na.rm = na.rm)
-          expect_identical(tbl,
-                           tibble::as_tibble(nwL, attrname = attrname, na.rm = na.rm))
         }
       }
 

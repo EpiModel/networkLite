@@ -14,7 +14,13 @@
   ...
 )
 
-\method{as_tibble}{networkLite}(x, attrnames = NULL, na.rm = TRUE, ...)
+\method{as_tibble}{networkLite}(
+  x,
+  attrnames = (match.arg(unit) == "vertices"),
+  na.rm = TRUE,
+  ...,
+  unit = c("edges", "vertices")
+)
 
 \method{as.matrix}{networkLite}(
   x,
@@ -38,6 +44,8 @@
 may be logical, integer, or character vector, the former two being
 used to select attribute names from \code{list.edge.attributes(x)},
 and the latter being used as the attribute names themselves}
+
+\item{unit}{whether to return attributes for edges or for vertices}
 
 \item{matrix.type}{type of matrix to return from
 \code{as.matrix.networkLite}}

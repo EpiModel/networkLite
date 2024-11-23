@@ -13,6 +13,7 @@
 #' @param na.rm should missing edges be dropped from edgelist?
 #' @param matrix.type type of matrix to return from
 #'        `as.matrix.networkLite`
+#' @param unit whether to return attributes for edges or for vertices
 #' @param ... additional arguments
 #'
 #' @return A `matrix` or `tibble` (possibly of class `edgelist`)
@@ -68,22 +69,22 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
 
 #' @rdname matrix_conversions
 #' @export
-as_tibble.networkLite <- function(x, attrnames = NULL, na.rm = TRUE, ...) {
+as_tibble.networkLite <- function(x, attrnames=(match.arg(unit)=="vertices"), na.rm=TRUE, ..., unit=c("edges", "vertices")) {
+  unit <- match.arg(unit)
+  df <- switch(unit, edges = x$el, vertices = x$attr)
   if (is.logical(attrnames) || is.numeric(attrnames))
-    attrnames <- na.omit(list.edge.attributes(x)[attrnames])
-  attr_list <- lapply(attrnames, function(attrname) get.edge.attribute(x, attrname, null.na = FALSE, unlist = FALSE))
-  names(attr_list) <- attrnames
-  tibble_list <- c(list(.tail = x$el$.tail, .head = x$el$.head), attr_list)
-  out <- as_tibble(tibble_list)
-  if (na.rm && NROW(out) > 0) {
-    na <- NVL(x %e% "na", logical(NROW(out)))
-    out <- out[!na, ]
-  }
-  out <- atomize(out, ...)
-  attr(out, "n") <- network.size(x)
-  attr(out, "vnames") <- network.vertex.names(x)
-  attr(out, "bipartite") <- NVL(x %n% "bipartite", FALSE)
-  out
+    attrnames <- na.omit(setdiff(names(df), c(".tail", ".head", ".eid"))[attrnames])
+
+  # Keep only requested columns, but make sure all named columns are present.
+  if(na.rm) df <- df[!df$na,]
+  df <- df[intersect(c(".tail", ".head", ".eid", attrnames), names(df))]
+  for(a in setdiff(attrnames, names(df))) df[[a]] <- rep(list(), nrow(df))
+
+  df <- atomize(df, ...)
+  attr(df, "n") <- network.size(x)
+  attr(df, "vnames") <- network.vertex.names(x)
+  attr(df, "bipartite") <- NVL(x %n% "bipartite", FALSE)
+  df
 }
 
 #' @rdname matrix_conversions
