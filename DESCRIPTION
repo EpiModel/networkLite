@@ -1,13 +1,12 @@
 Package: networkLite
-Version: 1.0.5
-Date: 2023-03-10
+Version: 1.1.0
+Date: 2024-11-23
 Title: An Simplified Implementation of the 'network' Package Functionality
 Description: An implementation of some of the core 'network' package functionality based on a 
     simplified data structure that is faster in many research applications. This package is designed 
     for back-end use in the 'statnet' family of packages, including 'EpiModel'. Support is provided for
     binary and weighted, directed and undirected, bipartite and unipartite networks; no current 
     support for multigraphs, hypergraphs, or loops.
-Maintainer: Samuel Jenness <samuel.m.jenness@emory.edu>
 Authors@R: c(person("Samuel", "Jenness",
     role=c("cre","aut"), email="samuel.m.jenness@emory.edu"),
     person("Steven M.","Goodreau",
@@ -19,7 +18,9 @@ Authors@R: c(person("Samuel", "Jenness",
     person("Chad", "Klumb",
     role=c("aut"), email="cklumb@gmail.com"),
     person("Skye", "Bender-deMoll",
-    role=c("ctb"), email="skyebend@uw.edu"))
+    role=c("ctb"), email="skyebend@uw.edu"),
+    person(c("Pavel", "N."), "Krivitsky",
+    role=c("ctb"), email="pavel@statnet.org", comment=c(ORCID="0000-0002-9101-3362")))
 License: GPL-3
 URL: https://github.com/EpiModel/networkLite/
 BugReports: https://github.com/EpiModel/networkLite/issues
