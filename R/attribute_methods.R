@@ -49,7 +49,7 @@
 #' @export
 #'
 get.vertex.attribute.networkLite <- function(x, attrname, ..., null.na = TRUE, unlist = TRUE) {
-  if (!(attrname %in% list.vertex.attributes(x))) {
+  if (is.null(out <- unclass(x$attr)[[attrname]])) {
     ## special case handling relevant to netsim efficiency
     if (null.na == TRUE && unlist == TRUE) {
       return(rep(NA, length.out = network.size(x)))
@@ -61,8 +61,6 @@ get.vertex.attribute.networkLite <- function(x, attrname, ..., null.na = TRUE, u
       return(vector(mode = "list", length = network.size(x)))
     }
   }
-
-  out <- x$attr[[attrname]]
 
   if (null.na == TRUE && is.list(out)) {
     out <- lapply(out, function(val) if (!is.null(val)) val else NA)
@@ -148,7 +146,7 @@ list.network.attributes.networkLite <- function(x, ...) {
 #' @export
 #'
 get.edge.attribute.networkLite <- function(x, attrname, ..., null.na = FALSE, unlist = TRUE) {
-  if (!(attrname %in% list.edge.attributes(x))) {
+  if (is.null(out <- unclass(x$el)[[attrname]])) {
     ## special case handling consistent as for vertex attributes
     if (null.na == TRUE && unlist == TRUE) {
       return(rep(NA, length.out = network.edgecount(x, na.omit = FALSE)))
@@ -160,8 +158,6 @@ get.edge.attribute.networkLite <- function(x, attrname, ..., null.na = FALSE, un
       return(vector(mode = "list", length = network.edgecount(x, na.omit = FALSE)))
     }
   }
-
-  out <- x$el[[attrname]]
 
   if (null.na == TRUE && is.list(out)) {
     out <- lapply(out, function(val) if (!is.null(val)) val else NA)
