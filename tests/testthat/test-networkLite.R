@@ -103,8 +103,10 @@ test_that("net_attr overrides attributes(x)", {
   nw <- network.initialize(10, directed = FALSE)
   nw[3,7] <- 1
   el <- as.edgelist(nw)
-  expect_error(nwL <- networkLite(el, net_attr = list(newattr = "val")),
-               "non-negative integer")
+  expect_warning(
+    expect_error(nwL <- networkLite(el, net_attr = list(newattr = "val")),
+                 "non-negative integer"),
+    "first element used of 'length.out' argument")
   nwL <- networkLite(el, net_attr = list(n = 10, newattr = "val"))
   expect_equal(network.size(nwL), 10)
   expect_equal(get.network.attribute(nwL, "newattr"), "val")
@@ -311,10 +313,13 @@ test_that("setting vertex and edge attributes in strange ways", {
   set.vertex.attribute(nwL, "av2", letters[1:5])
   nwL <- atomize(nwL)
 
-  set.edge.attribute(nwL, "ae1", 1:2, c(1,2,4))
-  set.edge.attribute(nwL, "ae2", 1:3, c(3,1,4,2))
+  expect_warning(set.edge.attribute(nwL, "ae1", 1:2, c(1,2,4)),
+                 "number of items to replace is not a multiple of replacement length")
+  expect_warning(set.edge.attribute(nwL, "ae2", 1:3, c(3,1,4,2)),
+                 "number of items to replace is not a multiple of replacement length")
   set.vertex.attribute(nwL, "av1", letters[1:7])
-  set.vertex.attribute(nwL, "av2", c("1","2","3"), 1:2)
+  expect_warning(set.vertex.attribute(nwL, "av2", c("1","2","3"), 1:2),
+                 "number of items to replace is not a multiple of replacement length")
   
   expect_equiv_nets(nw, nwL)
 
@@ -323,10 +328,13 @@ test_that("setting vertex and edge attributes in strange ways", {
   set.vertex.attribute(nw, "av1", list(list(network.initialize(3)), 2, 3, "a", "b"))
   set.vertex.attribute(nw, "av2", list(list(network.initialize(3)), 2, 3, "a", "b"), 4:5)
   
-  set.edge.attribute(nwL, "ae1", list(list(1,2), list(3)), c(1,2,4))
-  set.edge.attribute(nwL, "ae2", list(list("a"), network.initialize(3), 1), c(3,1,4,2))
+  expect_warning(set.edge.attribute(nwL, "ae1", list(list(1,2), list(3)), c(1,2,4)),
+                 "number of items to replace is not a multiple of replacement length")
+  expect_warning(set.edge.attribute(nwL, "ae2", list(list("a"), network.initialize(3), 1), c(3,1,4,2)),
+                 "number of items to replace is not a multiple of replacement length")
   set.vertex.attribute(nwL, "av1", list(list(network.initialize(3)), 2, 3, "a", "b", "c"))
-  set.vertex.attribute(nwL, "av2", list(list(network.initialize(3)), 2, 3, "a", "b"), 4:5)
+  expect_warning(set.vertex.attribute(nwL, "av2", list(list(network.initialize(3)), 2, 3, "a", "b"), 4:5),
+                 "number of items to replace is not a multiple of replacement length")
 
   expect_equiv_nets(nw, nwL)
 
