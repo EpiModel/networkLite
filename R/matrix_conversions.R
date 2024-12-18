@@ -100,6 +100,7 @@ as.matrix.networkLite <- function(x,
          edgelist = as.matrix.networkLite.edgelist(x, attrname, ...))
 }
 
+#' @export
 as.matrix.networkLite.adjacency <- function(x, attrname = NULL, ...) {
   el <- as.edgelist(x, na.rm = FALSE)
 
@@ -127,6 +128,7 @@ as.matrix.networkLite.adjacency <- function(x, attrname = NULL, ...) {
   }
 }
 
+#' @export
 as.matrix.networkLite.incidence <- function(x, attrname = NULL, ...) {
   el <- as.edgelist(x, na.rm = FALSE)
 
@@ -143,6 +145,7 @@ as.matrix.networkLite.incidence <- function(x, attrname = NULL, ...) {
   m
 }
 
+#' @export
 as.matrix.networkLite.edgelist <- function(x, attrname = NULL,
                                            na.rm = TRUE, ...) {
 
