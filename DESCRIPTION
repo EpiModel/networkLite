@@ -1,11 +1,11 @@
 Package: networkLite
 Version: 1.1.0
-Date: 2024-11-23
+Date: 2024-12-24
 Title: An Simplified Implementation of the 'network' Package Functionality
-Description: An implementation of some of the core 'network' package functionality based on a 
-    simplified data structure that is faster in many research applications. This package is designed 
+Description: An implementation of some of the core 'network' package functionality based on a
+    simplified data structure that is faster in many research applications. This package is designed
     for back-end use in the 'statnet' family of packages, including 'EpiModel'. Support is provided for
-    binary and weighted, directed and undirected, bipartite and unipartite networks; no current 
+    binary and weighted, directed and undirected, bipartite and unipartite networks; no current
     support for multigraphs, hypergraphs, or loops.
 Authors@R: c(person("Samuel", "Jenness",
     role=c("cre","aut"), email="samuel.m.jenness@emory.edu"),
@@ -36,6 +36,3 @@ Suggests:
 RoxygenNote: 7.3.2.9000
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-Remotes:
-    github::statnet/statnet.common@master,
-    github::statnet/network@master  
