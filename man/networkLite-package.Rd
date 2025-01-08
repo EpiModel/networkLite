@@ -7,8 +7,8 @@
 \tabular{ll}{
 Package: \tab networkLite\cr
 Type: \tab Package\cr
-Version: \tab 1.0.5\cr
-Date: \tab 2023-03-10\cr
+Version: \tab 1.1.0\cr
+Date: \tab 2025-01-08\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 }
