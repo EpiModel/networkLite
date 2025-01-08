@@ -47,10 +47,10 @@ atomize.tbl_df <- function(x, ..., upcast = FALSE) {
   for (name in names(x)) {
     value <- x[[name]]
     if (is.list(value) &&
-        length(value) > 0 &&
-        all(unlist(lapply(value, is.atomic))) &&
-        all(unlist(lapply(value, length)) == 1) &&
-        (upcast == TRUE || length(unique(unlist(lapply(value, class)))) == 1)) {
+          length(value) > 0 &&
+          all(unlist(lapply(value, is.atomic))) &&
+          all(unlist(lapply(value, length)) == 1) &&
+          (upcast == TRUE || length(unique(unlist(lapply(value, class)))) == 1)) {
       x[[name]] <- unlist(value)
     }
   }
@@ -66,11 +66,11 @@ ensure_list <- function(x) {
     any_list <- any(unlist(lapply(lapply(x, `[[`, name), is.list)))
     if (any_list == TRUE) {
       x <- lapply(x, function(y) {
-                       if (name %in% names(y)) {
-                         y[[name]] <- as.list(y[[name]])
-                       }
-                       y
-                     })
+        if (name %in% names(y)) {
+          y[[name]] <- as.list(y[[name]])
+        }
+        y
+      })
     }
   }
   return(x)

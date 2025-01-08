@@ -77,12 +77,12 @@ add.vertices.networkLite <- function(x, nv, vattr = NULL,
 #' @export
 permute.vertexIDs.networkLite <- function(x, vids, ...) {
   #Sanity check: is this a permutation vector?
-  n<-network.size(x)
-  if((length(unique(vids))!=n)||any(range(vids)!=c(1,n)))
+  n <- network.size(x)
+  if ((length(unique(vids)) != n) || any(range(vids) != c(1, n)))
     stop("Invalid permutation vector in permute.vertexIDs.")
-  if(is.bipartite(x)){  #If bipartite, enforce partitioning
-    bpc<-get.network.attribute(x,"bipartite")
-    if(any(vids[0:bpc]>bpc)||any(vids[(bpc+1):n]<=bpc))
+  if (is.bipartite(x)) {  #If bipartite, enforce partitioning
+    bpc <- get.network.attribute(x, "bipartite")
+    if (any(vids[0:bpc] > bpc) || any(vids[(bpc + 1):n] <= bpc))
       warning("Performing a cross-mode permutation in permute.vertexIDs.  I hope you know what you're doing....")
   }
 
@@ -90,7 +90,8 @@ permute.vertexIDs.networkLite <- function(x, vids, ...) {
   o <- order(vids)
   x$el$.tail <- o[x$el$.tail]
   x$el$.head <- o[x$el$.head]
-  if(!is.directed(x)) x$el[, c(".tail", ".head")] <- cbind(pmin(x$el$.tail, x$el$.head), pmax(x$el$.tail, x$el$.head))
+  if (!is.directed(x)) x$el[, c(".tail", ".head")] <- cbind(pmin(x$el$.tail, x$el$.head),
+                                                            pmax(x$el$.tail, x$el$.head))
   x$el <- x$el[order(x$el$.tail, x$el$.head), , drop = FALSE]
 
   # Permute the vertex attributes.

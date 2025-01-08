@@ -243,7 +243,7 @@ list.edge.attributes.networkLite <- function(x, ...) {
 #' @export
 delete.vertex.attribute.networkLite <- function(x, attrname, ...) {
   ## TODO: See if this can be done in one operation faster.
-  for(a in attrname) x$attr[[a]] <- NULL
+  for (a in attrname) x$attr[[a]] <- NULL
 
   modify_in_place(x)
 }
@@ -252,7 +252,7 @@ delete.vertex.attribute.networkLite <- function(x, attrname, ...) {
 #' @export
 delete.edge.attribute.networkLite <- function(x, attrname, ...) {
   ## TODO: See if this can be done in one operation faster.
-  for(a in attrname) x$el[[a]] <- NULL
+  for (a in attrname) x$el[[a]] <- NULL
 
   modify_in_place(x)
 }
@@ -261,7 +261,7 @@ delete.edge.attribute.networkLite <- function(x, attrname, ...) {
 #' @export
 delete.network.attribute.networkLite <- function(x, attrname, ...) {
   ## TODO: See if this can be done in one operation faster.
-  for(a in attrname) x$gal[[a]] <- NULL
+  for (a in attrname) x$gal[[a]] <- NULL
 
   modify_in_place(x)
 }
