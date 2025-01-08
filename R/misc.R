@@ -97,8 +97,8 @@ is.na.networkLite <- function(x) {
 #'
 `+.networkLite` <- function(e1, e2) {
   if (!identical(e1 %n% "n", e2 %n% "n") ||
-      !identical(e1 %n% "directed", e2 %n% "directed") ||
-      !identical(e1 %n% "bipartite", e2 %n% "bipartite")) {
+        !identical(e1 %n% "directed", e2 %n% "directed") ||
+        !identical(e1 %n% "bipartite", e2 %n% "bipartite")) {
     stop("cannot add networkLites of differing network size, directedness, or",
          " bipartiteness")
   }
@@ -124,8 +124,8 @@ is.na.networkLite <- function(x) {
 #' @export
 `-.networkLite` <- function(e1, e2) {
   if (!identical(e1 %n% "n", e2 %n% "n") ||
-      !identical(e1 %n% "directed", e2 %n% "directed") ||
-      !identical(e1 %n% "bipartite", e2 %n% "bipartite")) {
+        !identical(e1 %n% "directed", e2 %n% "directed") ||
+        !identical(e1 %n% "bipartite", e2 %n% "bipartite")) {
     stop("cannot subtract networkLites of differing network size,",
          " directedness, or bipartiteness")
   }

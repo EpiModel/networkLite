@@ -47,15 +47,16 @@ delete.vertices.networkLite <- function(x, vid, ...) {
 #'
 #' @param x,v,alters,... see [network::get.inducedSubgraph()]
 #' @export
-get.inducedSubgraph.networkLite <- function(x, v, alters=NULL, ...){
+get.inducedSubgraph.networkLite <- function(x, v, alters = NULL, ...) {
   #Do some reality checking
-  n<-network.size(x)
+  n <- network.size(x)
 
   # do checks for v and alters
-  if((length(v)<1)||any(is.na(v))||any(v<1)||any(v>n))
+  if ((length(v) < 1) || any(is.na(v)) || any(v < 1) || any(v > n))
     stop("Illegal vertex selection in get.inducedSubgraph")
-  if(!is.null(alters)){
-    if((length(alters)<1)||any(is.na(alters))||any(alters<1)||any(alters>n)|| any(alters%in%v))
+  if (!is.null(alters)) {
+    if ((length(alters) < 1) || any(is.na(alters)) || any(alters < 1) ||
+          any(alters > n) || any(alters %in% v))
       stop("Illegal vertex selection (alters) in get.inducedSubgraph")
   }
 
@@ -63,20 +64,19 @@ get.inducedSubgraph.networkLite <- function(x, v, alters=NULL, ...){
   #TODO: in most cases, probably faster to create a new network and only copy over what is needed
 
   #Now, strip out what is needed, and/or permute in the two-mode case
-  if(is.null(alters)){                    #Simple case
-    delete.vertices(x,(1:n)[-v])           #Get rid of everyone else
-  }else{                                  #Really an edge cut, but w/vertices
-    nv<-length(v)
-    na<-length(alters)
-    newids<-sort(c(v,alters))
-    newv<-match(v,newids)
-    newalt<-match(alters,newids)
-    delete.vertices(x,(1:n)[-c(v,alters)])  #Get rid of everyone else
-    permute.vertexIDs(x,c(newv,newalt))    #Put the new vertices first
-    #Remove within-group edges
-    x$el <- x$el[(x$el$.tail <= nv) != (x$el$.head <= nv), , drop=FALSE]
-    x%n%"bipartite"<-nv   #Set bipartite attribute
+  if (is.null(alters)) {                    #Simple case
+    delete.vertices(x, (1:n)[-v])           #Get rid of everyone else
+  } else {                                  #Really an edge cut, but w/vertices
+    nv <- length(v)
+    newids <- sort(c(v, alters))
+    newv <- match(v, newids)
+    newalt <- match(alters, newids)
+    delete.vertices(x, (1:n)[-c(v, alters)])  #Get rid of everyone else
+    permute.vertexIDs(x, c(newv, newalt))    #Put the new vertices first
+    # Remove within-group edges
+    x$el <- x$el[(x$el$.tail <= nv) != (x$el$.head <= nv), , drop = FALSE]
+    x %n% "bipartite" <- nv   #Set bipartite attribute
   }
 
-  x
+  return(x)
 }

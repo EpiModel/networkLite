@@ -75,9 +75,9 @@ networkLite.edgelist <- function(
     attr = list(vertex.names = seq_len(net_attr[["n"]]),
                 na = logical(net_attr[["n"]])),
     net_attr = attributes(x)[setdiff(names(attributes(x)),
-                                         c("class", "dim", "dimnames",
-                                           "vnames", "row.names", "names",
-                                           "mnext"))],
+                                     c("class", "dim", "dimnames",
+                                       "vnames", "row.names", "names",
+                                       "mnext"))],
     ...,
     atomize = FALSE) {
 
@@ -130,7 +130,7 @@ networkLite.edgelist <- function(
   }
 
   if (!isFALSE(nw$gal[["loops"]]) || !isFALSE(nw$gal[["hyper"]]) ||
-      !isFALSE(nw$gal[["multiple"]])) {
+        !isFALSE(nw$gal[["multiple"]])) {
     stop("networkLite requires network attributes `loops`, `hyper`, and",
          " `multiple` be `FALSE`.")
   }

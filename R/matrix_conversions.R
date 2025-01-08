@@ -69,16 +69,17 @@ as.edgelist.networkLite <- function(x, attrname = NULL,
 
 #' @rdname matrix_conversions
 #' @export
-as_tibble.networkLite <- function(x, attrnames=(match.arg(unit)=="vertices"), na.rm=TRUE, ..., unit=c("edges", "vertices")) {
+as_tibble.networkLite <- function(x, attrnames = (match.arg(unit) == "vertices"),
+                                  na.rm = TRUE, ..., unit = c("edges", "vertices")) {
   unit <- match.arg(unit)
   df <- switch(unit, edges = x$el, vertices = x$attr)
   if (is.logical(attrnames) || is.numeric(attrnames))
     attrnames <- na.omit(setdiff(names(df), c(".tail", ".head", ".eid"))[attrnames])
 
-  # Keep only requested columns, but make sure all named columns are present.
-  if(na.rm) df <- df[!df$na,]
+  # Keep only requested columns, but make sure all named columns are present
+  if (na.rm) df <- df[!df$na, ]
   df <- df[intersect(c(".tail", ".head", ".eid", attrnames), names(df))]
-  for(a in setdiff(attrnames, names(df))) df[[a]] <- rep(list(), nrow(df))
+  for (a in setdiff(attrnames, names(df))) df[[a]] <- rep(list(), nrow(df))
 
   df <- atomize(df, ...)
   attr(df, "n") <- network.size(x)
@@ -100,6 +101,7 @@ as.matrix.networkLite <- function(x,
          edgelist = as.matrix.networkLite.edgelist(x, attrname, ...))
 }
 
+#' @export
 as.matrix.networkLite.adjacency <- function(x, attrname = NULL, ...) {
   el <- as.edgelist(x, na.rm = FALSE)
 
@@ -127,6 +129,7 @@ as.matrix.networkLite.adjacency <- function(x, attrname = NULL, ...) {
   }
 }
 
+#' @export
 as.matrix.networkLite.incidence <- function(x, attrname = NULL, ...) {
   el <- as.edgelist(x, na.rm = FALSE)
 
@@ -143,6 +146,7 @@ as.matrix.networkLite.incidence <- function(x, attrname = NULL, ...) {
   m
 }
 
+#' @export
 as.matrix.networkLite.edgelist <- function(x, attrname = NULL,
                                            na.rm = TRUE, ...) {
 

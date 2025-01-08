@@ -40,9 +40,9 @@ add.edges.networkLite <- function(x, tail, head, names.eval = NULL,
   ## if we were passed any attribute information...
   if (length(unlist(names.eval))  > 0) {
     if (!is.list(names.eval)) names.eval <-
-        as.list(rep(names.eval, length.out = length(tail)))
+      as.list(rep(names.eval, length.out = length(tail)))
     if (!is.list(vals.eval)) vals.eval <-
-        as.list(rep(vals.eval, length.out = length(names.eval)))
+      as.list(rep(vals.eval, length.out = length(names.eval)))
 
     for (i in seq_along(vals.eval)) {
       vals.eval[[i]] <- as.list(vals.eval[[i]])
