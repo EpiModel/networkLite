@@ -2,11 +2,14 @@
 % Please edit documentation in R/as_networkLite.R
 \name{as.networkLite}
 \alias{as.networkLite}
+\alias{as.networkLite.default}
 \alias{as.networkLite.network}
 \alias{as.networkLite.networkLite}
 \title{Convert to \code{networkLite} Representation.}
 \usage{
 as.networkLite(x, ...)
+
+\method{as.networkLite}{default}(x, ...)
 
 \method{as.networkLite}{network}(x, ..., atomize = TRUE)
 
@@ -30,6 +33,9 @@ Convert to \code{networkLite} Representation.
 \code{as.networkLite.network} converts a \code{network} object
 to a \code{networkLite} object. \code{as.networkLite.networkLite}
 returns the \code{networkLite} object unchanged.
+
+The last resort is to call \code{as.network(x, ...)} and then convert
+the result to \code{networkLite}.
 
 Currently the network attributes \code{hyper}, \code{multiple}, and
 \code{loops} must be \code{FALSE} for \code{networkLite}s;

@@ -12,6 +12,9 @@
 #' to a `networkLite` object. `as.networkLite.networkLite`
 #' returns the `networkLite` object unchanged.
 #'
+#' The last resort is to call `as.network(x, ...)` and then convert
+#' the result to `networkLite`.
+#'
 #' Currently the network attributes `hyper`, `multiple`, and
 #' `loops` must be `FALSE` for `networkLite`s;
 #' attempting to convert a `network` to a `networkLite` when
@@ -29,6 +32,12 @@
 #'
 as.networkLite <- function(x, ...) {
   UseMethod("as.networkLite")
+}
+
+#' @rdname as_networkLite
+#' @export
+as.networkLite.default <- function(x, ...) {
+  as.networkLite(as.network(x, ...), ...)
 }
 
 #' @rdname as_networkLite
