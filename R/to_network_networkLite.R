@@ -51,7 +51,8 @@ to_network_networkLite <- function(x, ...) {
     attr(nw, name) <- attr(x, name)
   }
 
-  nw
+  # "Pop" the first networkLite class definition.
+  structure(nw, class = class(x)[-which(class(x)=="networkLite")[1]])
 }
 
 #' @rdname to_network_networkLite
