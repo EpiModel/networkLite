@@ -170,3 +170,12 @@ is.na.networkLite <- function(x) {
 valid.eids.networkLite <- function(x, ...) {
   seq_len(network.edgecount(x, na.omit = FALSE))
 }
+
+#' Test whether the object is a [`networkLite`]
+#'
+#' @param x an object
+#'
+#' @export
+is.networkLite <- function(x) {
+  inherits(x, "networkLite")
+}
