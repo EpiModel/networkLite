@@ -60,3 +60,38 @@ to_network_networkLite <- function(x, ...) {
 as.network.networkLite <- function(x, ...) {
   return(x)
 }
+
+#' @rdname last-resort
+#'
+#' @title Last-resort utilities
+#'
+#' @description Since the purpose of [`networkLite`] is to be a drop-in replacement
+#' for [`network`], these utilities emulate the internal structure of
+#' `network`. They are likely to perform poorly and should be avoided.
+#'
+#' @param x a `networkLite` object
+#' @param name passed to `[[`, but some special cases (`"oel"` nd `"iel"` are handled)
+#'
+#' @note Please do not rely on these unless you absolutely have to;
+#'   since they slow down access to `networkLite` objects, they may be
+#'   removed if they ever stop being necessary.
+#'
+#' @export
+`$.networkLite` <- function(x, name) {
+  o <- x[[name, exact = FALSE]]
+  if(!is.null(o)) return(o)
+
+  name <- match.arg(name, c("oel", "iel"))
+  if(getOption("networkLite.warn_fallback")) warning(sQuote("networkLite"), " fallback invoked: ", sQuote(name), ".", immediate. = TRUE)
+  switch(name,
+         oel = split(seq_len(nrow(x$el)), factor(x$el$.tail, levels = seq_len(x$gal$n))),
+         iel = split(seq_len(nrow(x$el)), factor(x$el$.head, levels = seq_len(x$gal$n)))
+         )
+}
+
+#' @rdname last-resort
+#' @export
+`[.networkLite` <- function(x, ...) {
+  if(getOption("networkLite.warn_fallback")) warning(sQuote("networkLite"), " fallback invoked: ", sQuote("["), ".", immediate. = TRUE)
+  to_network_networkLite(x)[...]
+}
