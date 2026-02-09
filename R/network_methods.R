@@ -1,4 +1,78 @@
 
+# Re-export network functions as S3 generics for networkLite
+
+#' @name get.edgeIDs
+#' @export
+get.edgeIDs <- function(x, ...) {
+  UseMethod("get.edgeIDs")
+}
+
+#' @export
+get.edgeIDs.default <- function(x, v, alter = NULL, 
+                                neighborhood = c("out", "in", "combined"),
+                                na.omit = TRUE, ...) {
+  network::get.edgeIDs(x, v, alter, neighborhood, na.omit, ...)
+}
+
+#' @name get.dyads.eids
+#' @export
+get.dyads.eids <- function(x, ...) {
+  UseMethod("get.dyads.eids")
+}
+
+#' @export
+get.dyads.eids.default <- function(x, tails, heads,
+                                   neighborhood = c("out", "in", "combined"),
+                                   na.omit = TRUE, ...) {
+  network::get.dyads.eids(x, tails, heads, neighborhood, na.omit, ...)
+}
+
+#' @name get.edges
+#' @export
+get.edges <- function(x, ...) {
+  UseMethod("get.edges")
+}
+
+#' @export
+get.edges.default <- function(x, v, alter, neighborhood = c("combined", "out", "in"),
+                              na.omit = TRUE, ...) {
+  network::get.edges(x, v, alter, neighborhood, na.omit, ...)
+}
+
+#' @name get.neighborhood
+#' @export
+get.neighborhood <- function(x, ...) {
+  UseMethod("get.neighborhood")
+}
+
+#' @export
+get.neighborhood.default <- function(x, v, type = c("combined", "out", "in"),
+                                     na.omit = TRUE, ...) {
+  network::get.neighborhood(x, v, type, na.omit, ...)
+}
+
+#' @name is.adjacent
+#' @export
+is.adjacent <- function(x, ...) {
+  UseMethod("is.adjacent")
+}
+
+#' @export
+is.adjacent.default <- function(x, vi, vj, na.omit = FALSE, ...) {
+  network::is.adjacent(x, vi, vj, na.omit, ...)
+}
+
+#' @name has.edges
+#' @export
+has.edges <- function(net, ...) {
+  UseMethod("has.edges")
+}
+
+#' @export
+has.edges.default <- function(net, v = seq_len(network.size(net)), ...) {
+  network::has.edges(net, v, ...)
+}
+
 #' @rdname get.edgeIDs
 #'
 #' @title Get Edge IDs for Specified Dyads
@@ -28,12 +102,40 @@ get.edgeIDs.networkLite <- function(x, v, alter = NULL,
                                     na.omit = TRUE, ...) {
   neighborhood <- match.arg(neighborhood)
   
+  v <- as.integer(v)
+  
   if (is.null(alter)) {
     # Return incident edges when alter is NULL
-    return(get.edges(x, v, neighborhood = neighborhood, na.omit = na.omit))
+    if (length(v) != 1) {
+      stop("get.edgeIDs requires scalar v")
+    }
+    
+    # Get edges incident on v
+    if (neighborhood == "out" || neighborhood == "combined") {
+      out_edges <- which(x$el$.tail %in% v)
+    } else {
+      out_edges <- integer(0)
+    }
+    
+    if (neighborhood == "in" || (neighborhood == "combined" && is.directed(x))) {
+      in_edges <- which(x$el$.head %in% v)
+    } else if (neighborhood == "combined" && !is.directed(x)) {
+      # For undirected networks, also check heads
+      in_edges <- which(x$el$.head %in% v)
+    } else {
+      in_edges <- integer(0)
+    }
+    
+    eids <- unique(c(out_edges, in_edges))
+    
+    # Filter out missing edges if na.omit is TRUE
+    if (na.omit && length(eids) > 0) {
+      eids <- eids[!NVL(x$el$na[eids], FALSE)]
+    }
+    
+    return(eids)
   }
   
-  v <- as.integer(v)
   alter <- as.integer(alter)
   
   if (length(v) != 1 || length(alter) != 1) {
