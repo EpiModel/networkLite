@@ -130,7 +130,9 @@ get.edgeIDs.networkLite <- function(x, v, alter = NULL,
     
     # Filter out missing edges if na.omit is TRUE
     if (na.omit && length(eids) > 0) {
-      eids <- eids[!NVL(x$el$na[eids], FALSE)]
+      # Check each edge's na attribute
+      na_vals <- sapply(eids, function(i) isTRUE(x$el$na[[i]]))
+      eids <- eids[!na_vals]
     }
     
     return(eids)
@@ -158,8 +160,11 @@ get.edgeIDs.networkLite <- function(x, v, alter = NULL,
   eid <- which(x$el$.tail == v & x$el$.head == alter)
   
   # If na.omit is TRUE, exclude edges with na = TRUE
-  if (na.omit && length(eid) > 0 && isTRUE(x$el$na[eid])) {
-    return(numeric(0))
+  if (na.omit && length(eid) > 0) {
+    na_val <- x$el$na[[eid]]  # Use [[]] to get the scalar value from list
+    if (isTRUE(na_val)) {
+      return(numeric(0))
+    }
   }
   
   return(eid)
@@ -260,7 +265,9 @@ get.edges.networkLite <- function(x, v, alter, neighborhood = c("combined", "out
   
   # Filter out missing edges if na.omit is TRUE
   if (na.omit && length(eids) > 0) {
-    eids <- eids[!NVL(x$el$na[eids], FALSE)]
+    # Check each edge's na attribute
+    na_vals <- sapply(eids, function(i) isTRUE(x$el$na[[i]]))
+    eids <- eids[!na_vals]
   }
   
   return(eids)
@@ -298,7 +305,9 @@ get.neighborhood.networkLite <- function(x, v, type = c("combined", "out", "in")
   if (type == "out" || type == "combined") {
     out_idx <- which(x$el$.tail %in% v)
     if (na.omit) {
-      out_idx <- out_idx[!NVL(x$el$na[out_idx], FALSE)]
+      # Filter out missing edges
+      na_vals <- sapply(out_idx, function(i) isTRUE(x$el$na[[i]]))
+      out_idx <- out_idx[!na_vals]
     }
     neighbors <- c(neighbors, x$el$.head[out_idx])
   }
@@ -307,7 +316,9 @@ get.neighborhood.networkLite <- function(x, v, type = c("combined", "out", "in")
   if (type == "in" || type == "combined") {
     in_idx <- which(x$el$.head %in% v)
     if (na.omit) {
-      in_idx <- in_idx[!NVL(x$el$na[in_idx], FALSE)]
+      # Filter out missing edges
+      na_vals <- sapply(in_idx, function(i) isTRUE(x$el$na[[i]]))
+      in_idx <- in_idx[!na_vals]
     }
     neighbors <- c(neighbors, x$el$.tail[in_idx])
   }
@@ -324,6 +335,7 @@ get.neighborhood.networkLite <- function(x, v, type = c("combined", "out", "in")
 #' @param x A `networkLite` object.
 #' @param vi,vj Vertex IDs.
 #' @param na.omit Logical; whether to treat missing edges as non-existent.
+#'   Default is FALSE to match network package behavior.
 #' @param ... additional arguments.
 #'
 #' @return Logical indicating whether an edge exists from vi to vj (or
@@ -332,62 +344,17 @@ get.neighborhood.networkLite <- function(x, v, type = c("combined", "out", "in")
 #' @details
 #' Tests whether an edge exists between the specified vertices. For directed
 #' networks, tests for an edge from vi to vj. For undirected networks, tests
-#' for an edge between vi and vj (order does not matter).
+#' for an edge between vi and vj (order does not matter). Note that the
+#' default for na.omit is FALSE, meaning missing edges are treated as
+#' present by default (consistent with network package behavior).
 #'
 #' @export
 #'
 is.adjacent.networkLite <- function(x, vi, vj, na.omit = FALSE, ...) {
+  # Explicitly pass na.omit to get.edgeIDs
+  # Note: get.edgeIDs has default na.omit=TRUE, but we override it here
   eid <- get.edgeIDs(x, vi, vj, na.omit = na.omit)
   length(eid) > 0
-}
-
-
-#' @rdname network.density
-#'
-#' @title Calculate Network Density
-#'
-#' @param x A `networkLite` object.
-#' @param na.omit Logical; whether to exclude missing edges from the calculation.
-#' @param discount.bipartite Logical; for bipartite networks, whether to compute
-#'   density based on within-mode edges (if FALSE) or only between-mode edges (if TRUE).
-#' @param ... additional arguments.
-#'
-#' @return The network density (proportion of possible edges that are present).
-#'
-#' @details
-#' Calculates the density of the network as the ratio of the number of edges
-#' to the number of possible edges. For directed networks, the number of
-#' possible edges is n*(n-1). For undirected networks, it is n*(n-1)/2,
-#' where n is the network size. For bipartite networks, the number of
-#' possible edges is n1*n2 when discount.bipartite = FALSE, where n1 and n2 
-#' are the sizes of the two modes.
-#'
-#' @export
-#'
-network.density.networkLite <- function(x, na.omit = TRUE, discount.bipartite = FALSE, ...) {
-  n <- network.size(x)
-  
-  if (n == 0) {
-    return(NaN)
-  }
-  
-  edge_count <- network.edgecount(x, na.omit = na.omit)
-  
-  if (is.bipartite(x) && !discount.bipartite) {
-    b1 <- x %n% "bipartite"
-    b2 <- n - b1
-    max_edges <- b1 * b2
-  } else if (is.directed(x)) {
-    max_edges <- n * (n - 1)
-  } else {
-    max_edges <- n * (n - 1) / 2
-  }
-  
-  if (max_edges == 0) {
-    return(NaN)
-  }
-  
-  edge_count / max_edges
 }
 
 
@@ -415,6 +382,14 @@ has.edges.networkLite <- function(net, v = seq_len(network.size(net)), ...) {
   v <- as.integer(v)
   
   # Check if any edges involve the specified vertices
-  any(net$el$.tail %in% v | net$el$.head %in% v) &&
-    any(!NVL(net$el$na[net$el$.tail %in% v | net$el$.head %in% v], FALSE))
+  if (length(v) > 0 && network.edgecount(net, na.omit = TRUE) > 0) {
+    edge_indices <- which(net$el$.tail %in% v | net$el$.head %in% v)
+    if (length(edge_indices) > 0) {
+      # Check if any of these edges are not missing
+      na_vals <- sapply(edge_indices, function(i) isTRUE(net$el$na[[i]]))
+      return(any(!na_vals))
+    }
+  }
+  
+  return(FALSE)
 }
